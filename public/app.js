@@ -14,9 +14,5 @@ Vue.createApp({
     },
   },
 
-  created: function () {
-    window.addEventListener("load", () => {
-      document.body.classList.add("loaded");
-    });
-  },
+  created: function () {},
 }).mount("#app");

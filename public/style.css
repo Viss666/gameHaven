@@ -72,11 +72,6 @@ nav ul li a.active {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  transition: opacity 1s ease-in-out;
-}
-
-.home-content.loaded {
-  opacity: 1;
 }
 
 .home-address {
