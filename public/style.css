@@ -8,6 +8,7 @@ body {
   background-color: #4f525a;
   font-family: "Acme";
   display: flex;
+  height: 100%;
 }
 
 nav {
@@ -15,7 +16,7 @@ nav {
   /* background-color: #333; */
   display: flex;
   flex-direction: column;
-  height: 93vh;
+  height: 95vh;
 
   /* position: fixed; */
 }
@@ -143,10 +144,13 @@ footer {
   background-color: black;
   color: white;
   text-align: center;
+  margin-top: auto;
   /* padding: 1vh; */
-  position: fixed;
+  /* position: fixed; */
+  /* max-height: 20vh; */
+  height: auto;
   width: 100vw;
-  height: 7vh;
+  /* height: 5vh; */
   font-size: 1rem;
 }
 
@@ -165,13 +169,17 @@ footer {
 }
 
 .social-icon {
-  height: 7vh;
+  /* height: 7vh; */
+  height: 35px;
+
   padding: 3px;
 }
 
 .times {
   text-align: left;
-  font-size: 1.1rem;
+  /* font-size: 1rem; */
   align-content: center;
   padding-left: 5px;
+  /* gap: 15px; */
+  /* height: 100%; */
 }
