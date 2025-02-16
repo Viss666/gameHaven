@@ -4,24 +4,143 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="images/Logo.png" type="image/icon type" />
 
-    <title>Vue Skeleton
-    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Acme&family=Jost:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Playfair+Display&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Game Haven St. George</title>
   </head>
   <body>
     <div id="app">
-        <!-- putting your content in double {{}} brackets will call that data from vue. See test here will be "hello" -->
-         <!-- calling data objects you just have to walk through with something like test.test1 -->
-        <p> {{ test }} </p>
+      <div id="main">
+        <nav>
+          <a href="index.html" id="nav-logo-link">
+            <img src="images/Logo.png" id="nav-logo" />
+          </a>
+          <ul>
+            <li>
+              <a
+                v-on:click="navigatePage('home')"
+                :class="{ active: currentPage === 'home' }"
+                >Home</a
+              >
+            </li>
+            <li>
+              <a
+                v-on:click="navigatePage('tcg')"
+                :class="{ active: currentPage === 'tcg' }"
+                >TCG</a
+              >
+            </li>
+            <li>
+              <a
+                v-on:click="navigatePage('games')"
+                :class="{ active: currentPage === 'games' }"
+                >Games</a
+              >
+            </li>
+            <li>
+              <a
+                v-on:click="navigatePage('events')"
+                :class="{ active: currentPage === 'events' }"
+                >Events</a
+              >
+            </li>
+            <li>
+              <a
+                v-on:click="navigatePage('rentals')"
+                :class="{ active: currentPage === 'rentals' }"
+                >Rentals</a
+              >
+            </li>
+            <li>
+              <a
+                v-on:click="navigatePage('contact')"
+                :class="{ active: currentPage === 'contact' }"
+                >Contact</a
+              >
+            </li>
+          </ul>
+        </nav>
 
-        <!-- Directives are also a huge part of vue, such as the built-in directives including v-if, v-for, v-bind, v-on and v-slot. -->
-         
+        <div v-if="currentPage == 'home'" class="home-content">
+          <div class="home-logo">
+            <img src="images/Text.png" id="logo-png" />
+            <p class="home-address">250 Red Cliffs Dr #32</p>
+          </div>
+          <div class="reviews">
+            <div class="review">
+              <img src="images/stars.png" class="stars" />
+              <p>
+                Big, clean, well organized and friendly staff! Great inventory
+                of board games, miniature games, GREAT hobby section and tons
+                more! Definitely recommended.
+              </p>
+            </div>
+            <div class="review">
+              <img src="images/stars.png" class="stars" />
+              <p>
+                Game Haven is a great store for all of your tabletop needs. The
+                staff are wonderful as well. Ben and Jayden took great care of
+                me, my wife, and my friend. Super friendly and solid people. I
+                look forward to coming back soon!
+              </p>
+            </div>
+            <div class="review">
+              <img src="images/stars.png" class="stars" />
+              <p>
+                Staff is very knowledgeable. Best feature was the ability to
+                rent games. Our family from out of town thought this was
+                spectacular and we definitely rented a bunch before purchasing.
+                Great asset to the St. George community.
+              </p>
+            </div>
+          </div>
+          <!-- <img src="images/hero.png" height="500px" /> -->
+        </div>
 
-
+        <div v-if="currentPage == 'tcg'" class="home-content"></div>
+        <div v-if="currentPage == 'games'" class="home-content"></div>
+        <div v-if="currentPage == 'events'" class="home-content"></div>
+        <div v-if="currentPage == 'rentals'" class="home-content"></div>
+        <div v-if="currentPage == 'contact'" class="contact-content"></div>
+      </div>
+      <div class="footer">
+        <footer>
+          <div class="times">
+            <div id="open">Monday – Saturday: 10 AM – 10 PM</div>
+            <div id="closed">Sunday: Closed</div>
+          </div>
+          <div class="copyright">Copyright © 2025 Game Haven St. George</div>
+          <div class="social">
+            <a
+              href="https://discord.gg/GkBxQasQ"
+              class="icon-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="images/discord-white-icon.png" class="social-icon" />
+            </a>
+            <a
+              href="https://www.facebook.com/GameHavenSTG/"
+              class="icon-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="images/facebook.png" class="social-icon" />
+            </a>
+          </div>
+        </footer>
+      </div>
+      <!-- Directives are also a huge part of vue, such as the built-in directives including v-if, v-for, v-bind, v-on and v-slot. -->
     </div>
   </body>
   <!-- scripts to connect to vue and connect app.js -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="app.js"></script>
 </html>
-

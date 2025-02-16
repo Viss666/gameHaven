@@ -1,15 +1,18 @@
-// app init
 Vue.createApp({
   // where you hold your data
   data: function () {
     return {
       test: "hello",
+      currentPage: "home",
     };
   },
   //   where you put your methods
-  methods: {},
-  //   if you have any methods or processes you want to call on creation, do them here. Usually
-  //  along the lines of loading data from a server.
+  methods: {
+    //Change the current page
+    navigatePage: function (page) {
+      this.currentPage = page;
+    },
+  },
+
   created: function () {},
-  //mount application using the id "app"
 }).mount("#app");

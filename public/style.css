@@ -1,0 +1,177 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #4f525a;
+  font-family: "Acme";
+  display: flex;
+}
+
+nav {
+  width: 15%;
+  /* background-color: #333; */
+  display: flex;
+  flex-direction: column;
+  height: 93vh;
+
+  /* position: fixed; */
+}
+
+#nav-logo-link {
+  text-align: center;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-evenly; */
+  height: 100%;
+}
+
+nav ul li {
+  font-size: 1.9rem;
+  text-align: left;
+}
+
+nav ul li a {
+  display: block;
+  text-decoration: none;
+  color: white;
+  padding: 4% 10% 4% 30%;
+  /* background-color: #444; */
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+  transition: 0.3s;
+}
+
+nav ul li a:hover {
+  background-color: #333333;
+  cursor: pointer;
+}
+
+nav ul li a.active {
+  background-color: #333333;
+  cursor: default;
+  color: #a5ca68;
+  /* font-weight: bold; */
+}
+
+#nav-logo {
+  align-self: center;
+  width: 70%;
+  margin: 0px 5px 10px 5px;
+}
+
+.home-content {
+  flex: 1;
+  background-image: url("images/hero2.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.home-address {
+  color: white;
+  font-size: 2.3rem;
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: black;
+  /* font-weight: normal; */
+}
+
+#main {
+  display: flex;
+}
+
+.home-logo {
+  color: white;
+  padding: 2px;
+  font-size: 2.1rem;
+  /* -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black; */
+  width: fit-content;
+  text-align: center;
+}
+
+#logo-png {
+  height: 45vh;
+}
+
+.reviews {
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 8vh;
+}
+
+.review {
+  height: 30vh;
+  width: 25vw;
+  margin: 20px;
+  color: white;
+  background-color: #00000099;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.review p {
+  padding: 0% 3%;
+  align-content: center;
+  font-size: 1.05rem;
+}
+
+.stars {
+  margin-top: 5%;
+  height: 5vh;
+}
+
+.contact-content {
+  flex: 1;
+  background-image: url("images/contact.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  background-color: black;
+  color: white;
+  text-align: center;
+  /* padding: 1vh; */
+  position: fixed;
+  width: 100vw;
+  height: 7vh;
+  font-size: 1rem;
+}
+
+.social {
+  /* padding: 5px; */
+  padding-right: 5px;
+  align-content: center;
+  padding-left: 5px;
+}
+
+.icon-link {
+}
+
+.copyright {
+  align-content: center;
+}
+
+.social-icon {
+  height: 7vh;
+  padding: 3px;
+}
+
+.times {
+  text-align: left;
+  font-size: 1.1rem;
+  align-content: center;
+  padding-left: 5px;
+}
