@@ -8,29 +8,39 @@ body {
   background-color: #4f525a;
   font-family: "Acme";
   /* display: flex; */
-  height: 100%;
+  /* height: 100%; */
+  display: flex;
+  height: 100vh;
 }
 
 #app {
 }
 
 #main {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) repeat(6, minmax(0, 175px)) minmax(
+  display: flex;
+  /* grid-template-columns: minmax(0, 1fr) repeat(6, minmax(0, 175px)) minmax(
       0,
       1fr
-    );
-  height: 100vh;
+    ); */
+  flex-direction: row;
+  width: 100vw;
+  height: 95vh;
+  /* flex-wrap: wrap; */
+
+  /* justify-content: space-between; */
+
+  /* height: 100vh; */
 }
 
 nav {
-  grid-column: 1 / 2;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   /* height: 96vh; */
-  display: flex;
-  flex-direction: column;
   align-items: center;
+  /* max-width: 20%; */
+  width: 10%;
+  /* margin-right: auto; */
 
   /* position: fixed; */
 }
@@ -43,12 +53,14 @@ nav ul {
   list-style: none;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-evenly; */
-  height: 100%;
   width: 100%;
+  /* justify-content: space-evenly; */
+  /* height: 100%; */
+  /* width: 100%; */
 }
 
 nav ul li {
+  align-items: center;
   font-size: 1.9rem;
   text-align: left;
   width: 100%;
@@ -64,7 +76,7 @@ nav ul li a {
   /* background-color: #444; */
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
-  padding-left: 25%;
+  padding-left: 15%;
   transition: 0.3s;
 }
 
@@ -83,35 +95,38 @@ nav ul li a.active {
 #nav-logo {
   align-self: center;
   width: 70%;
+  max-width: 200px;
   margin: 0px 5px 10px 5px;
 }
 
 .home-content {
-  /* flex: 1; */
+  flex: 1;
+  flex-wrap: wrap;
+  height: 100%;
   /* display: flex; */
   background: url("images/hero2.png");
   background-size: cover;
   /* height: 100%; */
   /* background-repeat: no-repeat; */
   background-position: center;
-  grid-column: 2 / 9;
-  min-height: 94vh;
-  /* grid-row: -1; */
+  width: 80%;
+  margin-left: auto;
+
+  /* min-height: 94vh; */
 }
 
 .home-address {
   color: white;
-  font-size: 2.3rem;
+  font-size: 2rem;
   -webkit-text-stroke-width: 1.5px;
   -webkit-text-stroke-color: black;
   /* font-weight: normal; */
 }
 
 .home-logo {
-  grid-column: 2/3;
   color: white;
-  /* padding: 2px; */
-  font-size: 2.1rem;
+  padding: 10px;
+  /* font-size: 1.5rem; */
   /* -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: black; */
   width: fit-content;
@@ -119,13 +134,13 @@ nav ul li a.active {
 }
 
 #logo-png {
-  height: 35vh;
+  height: 30vh;
 }
 
 .reviews {
   display: flex;
   /* width: 100vw; */
-  margin-top: 7%;
+  margin-top: 10%;
   align-items: center;
   justify-content: center;
   gap: 20px;
@@ -145,16 +160,16 @@ nav ul li a.active {
 .review p {
   padding: 0% 3%;
   align-content: center;
-  font-size: 1.05rem;
+  font-size: clamp(1rem, 2vw, 1.1rem);
 }
 
 .stars {
   margin-top: 5%;
-  height: 5vh;
+  height: 4vh;
 }
 
 .contact-content {
-  flex: 1;
+  /* flex: 1; */
   background-image: url("images/contact.png");
   background-size: cover;
   background-repeat: no-repeat;
@@ -162,7 +177,6 @@ nav ul li a.active {
 }
 
 .footer {
-  grid-column: 1 / -9;
   justify-content: space-between;
   background-color: black;
   color: white;
@@ -171,11 +185,12 @@ nav ul li a.active {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+
   /* padding: 1vh; */
   /* position: fixed; */
   /* max-height: 20vh; */
-  height: auto;
-  width: 100vw;
+  /* height: 15%; */
+  width: 100%;
   /* height: 5vh; */
   font-size: 1rem;
 }
