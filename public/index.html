@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="gridstyle.css" />
     <link rel="icon" href="images/Logo.png" type="image/icon type" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -74,6 +74,7 @@
             <img src="images/Text.png" id="logo-png" />
             <p class="home-address">250 Red Cliffs Dr #32</p>
           </div>
+
           <div class="reviews">
             <div class="review">
               <img src="images/stars.png" class="stars" />
@@ -102,6 +103,7 @@
               </p>
             </div>
           </div>
+
           <!-- <img src="images/hero.png" height="500px" /> -->
         </div>
 
@@ -110,9 +112,8 @@
         <div v-if="currentPage == 'events'" class="home-content"></div>
         <div v-if="currentPage == 'rentals'" class="home-content"></div>
         <div v-if="currentPage == 'contact'" class="contact-content"></div>
-      </div>
-      <div class="footer">
-        <footer>
+
+        <div class="footer">
           <div class="times">
             <div id="open">Monday – Saturday: 10 AM – 10 PM</div>
             <div id="closed">Sunday: Closed</div>
@@ -138,8 +139,9 @@
               <img src="images/facebook.png" class="social-icon" />
             </a>
           </div>
-        </footer>
+        </div>
       </div>
+
       <!-- Directives are also a huge part of vue, such as the built-in directives including v-if, v-for, v-bind, v-on and v-slot. -->
     </div>
   </body>

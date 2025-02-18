@@ -7,16 +7,30 @@
 body {
   background-color: #4f525a;
   font-family: "Acme";
-  display: flex;
+  /* display: flex; */
   height: 100%;
 }
 
+#app {
+}
+
+#main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) repeat(6, minmax(0, 175px)) minmax(
+      0,
+      1fr
+    );
+  height: 100vh;
+}
+
 nav {
-  width: 12%;
-  /* background-color: #333; */
+  grid-column: 1 / 2;
   display: flex;
   flex-direction: column;
-  height: 96vh;
+  /* height: 96vh; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   /* position: fixed; */
 }
@@ -31,21 +45,26 @@ nav ul {
   flex-direction: column;
   /* justify-content: space-evenly; */
   height: 100%;
+  width: 100%;
 }
 
 nav ul li {
   font-size: 1.9rem;
   text-align: left;
+  width: 100%;
+  margin: 5% 0 0 0;
 }
 
 nav ul li a {
   display: block;
   text-decoration: none;
   color: white;
-  padding: 4% 10% 4% 22%;
+
+  /* padding: 4% 10% 4% 22%; */
   /* background-color: #444; */
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
+  padding-left: 25%;
   transition: 0.3s;
 }
 
@@ -68,11 +87,16 @@ nav ul li a.active {
 }
 
 .home-content {
-  flex: 1;
-  background-image: url("images/hero2.png");
+  /* flex: 1; */
+  /* display: flex; */
+  background: url("images/hero2.png");
   background-size: cover;
-  background-repeat: no-repeat;
+  /* height: 100%; */
+  /* background-repeat: no-repeat; */
   background-position: center;
+  grid-column: 2 / 9;
+  min-height: 94vh;
+  /* grid-row: -1; */
 }
 
 .home-address {
@@ -83,46 +107,45 @@ nav ul li a.active {
   /* font-weight: normal; */
 }
 
-#main {
-  display: flex;
-}
-
 .home-logo {
+  grid-column: 2/3;
   color: white;
-  padding: 2px;
+  /* padding: 2px; */
   font-size: 2.1rem;
   /* -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: black; */
+    -webkit-text-stroke-color: black; */
   width: fit-content;
   text-align: center;
 }
 
 #logo-png {
-  height: 45vh;
+  height: 35vh;
 }
 
 .reviews {
   display: flex;
-  justify-content: space-around;
-  position: absolute;
-  bottom: 0;
-  margin-bottom: 5vh;
+  /* width: 100vw; */
+  margin-top: 7%;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
 .review {
   height: 30vh;
   width: 25vw;
-  margin: 20px;
   color: white;
   background-color: #00000099;
   border-radius: 15px;
   text-align: center;
+  /* justify-content: space-around; */
+  /* align-items: center; */
 }
 
 .review p {
   padding: 0% 3%;
   align-content: center;
-  /* font-size: 1.05rem; */
+  font-size: 1.05rem;
 }
 
 .stars {
@@ -138,13 +161,16 @@ nav ul li a.active {
   background-position: center;
 }
 
-footer {
-  display: flex;
+.footer {
+  grid-column: 1 / -9;
   justify-content: space-between;
   background-color: black;
   color: white;
   text-align: center;
   margin-top: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   /* padding: 1vh; */
   /* position: fixed; */
   /* max-height: 20vh; */
