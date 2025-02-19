@@ -18,7 +18,7 @@
   </head>
   <body>
     <div id="app">
-      <div id="main">
+      <div id="main" :style="backgroundStyle">
         <nav>
           <a href="index.html" id="nav-logo-link">
             <img src="images/Logo.png" id="nav-logo" />
@@ -109,7 +109,16 @@
 
         <div v-if="currentPage == 'tcg'" class="home-content"></div>
         <div v-if="currentPage == 'games'" class="home-content"></div>
-        <div v-if="currentPage == 'events'" class="home-content"></div>
+        <div v-if="currentPage == 'events'" class="events-content">
+          <div class="upcoming-events">
+            <h1>Upcoming Events</h1>
+          </div>
+          <div class="events-wrapper">
+            <div class="event">
+              <p>event</p>
+            </div>
+          </div>
+        </div>
         <div v-if="currentPage == 'rentals'" class="home-content"></div>
         <div v-if="currentPage == 'contact'" class="contact-content"></div>
       </div>

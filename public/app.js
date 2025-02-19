@@ -1,18 +1,25 @@
 Vue.createApp({
-  // where you hold your data
-  data: function () {
+  data() {
     return {
-      test: "hello",
       currentPage: "home",
     };
   },
-  //   where you put your methods
+  computed: {
+    backgroundStyle() {
+      const images = {
+        home: "url('images/hex2.png')",
+        tcg: "url('images/tcg.png')",
+        games: "url('images/games.png')",
+        events: "url('images/events.png')",
+        rentals: "url('images/rentals.png')",
+        contact: "url('images/contact.png')",
+      };
+      return { backgroundImage: images[this.currentPage] || "none" };
+    },
+  },
   methods: {
-    //Change the current page
-    navigatePage: function (page) {
+    navigatePage(page) {
       this.currentPage = page;
     },
   },
-
-  created: function () {},
 }).mount("#app");

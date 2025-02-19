@@ -18,19 +18,11 @@ body {
 
 #main {
   display: flex;
-  /* grid-template-columns: minmax(0, 1fr) repeat(6, minmax(0, 175px)) minmax(
-      0,
-      1fr
-    ); */
   flex-direction: row;
   width: 100dvw;
   height: 100dvh;
   position: relative;
-  /* flex-wrap: wrap; */
-
-  /* justify-content: space-between; */
-
-  /* height: 100vh; */
+  background-size: cover;
 }
 
 nav {
@@ -42,6 +34,8 @@ nav {
   /* max-width: 20%; */
   width: 12dvw;
   height: calc(100dvh - 5dvh);
+  background-color: #00000050;
+
   /* margin-right: auto; */
 
   /* position: fixed; */
@@ -108,18 +102,14 @@ nav ul li a.active {
   flex-wrap: wrap;
   height: calc(100dvh - 5dvh);
   width: calc(100dvw - 15dvw);
-  /* display: flex; */
   background: url("images/hero2.png");
   background-size: cover;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  /* height: 100%; */
-  /* background-repeat: no-repeat; */
-  background-position: center;
-  /* margin-left: auto; */
+  transition: 0.3s;
 
-  /* min-height: 94vh; */
+  background-position: center;
 }
 
 .home-address {
@@ -176,6 +166,27 @@ nav ul li a.active {
 .stars {
   margin-top: 5%;
   height: 4vh;
+}
+
+.events-content {
+  flex: 1;
+  flex-wrap: wrap;
+  height: calc(100dvh - 5dvh);
+  width: calc(100dvw - 15dvw);
+  /* background: url("images/events.png"); */
+  background-size: cover;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-position: center;
+}
+
+.upcoming-events {
+  text-align: center;
+  color: white;
+  font-size: 1.2rem;
+  -webkit-text-stroke-width: 0.25px;
+  -webkit-text-stroke-color: black;
 }
 
 .contact-content {
