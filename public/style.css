@@ -24,7 +24,7 @@ body {
     ); */
   flex-direction: row;
   width: 100vw;
-  height: 95vh;
+  height: 94vh;
   /* flex-wrap: wrap; */
 
   /* justify-content: space-between; */
@@ -140,7 +140,7 @@ nav ul li a.active {
 .reviews {
   display: flex;
   /* width: 100vw; */
-  margin-top: 10%;
+  margin-top: 12%;
   align-items: center;
   justify-content: center;
   gap: 20px;
@@ -191,8 +191,8 @@ nav ul li a.active {
   /* max-height: 20vh; */
   /* height: 15%; */
   width: 100%;
-  height: 5vh;
-  font-size: 1rem;
+  max-height: 6vh;
+  /* font-size: 1rem; */
 }
 
 .social {
