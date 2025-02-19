@@ -111,7 +111,9 @@ nav ul li a.active {
   /* display: flex; */
   background: url("images/hero2.png");
   background-size: cover;
+  flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   /* height: 100%; */
   /* background-repeat: no-repeat; */
   background-position: center;
@@ -144,20 +146,24 @@ nav ul li a.active {
 
 .reviews {
   display: flex;
-  /* margin-top: 13%; */
+  justify-content: center;
   align-items: center;
-  margin-top: auto;
   gap: 20px;
+  /* width: 100%; */
+  margin-bottom: 3%;
+  position: absolute;
+  margin-left: 6%;
+  bottom: 0;
+  margin-top: auto; /* Pushes it to the bottom */
 }
 
 .review {
   height: 200px;
-  width: 400px;
+  width: 350px;
   color: white;
   background-color: #00000099;
   border-radius: 15px;
   text-align: center;
-  align-items: flex-end;
   margin: 5px;
 }
 
