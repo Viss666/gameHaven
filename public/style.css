@@ -407,7 +407,7 @@ nav ul li a.active {
     width: 100%; /* Full width on mobile */
     height: calc(100dvh - 6dvh);
   }
-  .circle {
+  /* .circle {
     width: 80dvw;
     height: 45dvh;
   }
@@ -416,15 +416,19 @@ nav ul li a.active {
   }
   .right {
     left: 0%;
-  }
-  .center {
+  } */
+  /* .center {
     width: 50dvw;
     height: 30dvh;
-  }
+  } */
   nav ul li {
     font-size: 1.5rem;
   }
   nav ul li a {
     padding: 5% 0 5% 10%;
+  }
+
+  .footer {
+    height: 10dvh;
   }
 }

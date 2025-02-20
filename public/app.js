@@ -23,6 +23,17 @@ Vue.createApp({
       return { backgroundImage: images[this.currentPage] || "none" };
     },
   },
+
+  mounted() {
+    const mainContent = document.getElementById("main");
+    mainContent.addEventListener("touchstart", this.closeMenuOnClickOutside); // Mobile
+    mainContent.addEventListener("click", this.closeMenuOnClickOutside); //Desktop
+  },
+  beforeUnmount() {
+    const mainContent = document.getElementById("main");
+    mainContent.removeEventListener("touchstart", this.closeMenuOnClickOutside);
+    mainContent.removeEventListener("click", this.closeMenuOnClickOutside);
+  },
   methods: {
     navigatePage(page) {
       this.currentPage = page;
@@ -41,6 +52,16 @@ Vue.createApp({
       Object.keys(this.dropdowns).forEach((key) => {
         this.dropdowns[key] = key === menu ? !this.dropdowns[key] : false;
       });
+    },
+
+    closeMenuOnClickOutside(event) {
+      if (
+        this.menuOpen &&
+        !event.target.closest("nav") &&
+        !event.target.closest(".menu-btn")
+      ) {
+        this.menuOpen = false;
+      }
     },
   },
 }).mount("#app");
