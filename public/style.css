@@ -192,17 +192,59 @@ nav ul li a.active {
 .contact-content {
   /* flex: 1; */
   background: url("images/contact.png");
-
+  display: flex;
   flex: 1;
   flex-wrap: wrap;
   height: calc(100dvh - 5dvh);
   width: calc(100dvw - 15dvw);
-  /* display: flex; */
   background-size: cover;
-  /* height: 100%; */
-  /* background-repeat: no-repeat; */
   background-position: center;
-  margin-left: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-bubbles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  /* margin-top: 100px; */
+}
+
+.circle {
+  width: 30dvw;
+  height: 65dvh;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: green;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+}
+
+.left {
+  background-color: #00000070;
+  position: relative;
+  right: 10%;
+}
+
+.right {
+  background-color: #00000070;
+  position: relative;
+  left: 10%;
+}
+
+.center {
+  background-color: lightgreen;
+  position: absolute;
+  outline: 1px solid black;
+  background: url("images/owner.webp");
+  background-size: contain;
+  z-index: 10;
 }
 
 .footer {
