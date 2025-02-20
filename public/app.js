@@ -2,6 +2,11 @@ Vue.createApp({
   data() {
     return {
       currentPage: "home",
+
+      dropdowns: {
+        tcg: false,
+        games: false,
+      },
     };
   },
   computed: {
@@ -14,12 +19,25 @@ Vue.createApp({
         rentals: "url('images/rentals.png')",
         contact: "url('images/contact.png')",
       };
+
       return { backgroundImage: images[this.currentPage] || "none" };
     },
   },
   methods: {
     navigatePage(page) {
       this.currentPage = page;
+      // Close all dropdowns on navigation
+
+      Object.keys(this.dropdowns).forEach(
+        (key) => (this.dropdowns[key] = false)
+      );
+    },
+
+    toggleDropdown(menu) {
+      // Close all dropdowns except the clicked one
+      Object.keys(this.dropdowns).forEach((key) => {
+        this.dropdowns[key] = key === menu ? !this.dropdowns[key] : false;
+      });
     },
   },
 }).mount("#app");

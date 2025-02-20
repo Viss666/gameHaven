@@ -31,12 +31,20 @@
                 >Home</a
               >
             </li>
-            <li>
+            <li class="dropdown">
               <a
                 v-on:click="navigatePage('tcg')"
                 :class="{ active: currentPage === 'tcg' }"
                 >TCG</a
               >
+              <ul class="submenu">
+                <li><a v-on:click="navigatePage('tcg-pokemon')">Pokémon</a></li>
+                <li>
+                  <a v-on:click="navigatePage('tcg-mtg')"
+                    >Magic: The Gathering</a
+                  >
+                </li>
+              </ul>
             </li>
             <li>
               <a

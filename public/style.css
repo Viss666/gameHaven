@@ -97,6 +97,45 @@ nav ul li a.active {
   margin: 0px 5px 10px 5px;
 }
 
+/* Positioning for dropdown items */
+.dropdown {
+  position: relative;
+}
+
+.submenu {
+  position: absolute;
+  left: 100%; /* Moves submenu to the right */
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  list-style: none;
+  padding: 0;
+  display: none; /* Hidden by default */
+  width: 150px;
+  min-width: max-content;
+}
+
+.submenu li {
+  width: 100%;
+}
+
+.submenu li a {
+  display: block;
+  padding: 10px;
+  font-size: 1.4rem;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.submenu li a:hover {
+  background-color: #333;
+}
+
+/* Make dropdowns visible when parent is hovered (Fallback for non-JS users) */
+.dropdown:hover .submenu {
+  display: block;
+}
+
 .home-content {
   flex: 1;
   flex-wrap: wrap;
