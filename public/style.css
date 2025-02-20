@@ -136,6 +136,18 @@ nav ul li a.active {
   display: block;
 }
 
+/* Mobile Navigation */
+.menu-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
 .home-content {
   flex: 1;
   flex-wrap: wrap;
@@ -335,4 +347,84 @@ nav ul li a.active {
   padding-left: 5px;
   /* gap: 15px; */
   /* height: 100%; */
+}
+
+@media only screen and (max-width: 960px) {
+  #main {
+    flex-direction: column; /* Stack elements vertically */
+  }
+
+  nav {
+    display: none; /* Hide the default nav */
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80%; /* Or a specific width */
+    height: 100%;
+    background-color: #00000099; /* Semi-transparent background */
+    z-index: 1000; /* Ensure it's above other content */
+    transform: translateX(-100%); /* Initially hidden */
+    transition: transform 1s ease-in-out; /* Smooth transitions */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+  }
+
+  nav.mobile-nav {
+    display: flex; /* Show the mobile nav */
+    transform: translateX(0); /* Slide in */
+  }
+
+  .menu-btn {
+    display: block; /* Show the hamburger menu */
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px; /* Add some padding around the button */
+  }
+
+  .menu-btn div {
+    width: 30px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+  }
+  #nav-logo {
+    width: 50%;
+  }
+  .home-content {
+    width: 100%; /* Full width on mobile */
+    height: calc(100dvh - 6dvh);
+  }
+  .events-content {
+    width: 100%; /* Full width on mobile */
+    height: calc(100dvh - 6dvh);
+  }
+  .contact-content {
+    width: 100%; /* Full width on mobile */
+    height: calc(100dvh - 6dvh);
+  }
+  .circle {
+    width: 80dvw;
+    height: 45dvh;
+  }
+  .left {
+    right: 0%;
+  }
+  .right {
+    left: 0%;
+  }
+  .center {
+    width: 50dvw;
+    height: 30dvh;
+  }
+  nav ul li {
+    font-size: 1.5rem;
+  }
+  nav ul li a {
+    padding: 5% 0 5% 10%;
+  }
 }

@@ -2,7 +2,7 @@ Vue.createApp({
   data() {
     return {
       currentPage: "home",
-
+      menuOpen: false,
       dropdowns: {
         tcg: false,
         games: false,
@@ -31,6 +31,9 @@ Vue.createApp({
       Object.keys(this.dropdowns).forEach(
         (key) => (this.dropdowns[key] = false)
       );
+    },
+    toggleMenu() {
+      this.menuOpen = !this.menuOpen;
     },
 
     toggleDropdown(menu) {
