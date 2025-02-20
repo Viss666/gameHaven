@@ -47,12 +47,12 @@ Vue.createApp({
       this.menuOpen = !this.menuOpen;
     },
 
-    toggleDropdown(menu) {
-      // Close all dropdowns except the clicked one
-      Object.keys(this.dropdowns).forEach((key) => {
-        this.dropdowns[key] = key === menu ? !this.dropdowns[key] : false;
-      });
-    },
+    // toggleDropdown(menu) {
+    //   // Close all dropdowns except the clicked one
+    //   Object.keys(this.dropdowns).forEach((key) => {
+    //     this.dropdowns[key] = key === menu ? !this.dropdowns[key] : false;
+    //   });
+    // },
 
     closeMenuOnClickOutside(event) {
       if (
