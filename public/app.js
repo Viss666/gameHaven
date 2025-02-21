@@ -34,6 +34,7 @@ Vue.createApp({
     mainContent.removeEventListener("touchstart", this.closeMenuOnClickOutside);
     mainContent.removeEventListener("click", this.closeMenuOnClickOutside);
   },
+
   methods: {
     navigatePage(page) {
       this.currentPage = page;

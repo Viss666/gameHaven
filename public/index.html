@@ -32,24 +32,67 @@
             <img src="images/Logo.png" id="nav-logo" />
           </a>
           <ul>
-            <li><a href="#" @click="navigatePage('home')">Home</a></li>
+            <li>
+              <a
+                href="#"
+                @click="navigatePage('home')"
+                :class="{ active: currentPage === 'home' }"
+                >Home</a
+              >
+            </li>
             <li class="dropdown">
-              <a href="#" @click="toggleDropdown('tcg')">TCG</a>
+              <a href="#">TCG</a>
               <ul class="submenu">
                 <li>
-                  <a href="#" @click="navigatePage('tcg-pokemon')">Pokémon</a>
+                  <a
+                    href="#"
+                    @click="navigatePage('tcg-pokemon')"
+                    :class="{ active: currentPage === 'tcg-pokemon' }"
+                    >Pokémon</a
+                  >
                 </li>
                 <li>
-                  <a href="#" @click="navigatePage('tcg-mtg')"
+                  <a
+                    href="#"
+                    @click="navigatePage('tcg-mtg')"
+                    :class="{ active: currentPage === 'tcg-mtg' }"
                     >Magic: The Gathering</a
                   >
                 </li>
               </ul>
             </li>
-            <li><a href="#" @click="navigatePage('games')">Games</a></li>
-            <li><a href="#" @click="navigatePage('events')">Events</a></li>
-            <li><a href="#" @click="navigatePage('rentals')">Rentals</a></li>
-            <li><a href="#" @click="navigatePage('contact')">Contact</a></li>
+            <li>
+              <a
+                href="#"
+                @click="navigatePage('games')"
+                :class="{ active: currentPage === 'games' }"
+                >Games</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                @click="navigatePage('events')"
+                :class="{ active: currentPage === 'events' }"
+                >Events</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                @click="navigatePage('rentals')"
+                :class="{ active: currentPage === 'rentals' }"
+                >Rentals</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                @click="navigatePage('contact')"
+                :class="{ active: currentPage === 'contact' }"
+                >Contact</a
+              >
+            </li>
           </ul>
         </nav>
 
