@@ -157,8 +157,8 @@ nav ul li a.active {
   background: url("images/hero2.png");
   background-size: cover;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  /* justify-content: space-between; */
+  align-items: flex-start;
   transition: 0.3s;
 
   background-position: center;
@@ -400,6 +400,7 @@ nav ul li a.active {
     width: 100%; /* Full width on mobile */
     height: auto;
     display: flex;
+    align-items: center;
     /* height: calc(100dvh - 6dvh); */
   }
   .home-logo {
