@@ -7,6 +7,7 @@ Vue.createApp({
         tcg: false,
         games: false,
       },
+      mobileSubmenuOpen: null,
     };
   },
   computed: {
@@ -43,9 +44,32 @@ Vue.createApp({
       Object.keys(this.dropdowns).forEach(
         (key) => (this.dropdowns[key] = false)
       );
+      if (this.menuOpen) {
+        this.menuOpen = false;
+      }
+      this.setActiveLink();
+      this.mobileSubmenuOpen = null; // Close mobile submenu on page navigation
     },
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
+      this.mobileSubmenuOpen = null; // Close mobile submenu when menu toggles
+    },
+    toggleMobileSubmenu(submenu) {
+      if (this.mobileSubmenuOpen === submenu) {
+        this.mobileSubmenuOpen = null; // Close if already open
+      } else {
+        this.mobileSubmenuOpen = submenu; // Open the selected submenu
+      }
+    },
+    closeMenuOnClickOutside(event) {
+      if (
+        this.menuOpen &&
+        !event.target.closest("nav") &&
+        !event.target.closest(".menu-btn")
+      ) {
+        this.menuOpen = false;
+        this.mobileSubmenuOpen = null; // Close mobile submenu when menu closes
+      }
     },
 
     // toggleDropdown(menu) {

@@ -41,8 +41,8 @@
               >
             </li>
             <li class="dropdown">
-              <a href="#">TCG</a>
-              <ul class="submenu">
+              <a href="#" @click="toggleMobileSubmenu('tcg')">TCG</a>
+              <ul class="submenu" v-if="mobileSubmenuOpen === 'tcg'">
                 <li>
                   <a
                     href="#"

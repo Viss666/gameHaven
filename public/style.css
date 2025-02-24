@@ -478,6 +478,20 @@ nav ul li a.active {
     cursor: pointer;
     padding: 10px; /* Add some padding around the button */
   }
+  .submenu {
+    position: relative; /* Now it flows in the document */
+    left: 0;
+    top: 0;
+    display: block; /* Controlled by Vue with v-if */
+    padding-left: 50px; /* Indent submenu items */
+    background-color: rgba(
+      0,
+      0,
+      0,
+      0.85
+    ); /* Optional: differentiate submenu background */
+    width: 100%;
+  }
 
   .menu-btn div {
     width: 30px;
