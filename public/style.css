@@ -233,10 +233,102 @@ nav ul li a.active {
   background-position: center;
 }
 
+.events-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  padding-top: 0px;
+  flex-direction: column;
+}
+.event-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* max-width: 400px; */
+  background: #fff;
+  padding: 0px 0px 0px 0px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  text-align: center;
+  background-color: #00000099;
+  color: white;
+}
+.event-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  justify-content: flex-start;
+  padding: 15px 0px 0% 15px;
+  margin-bottom: 10px;
+  width: fit-content;
+  display: inline;
+  float: left;
+}
+.event-header {
+  width: 100%;
+  position: relative;
+  background-color: black;
+  border-radius: 10px;
+}
+.event-main-info {
+  font-size: 1.1rem;
+  width: 100%;
+  position: relative;
+  flex-direction: row;
+}
+.event-day {
+  font-size: 1.3rem;
+  padding: 5px;
+  margin-bottom: 15px;
+  padding: 15px 15px 0px 0px;
+
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  width: fit-content;
+  float: right;
+}
+.event-game {
+  padding: 2px;
+}
+.event-side-info {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 15px;
+  padding-top: 8px;
+  width: fit-content;
+  display: inline;
+  float: left;
+  text-align: left;
+}
+.event-players-signed {
+  padding: 2px;
+}
+.event-time {
+  padding: 2px;
+}
+
+.event-button {
+  padding: 15px 20px;
+  margin: 25px;
+  background-color: black;
+  color: #a5ca68;
+  text-decoration: none;
+  border-radius: 5px;
+  bottom: 0;
+  font-weight: bold;
+  float: right;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.event-button:hover {
+  background-color: #02ab2f;
+  color: white;
+}
+
 .upcoming-events {
   text-align: center;
   color: white;
   font-size: 1.2rem;
+  padding-top: 15px;
   -webkit-text-stroke-width: 0.25px;
   -webkit-text-stroke-color: black;
 }
@@ -410,6 +502,7 @@ nav ul li a.active {
     width: 100%; /* Full width on mobile */
     height: calc(100dvh - 6dvh);
   }
+
   .contact-content {
     width: 100%; /* Full width on mobile */
     height: calc(100dvh - 6dvh);
