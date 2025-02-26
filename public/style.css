@@ -160,6 +160,7 @@ nav ul li a.active {
   display: flex;
   flex-wrap: wrap;
   height: 100%;
+  min-height: 94dvh;
   width: calc(100dvw - 15dvw);
   /* background: url("images/hero2.png"); */
   /* background-color: #4f525a;
@@ -340,6 +341,7 @@ nav ul li a.active {
   /* height: calc(100dvh - 5dvh); */
   width: calc(100dvw - 15dvw);
   height: 100%;
+  min-height: 94dvh;
   /* background: url("images/events.png"); */
   background-size: cover;
   flex-direction: column;
