@@ -12,6 +12,12 @@
       href="https://fonts.googleapis.com/css2?family=Acme&family=Jost:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Playfair+Display&display=swap"
       rel="stylesheet"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Acme&family=Jost:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Playfair+Display&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="preload" href="images/hero2.png" as="image" />
 
     <title>Game Haven St. George</title>
@@ -101,8 +107,11 @@
             <img src="images/Text.png" id="logo-png" />
             <p class="home-address">250 Red Cliffs Dr #32</p>
           </div>
-
-          <img src="images/hero2.png" class="hero-image-main" />
+          <div class="built-hero-container">
+            <img src="images/shelf.png" class="shelf1" />
+            <img src="images/shelf2.png" class="shelf2" />
+          </div>
+          <!-- <img src="images/hero2.png" class="hero-image-main" /> -->
 
           <div class="home-info-content">
             <div class="store-info">
@@ -255,11 +264,22 @@
       </div>
       <div class="footer">
         <div class="times">
-          <div id="open">Monday – Saturday: 10 AM – 10 PM</div>
-          <div id="closed">Sunday: Closed</div>
+          <div id="open">
+            <div class="footer-header">STORE</div>
+            <br />
+            <p>Game Haven</p>
+            <p>250 Red Cliffs Dr #32</p>
+            <p>St. George, UT 84790</p>
+            <br />
+          </div>
         </div>
-        <div class="copyright">Copyright © 2025 Game Haven St. George</div>
+
+        <div class="about-us">
+          <div class="footer-header">ABOUT US</div>
+        </div>
         <div class="social">
+          <div class="footer-header">CONNECT</div>
+          <br />
           <a
             href="https://discord.gg/GkBxQasQ"
             class="icon-link"

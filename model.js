@@ -2,34 +2,63 @@ const mongoose = require("mongoose");
 
 //inaccurate lol
 mongoose.connect(
-  "mongodb+srv://viss_666:ERQgfO4Xn4cn5mzO@cluster0.ooxemxf.mongodb.net/StoryHub?retryWrites=true&w=majority"
+  "mongodb+srv://vistral9546:YzUYGvz2Sdvpho1h@cluster0.mmgwu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 );
 
-
-//example schema
-const storySchema = new mongoose.Schema({
-  author: {
+const playerSchema = new mongoose.Schema({
+  playerName: {
     type: String,
-    required: [true, "Author is required"],
+    required: [true, "please enter a name"],
   },
-  genre: {
+  playerDiscordID: {
     type: String,
-    required: [true, "Genre is required"],
-  },
-  storyTitle: {
-    type: String,
-    required: [true, "Story title is required"],
-  },
-  storyBody: {
-    type: String,
-    required: [true, "Story body is required"],
+    required: [true, "please enter a Discord ID"],
   },
 });
 
-//event
-const Story = new mongoose.model("Story", storySchema);
+const eventSchema = new mongoose.Schema({
+  eventTitle: {
+    type: String,
+    required: [true, "event title is required"],
+  },
+  eventGame: {
+    type: String,
+    required: [true, "game is required"],
+  },
+  eventDescription: {
+    type: String,
+    required: [true, "add a description"],
+  },
+  eventOrganizer: {
+    type: String,
+    required: [true, "add an organizer"],
+  },
+  organizerContactInfo: {
+    type: String,
+    required: [true, "add contact info"],
+  },
+  playerCount: {
+    type: Number,
+    default: 0,
+  },
+  eventDate: {
+    type: Date,
+    required: [true, "date is required"],
+  },
+  eventTime: {
+    type: Number,
+    required: [true, "time is required"],
+  },
+  playerList: {
+    type: [playerSchema],
+    default: [],
+  },
+});
 
-//export
+const Event = new mongoose.model("Event", eventSchema);
+const Player = new mongoose.model("Player", playerSchema);
+
 module.exports = {
-  Story: Story,
+  Event: Event,
+  Player: Player,
 };

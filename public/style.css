@@ -5,7 +5,7 @@
 }
 
 body {
-  background-color: #4f525a;
+  background-color: #454955;
   font-family: "Acme";
   /* display: flex; */
   /* height: 100%; */
@@ -29,8 +29,8 @@ body {
 nav {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-
+  justify-content: flex-start;
+  font-family: "Poppins";
   /* height: 96vh; */
   height: 100%;
   align-items: center;
@@ -61,7 +61,7 @@ nav ul {
 
 nav ul li {
   align-items: center;
-  font-size: 1.9rem;
+  font-size: 1.2rem;
   text-align: left;
   width: 100%;
   /* padding: 5% 0 0 0; */
@@ -83,14 +83,14 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-  background-color: #333333;
+  background-color: #0d0a0b;
   cursor: pointer;
 }
 
 nav ul li a.active {
-  background-color: #333333;
+  background-color: #0d0a0b;
   cursor: default;
-  color: #a5ca68;
+  color: #72b01d;
   /* font-weight: bold; */
 }
 
@@ -128,7 +128,7 @@ nav ul li a.active {
 .submenu li a {
   display: block;
   padding: 10px;
-  font-size: 1.4rem;
+  font-size: 1rem;
   color: white;
   text-decoration: none;
   white-space: nowrap;
@@ -165,7 +165,7 @@ nav ul li a.active {
   /* background: url("images/hero2.png"); */
   /* background-color: #4f525a;
    */
-  background-color: #4f525a;
+  background-color: #f3eff5;
   background-size: cover;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -177,7 +177,8 @@ nav ul li a.active {
 }
 
 .home-address {
-  color: white;
+  display: none;
+  color: #f3eff5;
   font-size: 2rem;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
@@ -185,7 +186,7 @@ nav ul li a.active {
 }
 
 .home-logo {
-  display: none;
+  /* display: none; */
   color: white;
   padding: 10px;
   /* font-size: 1.5rem; */
@@ -193,6 +194,8 @@ nav ul li a.active {
     -webkit-text-stroke-color: black; */
   width: fit-content;
   text-align: center;
+  /* margin-left: 2%; */
+  position: absolute;
 }
 
 #logo-png {
@@ -201,7 +204,23 @@ nav ul li a.active {
 
 .hero-image-main {
   width: 88dvw;
-  max-height: 600px;
+  max-height: 300px;
+}
+
+.built-hero-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.shelf1 {
+  /* height: 400px; */
+  width: 50%;
+}
+
+.shelf2 {
+  /* height: 400px; */
+  width: 50%;
 }
 
 .home-info-content {
@@ -213,10 +232,11 @@ nav ul li a.active {
 }
 
 .store-info {
-  color: white;
+  font-family: "Poppins";
+  color: #0d0a0b;
   padding: 7px;
   margin: 15px;
-  border-style: inset;
+  /* border-style: inset; */
   border-color: #ffffff70;
 
   border-radius: 2px;
@@ -228,7 +248,7 @@ nav ul li a.active {
 
 .title {
   font-size: 1.2rem;
-  border-bottom: 2px solid #ffffff70;
+  border-bottom: 2px solid #3f7d20;
   width: 100%;
 }
 
@@ -523,11 +543,13 @@ nav ul li a.active {
 }
 
 .footer {
-  justify-content: space-between;
-  background-color: black;
+  justify-content: space-around;
+  background-color: #454955;
+  font-family: "Poppins";
+  font-size: 0.8rem;
+  margin-top: 25px;
   color: white;
   text-align: center;
-  margin-top: auto;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -537,16 +559,18 @@ nav ul li a.active {
   /* max-height: 20vh; */
   /* height: 15%; */
   width: 100%;
-  height: 6dvh;
+  height: auto;
   position: relative;
-  bottom: 0;
   /* font-size: 1rem; */
+}
+
+.about-us {
 }
 
 .social {
   /* padding: 5px; */
   padding-right: 5px;
-  align-content: center;
+  /* align-content: center; */
   padding-left: 5px;
 }
 
@@ -571,6 +595,15 @@ nav ul li a.active {
   padding-left: 5px;
   /* gap: 15px; */
   /* height: 100%; */
+}
+
+.footer-header {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 2px solid #72b01d;
 }
 
 @media only screen and (max-width: 960px) {
