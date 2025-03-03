@@ -11,8 +11,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(express.static("public"));
 
-app.listen(8080, function () {
-  console.log("Server is running...");
+app.use(
+  session({
+    secret: "super duper secret key", // Change this to a strong secret
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }, // Set `true` if using HTTPS
+  })
+);
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, function () {
+  console.log(`Server is running on port ${PORT}...`);
 });
 
 app.get("/events", function (request, response) {
