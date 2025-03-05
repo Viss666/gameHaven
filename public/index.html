@@ -46,6 +46,22 @@
                 >Home</a
               >
             </li>
+            <li>
+              <a
+                href="#"
+                @click="navigatePage('events')"
+                :class="{ active: currentPage === 'events' }"
+                >Events</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                @click="navigatePage('rentals')"
+                :class="{ active: currentPage === 'rentals' }"
+                >Rentals</a
+              >
+            </li>
             <li class="dropdown">
               <a href="#" @click="toggleMobileSubmenu('tcg')">TCG</a>
               <ul class="submenu" v-if="mobileSubmenuOpen === 'tcg'">
@@ -75,22 +91,7 @@
                 >Games</a
               >
             </li>
-            <li>
-              <a
-                href="#"
-                @click="navigatePage('events')"
-                :class="{ active: currentPage === 'events' }"
-                >Events</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                @click="navigatePage('rentals')"
-                :class="{ active: currentPage === 'rentals' }"
-                >Rentals</a
-              >
-            </li>
+
             <!-- <li>
               <a
                 href="#"
@@ -175,80 +176,75 @@
             <h1>Upcoming Events</h1>
           </div>
           <div class="events-wrapper">
-            <div class="event-card">
+            <div class="event-card" v-for="event in events" :key="event.id">
               <div class="event-header">
-                <div class="event-title">Friday Night Magic</div>
-                <div class="event-day">1/24/2025</div>
+                <div class="event-title">{{ event.title }}</div>
+                <div class="event-day">{{ event.date }}</div>
               </div>
               <div class="event-main-info">
                 <div class="event-side-info">
-                  <div class="event-game">Magic: The Gathering</div>
-
+                  <div class="event-game">{{event.game}}</div>
                   <div class="event-players-signed">
-                    Current Player Count: 12/16
+                    Current Player Count: {{
+                    event.registered_players.length}}/16
                   </div>
-                  <div class="event-time">Friday - 5:00pm</div>
+                  <div class="event-time">{{event.day}} - {{ event.time }}</div>
                 </div>
-
-                <a href="#" class="event-button">Event Info & Sign-Up</a>
-              </div>
-            </div>
-            <div class="event-card">
-              <div class="event-header">
-                <div class="event-title">Friday Night Magic</div>
-                <div class="event-day">1/24/2025</div>
-              </div>
-              <div class="event-main-info">
-                <div class="event-side-info">
-                  <div class="event-game">Magic: The Gathering</div>
-
-                  <div class="event-players-signed">
-                    Current Player Count: 12/16
-                  </div>
-                  <div class="event-time">Friday - 5:00pm</div>
-                </div>
-
-                <a href="#" class="event-button">Event Info & Sign-Up</a>
-              </div>
-            </div>
-            <div class="event-card">
-              <div class="event-header">
-                <div class="event-title">Friday Night Magic</div>
-                <div class="event-day">1/24/2025</div>
-              </div>
-              <div class="event-main-info">
-                <div class="event-side-info">
-                  <div class="event-game">Magic: The Gathering</div>
-
-                  <div class="event-players-signed">
-                    Current Player Count: 12/16
-                  </div>
-                  <div class="event-time">Friday - 5:00pm</div>
-                </div>
-
-                <a href="#" class="event-button">Event Info & Sign-Up</a>
-              </div>
-            </div>
-            <div class="event-card">
-              <div class="event-header">
-                <div class="event-title">Friday Night Magic</div>
-                <div class="event-day">1/24/2025</div>
-              </div>
-              <div class="event-main-info">
-                <div class="event-side-info">
-                  <div class="event-game">Magic: The Gathering</div>
-
-                  <div class="event-players-signed">
-                    Current Player Count: 12/16
-                  </div>
-                  <div class="event-time">Friday - 5:00pm</div>
-                </div>
-
-                <a href="#" class="event-button">Event Info & Sign-Up</a>
+                <a
+                  href="#"
+                  class="event-button"
+                  @click.prevent="viewEvent(event.id)"
+                >
+                  Event Info &amp; Sign-Up
+                </a>
               </div>
             </div>
           </div>
         </div>
+        <div v-if="currentPage == 'viewEvent'" class="view-event-content">
+          <div class="event-card event-detail-container">
+            <!-- Header Section -->
+            <div class="event-header">
+              <h1 class="event-title">{{activeEvent.title}}</h1>
+              <p class="event-day">
+                {{activeEvent.day}} - {{activeEvent.time}} -
+                {{activeEvent.date}}
+              </p>
+            </div>
+            <!-- Body Section -->
+            <div class="event-body">
+              <div class="event-game">{{activeEvent.game}}</div>
+              <p class="event-description">{{activeEvent.description}}</p>
+              <p class="event-organizer">
+                <strong>Organizer:</strong> {{activeEvent.organizer}}
+              </p>
+              <p class="organizer-contact">
+                <strong>Organizer Contact Info:</strong>
+                {{activeEvent.organizer_contact}}
+              </p>
+              <p class="player-count">
+                <strong>Current Player Count:</strong>
+                {{activeEvent.registered_players.length}} / 16
+              </p>
+              <div class="registered-players">
+                <h3>Registered Players</h3>
+                <ul v-for="player in activeEvent.registered_players">
+                  <li>{{player.player_name}}</li>
+                </ul>
+              </div>
+            </div>
+            <!-- Footer Section with Check-In Button -->
+            <div class="event-footer" style="text-align: right; padding: 15px">
+              <button class="event-button check-in-btn" onclick="checkIn()">
+                Check In
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="currentPage == 'adminEvent'"
+          class="admin-event-content"
+        ></div>
         <div v-if="currentPage == 'rentals'" class="rental-content"></div>
         <div v-if="currentPage == 'contact'" class="contact-content">
           <div class="contact-bubbles">

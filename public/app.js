@@ -8,6 +8,32 @@ Vue.createApp({
         games: false,
       },
       mobileSubmenuOpen: null,
+
+      events: [
+        {
+          id: "1234",
+          title: "Thursday Night Firefight",
+          game: "Warhammer 40,000",
+          description:
+            "Here is a description Here is a descriptionHere is a descriptionHere is a descriptionHere is a descriptionHere is a descriptionHere is a description",
+          organizer: "Ezra",
+          organizer_contact: "vistral9546@gmail.com",
+          registered_players: [
+            {
+              player_name: "Grant",
+              discord_id: "hammerhammer",
+            },
+            {
+              player_name: "Adrian",
+              discord_id: "GWOTH",
+            },
+          ],
+          day: "Thursday",
+          date: "03/26/25",
+          time: "6:00PM",
+        },
+      ],
+      activeEvent: null,
     };
   },
   computed: {
@@ -70,6 +96,12 @@ Vue.createApp({
         this.menuOpen = false;
         this.mobileSubmenuOpen = null; // Close mobile submenu when menu closes
       }
+    },
+    viewEvent(eventId) {
+      // Find the event with the matching id
+      this.activeEvent = this.events.find((event) => event.id === eventId);
+      // Navigate to the event info/sign-up page (assumed to be "viewEvent")
+      this.currentPage = "viewEvent";
     },
 
     // toggleDropdown(menu) {
