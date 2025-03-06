@@ -1,9 +1,5 @@
 const mongoose = require("mongoose");
-
-//inaccurate lol
-mongoose.connect(
-  "mongodb+srv://vistral9546:YzUYGvz2Sdvpho1h@cluster0.mmgwu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-);
+require("dotenv").config();
 
 const playerSchema = new mongoose.Schema({
   playerName: {

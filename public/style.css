@@ -470,6 +470,11 @@ nav ul li a.active {
   -webkit-text-stroke-color: black;
 }
 
+.view-event-content {
+  width: 100%;
+  height: 100%;
+}
+
 .rental-content {
   flex: 1;
   flex-wrap: wrap;
