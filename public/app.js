@@ -37,6 +37,7 @@ Vue.createApp({
     };
   },
   computed: {
+    // I wanted to have it so that selecting a tab could give you a different background image, this is how I implemented that
     backgroundStyle() {
       const images = {
         home: "url('images/hex2.png')",
@@ -51,6 +52,7 @@ Vue.createApp({
     },
   },
 
+  // Mounted/unmounted, this is so that a user on mobile can tap off the navigation to make it disappear
   mounted() {
     const mainContent = document.getElementById("main");
     mainContent.addEventListener("touchstart", this.closeMenuOnClickOutside); // Mobile
@@ -63,6 +65,7 @@ Vue.createApp({
   },
 
   methods: {
+    // Explanatory
     navigatePage(page) {
       this.currentPage = page;
       // Close all dropdowns on navigation
@@ -76,6 +79,8 @@ Vue.createApp({
       this.setActiveLink();
       this.mobileSubmenuOpen = null; // Close mobile submenu on page navigation
     },
+
+    // Toggles submenus
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
       this.mobileSubmenuOpen = null; // Close mobile submenu when menu toggles
@@ -87,6 +92,7 @@ Vue.createApp({
         this.mobileSubmenuOpen = submenu; // Open the selected submenu
       }
     },
+    // logic to close the submenu when clicking off
     closeMenuOnClickOutside(event) {
       if (
         this.menuOpen &&
@@ -97,21 +103,12 @@ Vue.createApp({
         this.mobileSubmenuOpen = null; // Close mobile submenu when menu closes
       }
     },
+    // Navigates to an event in the events section based off the events id
     viewEvent(eventId) {
       // Find the event with the matching id
       this.activeEvent = this.events.find((event) => event.id === eventId);
       // Navigate to the event info/sign-up page (assumed to be "viewEvent")
       this.currentPage = "viewEvent";
-    },
-
-    closeMenuOnClickOutside(event) {
-      if (
-        this.menuOpen &&
-        !event.target.closest("nav") &&
-        !event.target.closest(".menu-btn")
-      ) {
-        this.menuOpen = false;
-      }
     },
   },
 }).mount("#app");

@@ -106,7 +106,6 @@
         <div v-if="currentPage == 'home'" class="home-content">
           <div class="home-logo">
             <img src="images/Text.png" id="logo-png" />
-            <p class="home-address">250 Red Cliffs Dr #32</p>
           </div>
           <div class="built-hero-container">
             <img src="images/shelf.png" class="shelf1" />
@@ -164,13 +163,15 @@
             </div>
           </div> -->
 
-          <!-- <img src="images/hero.png" height="500px" /> -->
         </div>
 
+        <!-- CONTENT AFTER CURRENTPAGE SELECTION -->
         <div v-if="currentPage == 'tcg'" class="tcg-content"></div>
         <div v-if="currentPage == 'tcg-mtg'" class="tcg-mtg"></div>
         <div v-if="currentPage == 'tcg-pokemon'" class="tcg-pokemon"></div>
         <div v-if="currentPage == 'games'" class="games-content"></div>
+
+        <!-- My senior project -->
         <div v-if="currentPage == 'events'" class="events-content">
           <div class="upcoming-events">
             <h1>Upcoming Events</h1>
@@ -296,10 +297,8 @@
           </a>
         </div>
       </div>
-      <!-- Directives are also a huge part of vue, such as the built-in directives including v-if, v-for, v-bind, v-on and v-slot. -->
     </div>
   </body>
-  <!-- scripts to connect to vue and connect app.js -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="app.js"></script>
 </html>
