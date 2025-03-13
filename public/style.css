@@ -49,8 +49,8 @@ nav {
   left: 25px;
   top: 0;
   align-self: center;
-  width: 20%;
-  max-width: 160px;
+  max-width: 10%;
+  /* max-width: 160px; */
   margin: 0px 5px 10px 5px;
 }
 
@@ -324,6 +324,7 @@ nav ul li a.active {
   height: 100%;
   min-height: 94dvh;
   background-size: cover;
+  background-color: #f3eff5;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -353,29 +354,29 @@ nav ul li a.active {
   color: white;
 }
 .event-title {
-  font-size: 1.5em;
+  /* font-size: 1.5em;
   font-weight: bold;
   justify-content: flex-start;
   padding: 15px 0px 0% 15px;
   margin-bottom: 10px;
   width: fit-content;
   display: inline;
-  float: left;
+  float: left; */
 }
 .event-header {
-  width: 100%;
+  /* width: 100%;
   position: relative;
   background-color: black;
-  border-radius: 10px;
+  border-radius: 10px; */
 }
 .event-main-info {
-  font-size: 1.1rem;
+  /* font-size: 1.1rem;
   width: 100%;
   position: relative;
-  flex-direction: row;
+  flex-direction: row; */
 }
 .event-day {
-  font-size: 1.3rem;
+  /* font-size: 1.3rem;
   padding: 5px;
   margin-bottom: 15px;
   padding: 15px 15px 0px 0px;
@@ -383,25 +384,29 @@ nav ul li a.active {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 
   width: fit-content;
-  float: right;
+  float: right; */
 }
 .event-game {
-  padding: 2px;
+  /* padding: 2px; */
 }
 .event-side-info {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /* font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 15px;
   padding-top: 8px;
   width: fit-content;
   display: inline;
   float: left;
-  text-align: left;
+  text-align: left; */
 }
 .event-players-signed {
-  padding: 2px;
+  /* padding: 2px; */
 }
 .event-time {
-  padding: 2px;
+  /* padding: 2px; */
+}
+
+.player-list {
+  list-style-type: none;
 }
 
 .event-button {
@@ -433,6 +438,100 @@ nav ul li a.active {
 .view-event-content {
   width: 100%;
   height: 100%;
+  background-color: #f3eff5;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 600px;
+}
+
+/* blah */
+.btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background-color: #388e3c;
+}
+
+/* Modal Overlay (blurs the background) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+/* Modal Content */
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal h2 {
+  margin-bottom: 15px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Button Container */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+/* Submit Button */
+.submit-btn {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  flex: 1;
+  margin-right: 5px;
+}
+
+.submit-btn:hover {
+  background-color: #1976d2;
+}
+
+/* Close (Cancel) Button */
+.close-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  flex: 1;
+  margin-left: 5px;
+}
+
+.close-btn:hover {
+  background-color: #d32f2f;
 }
 
 .rental-content {
@@ -674,7 +773,6 @@ nav ul li a.active {
     width: 100%;
     height: 8dvh;
     position: fixed;
-
   }
 
   .social-icon {

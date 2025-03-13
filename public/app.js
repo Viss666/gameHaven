@@ -8,6 +8,10 @@ Vue.createApp({
         games: false,
       },
       mobileSubmenuOpen: null,
+      showCheckInForm: false,
+      firstName: "",
+      discordId: "",
+      isCheckedIn: false,
 
       events: [
         {
@@ -43,7 +47,7 @@ Vue.createApp({
         home: "url('images/hex2.png')",
         tcg: "url('images/tcg.png')",
         games: "url('images/games.png')",
-        events: "url('images/events.png')",
+        events: "url('images/hex2.png')",
         rentals: "url('images/rentals.png')",
         contact: "url('images/contact.png')",
       };
@@ -110,5 +114,47 @@ Vue.createApp({
       // Navigate to the event info/sign-up page (assumed to be "viewEvent")
       this.currentPage = "viewEvent";
     },
+    openCheckIn() {
+      this.showCheckInForm = true;
+    },
+    closeCheckIn() {
+      this.showCheckInForm = false;
+    },
+    submitCheckIn() {
+      if (this.firstName && this.discordId) {
+        // Here you'd normally send a request to the backend to check in
+        this.isCheckedIn = true;
+        this.showCheckInForm = false;
+      } else {
+        alert("Please enter both your name and Discord ID.");
+      }
+    },
+    getEvents() {
+      fetch("https://gamehavenstg.com/events").then((response) => {
+        if (response == 200) {
+          response.json().then((eventsFromServer) => {
+            console.log("Events from server: ", eventsFromServer);
+            this.events = eventsFromServer;
+          });
+        }
+      });
+    },
+  },
+  created: function () {
+    // console.log("Hello, world.")
+    // this.getStories();
+    // fetch("/sessions", {
+    //     method: "GET",
+    // }).then((response) => {
+    //     response.json().then(data => {
+    //         this.userId = data._id;
+    //         this.user.username = data.username;
+    //         this.user.isAdmin = data.isAdmin;
+    //     })
+    // })
+    console.log("Hello, world");
+    this.getEvents();
+    //this fetch will grab the first name/discord id from their cookie?
+    //fetch()
   },
 }).mount("#app");

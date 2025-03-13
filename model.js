@@ -9,55 +9,83 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-const playerSchema = new mongoose.Schema({
-  playerName: {
-    type: String,
-    required: [true, "please enter a name"],
+const matchSchema = new mongoose.Schema({
+  player1: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Player",
+    required: true,
   },
-  playerDiscordID: {
-    type: String,
-    required: [true, "please enter a Discord ID"],
+  player2: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Player",
+    required: false, // Optional for unassigned matches
+  },
+  assignedByOrganizer: {
+    type: Boolean,
+    default: false, // True if manually assigned by an organizer
   },
 });
 
-const eventSchema = new mongoose.Schema({
-  eventTitle: {
-    type: String,
-    required: [true, "event title is required"],
+const playerSchema = new mongoose.Schema(
+  {
+    playerName: {
+      type: String,
+      required: [true, "please enter a name"],
+    },
+    playerDiscordID: {
+      type: String,
+      required: [true, "please enter a Discord ID"],
+    },
   },
-  eventGame: {
-    type: String,
-    required: [true, "game is required"],
+  { _id: true }
+);
+
+const eventSchema = new mongoose.Schema(
+  {
+    eventTitle: {
+      type: String,
+      required: [true, "event title is required"],
+    },
+    eventGame: {
+      type: String,
+      required: [true, "game is required"],
+    },
+    eventType: {
+      type: String,
+      // required: [true, "event type is required"],
+    },
+    eventDescription: {
+      type: String,
+      required: [true, "add a description"],
+    },
+    eventOrganizer: {
+      type: String,
+      required: [true, "add an organizer"],
+    },
+    organizerContactInfo: {
+      type: String,
+      required: [true, "add contact info"],
+    },
+    eventDate: {
+      type: Date,
+      required: [true, "date is required"],
+    },
+    eventDay: {
+      type: String,
+      required: [true, "day is required"],
+    },
+    eventTime: {
+      type: Number,
+      required: [true, "time is required"],
+    },
+    playerList: {
+      type: [playerSchema],
+      default: [],
+    },
+    matches: { type: [matchSchema], default: [] }, // Stores player pairings
   },
-  eventDescription: {
-    type: String,
-    required: [true, "add a description"],
-  },
-  eventOrganizer: {
-    type: String,
-    required: [true, "add an organizer"],
-  },
-  organizerContactInfo: {
-    type: String,
-    required: [true, "add contact info"],
-  },
-  playerCount: {
-    type: Number,
-    default: 0,
-  },
-  eventDate: {
-    type: Date,
-    required: [true, "date is required"],
-  },
-  eventTime: {
-    type: Number,
-    required: [true, "time is required"],
-  },
-  playerList: {
-    type: [playerSchema],
-    default: [],
-  },
-});
+  { _id: true }
+);
 
 const Event = new mongoose.model("Event", eventSchema);
 const Player = new mongoose.model("Player", playerSchema);
