@@ -132,7 +132,7 @@ Vue.createApp({
     getEvents() {
       fetch("https://gamehavenstg.com/events").then((response) => {
         console.log(response);
-        if (response == 200) {
+        if (response === 200) {
           response.json().then((eventsFromServer) => {
             console.log("Events from server: ", eventsFromServer);
             this.events = eventsFromServer;
