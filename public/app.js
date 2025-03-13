@@ -130,15 +130,25 @@ Vue.createApp({
       }
     },
     getEvents() {
-      fetch("https://gamehavenstg.com/events").then((response) => {
-        console.log(response);
-        if (response) {
-          response.json().then((eventsFromServer) => {
-            console.log("Events from server: ", eventsFromServer);
-            this.events = eventsFromServer;
-          });
-        }
-      });
+      fetch("https://gamehavenstg.com/events")
+        .then((response) => response.json())
+        .then((eventsFromServer) => {
+          // Normalize each event to match your template's properties
+          this.events = eventsFromServer.map((event) => ({
+            id: event._id, // assuming _id from MongoDB
+            title: event.eventTitle,
+            game: event.eventGame,
+            description: event.eventDescription,
+            organizer: event.eventOrganizer,
+            organizer_contact: event.organizerContactInfo,
+            registered_players: event.playerList || [], // Map playerList to registered_players
+            day: event.eventDay,
+            date: event.eventDate,
+            time: event.eventTime,
+          }));
+          console.log("Normalized events:", this.events);
+        })
+        .catch((error) => console.error("Error fetching events:", error));
     },
   },
   created: function () {
