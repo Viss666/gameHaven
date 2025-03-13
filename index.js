@@ -21,7 +21,7 @@ app.use(
     secret: "super duper secret key",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: { secure: process.env.NODE_ENV === "production" },
   })
 );
 
