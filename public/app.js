@@ -201,7 +201,7 @@ Vue.createApp({
       }
 
       // Ensure user is checked into this event
-      if (!checkedInEvents.includes(eventId)) {
+      if (!this.checkedInEvents.includes(eventId)) {
         alert("You are not checked in to this event.");
         return;
       }
