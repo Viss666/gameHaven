@@ -40,6 +40,7 @@ Vue.createApp({
         },
       ],
       activeEvent: null,
+      checkedInEvents: [],
     };
   },
   computed: {
@@ -123,6 +124,10 @@ Vue.createApp({
       this.activeEvent = this.events.find((event) => event.id === eventId);
       // Navigate to the event info/sign-up page (assumed to be "viewEvent")
       this.currentPage = "viewEvent";
+      if (checkedInEvents.includes(eventId)) {
+        alert("You are already checked in to this event.");
+        this.isCheckedIn = true;
+      }
       console.log(this.activeEvent.registered_players);
     },
     openCheckIn() {
@@ -138,8 +143,8 @@ Vue.createApp({
       }
 
       // Get existing events from cookie
-      let checkedInEvents = Cookies.get("checkedInEvents");
-      checkedInEvents = checkedInEvents ? JSON.parse(checkedInEvents) : [];
+      // let checkedInEvents = Cookies.get("checkedInEvents");
+      // checkedInEvents = checkedInEvents ? JSON.parse(checkedInEvents) : [];
 
       // Prevent duplicate entries
       if (checkedInEvents.includes(eventId)) {
@@ -275,6 +280,7 @@ Vue.createApp({
     }
     this.firstName = this.getCookie("firstName") || "";
     this.discordId = this.getCookie("discordId") || "";
+    let checkedInEvents = JSON.parse(this.getCookie("checkedInEvents"));
     //this fetch will grab the first name/discord id from their cookie?
     //fetch()
   },
