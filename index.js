@@ -15,7 +15,22 @@ const allowedOrigins = [
 
 //middlewares
 app.use(express.urlencoded({ extended: false }));
-app.use(cors({ origin: "https://gamehavenstg.com" }));
+
+// app.use(cors({ origin: "http://127.0.0.1:5500", credentials: true }));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed for this origin."));
+      }
+    },
+    credentials: true,
+    methods: "GET,POST,PUT,DELETE,OPTIONS",
+    allowedHeaders: "Content-Type,Authorization",
+  })
+);
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -101,6 +116,42 @@ app.delete("/events/:eventId", async function (request, response) {
   } catch (error) {
     console.error("Error deleting event:", error);
     response.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+app.put("/events/:eventId/add-player", async (req, res) => {
+  const eventId = req.params.eventId;
+  const { playerName, playerDiscordID } = req.body;
+
+  if (!playerName || !playerDiscordID) {
+    return res
+      .status(400)
+      .json({ error: "Player name and Discord ID are required." });
+  }
+
+  try {
+    const event = await model.Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    // Check if the player is already in the list
+    const existingPlayer = event.playerList.find(
+      (player) => player.playerDiscordID === playerDiscordID
+    );
+
+    if (existingPlayer) {
+      return res.status(400).json({ error: "Player is already checked in." });
+    }
+
+    // Add the player to the event
+    event.playerList.push({ playerName, playerDiscordID });
+    await event.save();
+
+    res.status(200).json({ message: "Player successfully checked in.", event });
+  } catch (error) {
+    console.error("Error adding player:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

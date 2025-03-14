@@ -12,6 +12,8 @@ Vue.createApp({
       firstName: "",
       discordId: "",
       isCheckedIn: false,
+      firstName: "",
+      discordId: "",
 
       events: [
         {
@@ -69,6 +71,13 @@ Vue.createApp({
   },
 
   methods: {
+    //get cookie
+    getCookie(name) {
+      const cookies = document.cookie.split("; ");
+      const cookie = cookies.find((row) => row.startsWith(name + "="));
+      return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+    },
+
     // Explanatory
     navigatePage(page) {
       this.currentPage = page;
@@ -110,9 +119,11 @@ Vue.createApp({
     // Navigates to an event in the events section based off the events id
     viewEvent(eventId) {
       // Find the event with the matching id
+      // console.log(this.events);
       this.activeEvent = this.events.find((event) => event.id === eventId);
       // Navigate to the event info/sign-up page (assumed to be "viewEvent")
       this.currentPage = "viewEvent";
+      console.log(this.activeEvent.registered_players);
     },
     openCheckIn() {
       this.showCheckInForm = true;
@@ -120,14 +131,47 @@ Vue.createApp({
     closeCheckIn() {
       this.showCheckInForm = false;
     },
-    submitCheckIn() {
+    submitCheckIn(eventId) {
+      if (!eventId || typeof eventId !== "string") {
+        console.error("Invalid event ID:", eventId);
+        return;
+      }
+
       if (this.firstName && this.discordId) {
-        // Here you'd normally send a request to the backend to check in
-        this.isCheckedIn = true;
-        this.showCheckInForm = false;
+        Cookies.set("firstName", this.firstName, { expires: 999 });
+        Cookies.set("discordId", this.discordId, { expires: 999 });
+
+        fetch(`https://gamehavenstg.com/events/${eventId}/add-player`, {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            playerName: this.firstName,
+            playerDiscordID: this.discordId,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) throw new Error("Failed to check in.");
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Check-in successful:", data);
+            this.isCheckedIn = true;
+            this.showCheckInForm = false;
+          })
+          .catch((error) => {
+            console.error("Error during check-in:", error);
+            alert("Failed to check in. Please try again.");
+          });
       } else {
         alert("Please enter both your name and Discord ID.");
       }
+    },
+
+    checkOut() {
+      this.isCheckedIn = false;
     },
     getEvents() {
       fetch("https://gamehavenstg.com/events")
@@ -146,6 +190,10 @@ Vue.createApp({
             date: event.eventDate,
             time: event.eventTime,
           }));
+          if (this.events.length > 0) {
+            this.activeEvent = this.events[0]; // Set the first event as active
+          }
+
           console.log("Normalized events:", this.events);
         })
         .catch((error) => console.error("Error fetching events:", error));
@@ -165,6 +213,11 @@ Vue.createApp({
     // })
     console.log("Hello, world");
     this.getEvents();
+    if (this.events.length > 0) {
+      this.activeEvent = this.events[0];
+    }
+    this.firstName = this.getCookie("firstName") || "";
+    this.discordId = this.getCookie("discordId") || "";
     //this fetch will grab the first name/discord id from their cookie?
     //fetch()
   },
