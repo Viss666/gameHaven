@@ -137,16 +137,25 @@ Vue.createApp({
         return;
       }
 
+      // Get existing events from cookie
+      let checkedInEvents = Cookies.get("checkedInEvents");
+      checkedInEvents = checkedInEvents ? JSON.parse(checkedInEvents) : [];
+
+      // Prevent duplicate entries
+      if (checkedInEvents.includes(eventId)) {
+        alert("You are already checked in to this event.");
+        return;
+      }
+
       if (this.firstName && this.discordId) {
+        // Save user info
         Cookies.set("firstName", this.firstName, { expires: 999 });
         Cookies.set("discordId", this.discordId, { expires: 999 });
 
         fetch(`https://gamehavenstg.com/events/${eventId}/add-player`, {
           method: "PUT",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             playerName: this.firstName,
             playerDiscordID: this.discordId,
@@ -158,6 +167,13 @@ Vue.createApp({
           })
           .then((data) => {
             console.log("Check-in successful:", data);
+
+            // Add event ID to the cookie
+            checkedInEvents.push(eventId);
+            Cookies.set("checkedInEvents", JSON.stringify(checkedInEvents), {
+              expires: 999,
+            });
+
             this.isCheckedIn = true;
             this.showCheckInForm = false;
           })
@@ -169,10 +185,51 @@ Vue.createApp({
         alert("Please enter both your name and Discord ID.");
       }
     },
+    submitCheckOut(eventId) {
+      if (!eventId || typeof eventId !== "string") {
+        console.error("Invalid event ID:", eventId);
+        return;
+      }
 
-    checkOut() {
-      this.isCheckedIn = false;
+      let checkedInEvents = Cookies.get("checkedInEvents");
+      checkedInEvents = checkedInEvents ? JSON.parse(checkedInEvents) : [];
+
+      // Ensure user is checked into this event
+      if (!checkedInEvents.includes(eventId)) {
+        alert("You are not checked in to this event.");
+        return;
+      }
+
+      fetch(`https://gamehavenstg.com/events/${eventId}/remove-player`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playerName: this.firstName,
+          playerDiscordID: this.discordId,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("Failed to check out.");
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Check-out successful:", data);
+
+          // Remove event ID from checked-in events
+          checkedInEvents = checkedInEvents.filter((id) => id !== eventId);
+          Cookies.set("checkedInEvents", JSON.stringify(checkedInEvents), {
+            expires: 999,
+          });
+
+          this.isCheckedIn = false;
+        })
+        .catch((error) => {
+          console.error("Error during check-out:", error);
+          alert("Failed to check out. Please try again.");
+        });
     },
+
     getEvents() {
       fetch("https://gamehavenstg.com/events")
         .then((response) => response.json())
