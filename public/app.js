@@ -147,7 +147,7 @@ Vue.createApp({
       // checkedInEvents = checkedInEvents ? JSON.parse(checkedInEvents) : [];
 
       // Prevent duplicate entries
-      if (checkedInEvents.includes(eventId)) {
+      if (this.checkedInEvents.includes(eventId)) {
         alert("You are already checked in to this event.");
         return;
       }
@@ -174,10 +174,14 @@ Vue.createApp({
             console.log("Check-in successful:", data);
 
             // Add event ID to the cookie
-            checkedInEvents.push(eventId);
-            Cookies.set("checkedInEvents", JSON.stringify(checkedInEvents), {
-              expires: 999,
-            });
+            this.checkedInEvents.push(eventId);
+            Cookies.set(
+              "checkedInEvents",
+              JSON.stringify(this.checkedInEvents),
+              {
+                expires: 999,
+              }
+            );
 
             this.isCheckedIn = true;
             this.showCheckInForm = false;
@@ -195,9 +199,6 @@ Vue.createApp({
         console.error("Invalid event ID:", eventId);
         return;
       }
-
-      let checkedInEvents = Cookies.get("checkedInEvents");
-      checkedInEvents = checkedInEvents ? JSON.parse(checkedInEvents) : [];
 
       // Ensure user is checked into this event
       if (!checkedInEvents.includes(eventId)) {
@@ -222,8 +223,10 @@ Vue.createApp({
           console.log("Check-out successful:", data);
 
           // Remove event ID from checked-in events
-          checkedInEvents = checkedInEvents.filter((id) => id !== eventId);
-          Cookies.set("checkedInEvents", JSON.stringify(checkedInEvents), {
+          this.checkedInEvents = this.checkedInEvents.filter(
+            (id) => id !== eventId
+          );
+          Cookies.set("checkedInEvents", JSON.stringify(this.checkedInEvents), {
             expires: 999,
           });
 
