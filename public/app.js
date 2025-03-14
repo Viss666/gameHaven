@@ -124,9 +124,10 @@ Vue.createApp({
       this.activeEvent = this.events.find((event) => event.id === eventId);
       // Navigate to the event info/sign-up page (assumed to be "viewEvent")
       this.currentPage = "viewEvent";
-      if (checkedInEvents.includes(eventId)) {
-        alert("You are already checked in to this event.");
+      if (this.checkedInEvents.includes(eventId)) {
         this.isCheckedIn = true;
+      } else {
+        this.isCheckedIn = false;
       }
       console.log(this.activeEvent.registered_players);
     },
