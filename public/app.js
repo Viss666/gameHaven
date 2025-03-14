@@ -207,7 +207,7 @@ Vue.createApp({
       }
 
       fetch(`https://gamehavenstg.com/events/${eventId}/remove-player`, {
-        method: "PUT",
+        method: "DELETE",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
