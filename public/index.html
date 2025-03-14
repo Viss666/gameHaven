@@ -246,7 +246,11 @@
                 Check In
               </button>
 
-              <buttn v-if="isCheckedIn" @click="checkOut()" class="btn">
+              <buttn
+                v-if="isCheckedIn"
+                @click="submitCheckOut(activeEvent.id)"
+                class="btn"
+              >
                 Check Out
               </buttn>
               <!-- Pop-up modal -->
