@@ -161,7 +161,7 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
   try {
     const eventId = req.params.eventId;
     // Get the player's ID from the cookie (ensure the cookie name matches)
-    const playerId = req.cookies.playerId;
+    const playerId = req.cookies.discordId;
 
     if (!playerId) {
       return res.status(400).json({ error: "Player ID not found in cookie" });
