@@ -246,13 +246,13 @@
                 Check In
               </button>
 
-              <buttn
+              <button
                 v-if="isCheckedIn"
                 @click="submitCheckOut(activeEvent.id)"
                 class="btn"
               >
                 Check Out
-              </buttn>
+              </button>
               <!-- Pop-up modal -->
               <div v-if="showCheckInForm" class="modal-overlay">
                 <div class="modal">

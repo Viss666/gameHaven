@@ -283,7 +283,7 @@ Vue.createApp({
     }
     this.firstName = this.getCookie("firstName") || "";
     this.discordId = this.getCookie("discordId") || "";
-    let checkedInEvents = JSON.parse(this.getCookie("checkedInEvents"));
+    this.checkedInEvents = JSON.parse(this.getCookie("checkedInEvents"));
     //this fetch will grab the first name/discord id from their cookie?
     //fetch()
   },
