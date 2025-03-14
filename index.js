@@ -175,7 +175,7 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
 
     // Find the index of the player in the event's playerList
     const playerIndex = event.playerList.findIndex(
-      (player) => player._id.toString() === playerId
+      (player) => player.playerDiscordID.toString() === playerId
     );
 
     if (playerIndex === -1) {
