@@ -75,9 +75,11 @@ const eventSchema = new mongoose.Schema(
       required: [true, "day is required"],
     },
     eventTime: {
-      type: Number,
+      type: String,
       required: [true, "time is required"],
+      match: [/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:MM)"], // Regex for 24-hour format
     },
+
     playerList: {
       type: [playerSchema],
       default: [],

@@ -7,6 +7,7 @@ Vue.createApp({
         tcg: false,
         games: false,
       },
+      isAdmin: true,
       mobileSubmenuOpen: null,
       showCheckInForm: false,
       firstName: "",
@@ -14,12 +15,13 @@ Vue.createApp({
       isCheckedIn: false,
       firstName: "",
       discordId: "",
-
+      templates: null,
       events: [
         {
           id: "1234",
           title: "Thursday Night Firefight",
           game: "Warhammer 40,000",
+          type: "example",
           description:
             "Here is a description Here is a descriptionHere is a descriptionHere is a descriptionHere is a descriptionHere is a descriptionHere is a description",
           organizer: "Ezra",
@@ -39,6 +41,17 @@ Vue.createApp({
           time: "6:00PM",
         },
       ],
+      newEvent: {
+        title: "",
+        game: "",
+        type: "",
+        description: "",
+        organizer: "",
+        organizer_contact: "",
+        day: "",
+        date: "",
+        time: "",
+      },
       activeEvent: null,
       checkedInEvents: [],
     };
@@ -248,6 +261,7 @@ Vue.createApp({
             id: event._id, // assuming _id from MongoDB
             title: event.eventTitle,
             game: event.eventGame,
+            type: event.eventType,
             description: event.eventDescription,
             organizer: event.eventOrganizer,
             organizer_contact: event.organizerContactInfo,
@@ -264,6 +278,75 @@ Vue.createApp({
         })
         .catch((error) => console.error("Error fetching events:", error));
     },
+
+    createEvent() {
+      this.activeEvent = null;
+      this.navigatePage("creation");
+    },
+
+    pushEvent() {
+      const newEvent = {
+        eventTitle: this.newEvent.title,
+        eventGame: this.newEvent.game,
+        eventType: this.newEvent.type,
+        eventDescription: this.newEvent.description,
+        eventOrganizer: this.newEvent.organizer,
+        organizerContactInfo: this.newEvent.organizer_contact,
+        eventDate: this.newEvent.date,
+        eventDay: this.newEvent.day,
+        eventTime: this.newEvent.time,
+        playerList: [],
+        matches: [],
+      };
+
+      fetch("https://gamehavenstg.com/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newEvent),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to create event");
+          }
+          return response.json();
+        })
+        .then((createdEvent) => {
+          console.log("Event created:", createdEvent);
+
+          // Add the created event to the local events array
+          this.events.push({
+            id: createdEvent._id, // Assuming MongoDB returns _id
+            title: createdEvent.eventTitle,
+            game: createdEvent.eventGame,
+            type: createdEvent.eventType,
+            description: createdEvent.eventDescription,
+            organizer: createdEvent.eventOrganizer,
+            organizer_contact: createdEvent.organizerContactInfo,
+            registered_players: createdEvent.playerList || [],
+            day: createdEvent.eventDay,
+            date: createdEvent.eventDate,
+            time: createdEvent.eventTime,
+          });
+
+          // Reset form fields
+          this.newEvent = {
+            title: "",
+            game: "",
+            type: "",
+            description: "",
+            organizer: "",
+            organizer_contact: "",
+            day: "",
+            date: "",
+            time: "",
+          };
+        })
+        .catch((error) => console.error("Error creating event:", error));
+    },
+    editEvent(eventId) {},
+    deleteEvent(eventId) {},
   },
   created: function () {
     // console.log("Hello, world.")
