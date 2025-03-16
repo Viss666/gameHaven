@@ -331,7 +331,46 @@
           </select>
           <button @click="pushEvent()">Submit</button>
         </div>
+        <div v-if="currentPage == 'edit'">
+          <div class="event-header">
+            <p class="back-link" @click="navigatePage('events')">
+              < Back to All Events
+            </p>
+            <h1 class="event-title">{{activeEvent.title}}</h1>
+            <p class="event-day">
+              {{activeEvent.day}} - {{activeEvent.time}} - {{activeEvent.date}}
+            </p>
+            <button @click="deleteEvent(event.id)" class="btn">Delete</button>
+          </div>
+          <div class="event-body">
+            <div class="event-game">{{activeEvent.game}}</div>
+            <p class="event-description">{{activeEvent.description}}</p>
+            <p class="event-organizer">
+              <strong>Organizer:</strong> {{activeEvent.organizer}}
+            </p>
+            <p class="organizer-contact">
+              <strong>Organizer Contact Info:</strong>
+              {{activeEvent.organizer_contact}}
+            </p>
+            <p class="player-count">
+              <strong>Current Player Count:</strong>
+              {{activeEvent.registered_players.length}} / 16
+            </p>
+            <div class="registered-players">
+              <h3>Registered Players</h3>
+              <ul class="player-list">
+                <li
+                  v-for="player in activeEvent.registered_players ?? [] "
+                  :key="player.discord_id"
+                >
+                  {{player.playerName}}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <div v-if="currentPage == 'rentals'" class="rental-content"></div>
+
         <div v-if="currentPage == 'contact'" class="contact-content">
           <div class="contact-bubbles">
             <div class="circle left">

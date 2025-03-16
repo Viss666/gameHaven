@@ -345,8 +345,26 @@ Vue.createApp({
         })
         .catch((error) => console.error("Error creating event:", error));
     },
-    editEvent(eventId) {},
-    deleteEvent(eventId) {},
+    editEvent(eventId) {
+      this.currentPage = "edit";
+      this.activeEvent = this.events.find((event) => event.id === eventId);
+    },
+    deleteEvent(eventId) {
+      fetch(`https://gamehavenstg.com/events/${eventId}`, {
+        method: "DELETE",
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to delete event");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Deleted event:", data);
+          this.events = this.events.filter((event) => event.id !== eventId);
+        })
+        .catch((error) => console.error("Error deleting event:", error));
+    },
   },
   created: function () {
     // console.log("Hello, world.")
