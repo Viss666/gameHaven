@@ -285,6 +285,9 @@ Vue.createApp({
     },
 
     pushEvent() {
+      const dateString = this.newEvent.Date;
+      const formattedDate = new Date(dateString).toISOString().split("T")[0];
+
       const newEvent = {
         eventTitle: this.newEvent.title,
         eventGame: this.newEvent.game,
@@ -292,7 +295,7 @@ Vue.createApp({
         eventDescription: this.newEvent.description,
         eventOrganizer: this.newEvent.organizer,
         organizerContactInfo: this.newEvent.organizer_contact,
-        eventDate: this.newEvent.date,
+        eventDate: this.formattedDate,
         eventDay: this.newEvent.day,
         eventTime: this.newEvent.time,
         playerList: [],
@@ -364,6 +367,40 @@ Vue.createApp({
           this.events = this.events.filter((event) => event.id !== eventId);
         })
         .catch((error) => console.error("Error deleting event:", error));
+    },
+    saveEvent(eventId) {
+      fetch(`https://gamehavenstg.com/events/${eventId}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventTitle: this.activeEvent.title,
+          eventGame: this.activeEvent.game,
+          eventType: this.activeEvent.type,
+          eventDescription: this.activeEvent.description,
+          eventOrganizer: this.activeEvent.organizer,
+          organizerContactInfo: this.activeEvent.organizer_contact,
+          eventDate: this.activeEvent.date,
+          eventDay: this.activeEvent.day,
+          eventTime: this.activeEvent.time,
+          playerList: this.activeEvent.registered_players || [],
+          matches: this.activeEvent.matches || [],
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to update event");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Event updated:", data);
+          // Optionally update the local events list
+          this.events = this.events.map((event) =>
+            event.id === eventId ? { ...event, ...this.activeEvent } : event
+          );
+        })
+        .catch((error) => console.error("Error updating event:", error));
     },
   },
   created: function () {
