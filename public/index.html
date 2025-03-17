@@ -411,7 +411,7 @@
                 >
                   {{player.playerName}}
                   <button
-                    @click="removePlayerFromEvent(activeEvent.id,activeEvent.registered_players[player].playerDiscordID)"
+                    @click="removePlayerFromEvent(activeEvent.id,player.playerDiscordID)"
                   >
                     Remove player
                   </button>
