@@ -156,11 +156,11 @@ app.put("/events/:eventId/add-player", async (req, res) => {
 });
 
 //remove player as admin
-app.put("/events/:eventId/admin-remove-player", async (req, res) => {
+app.delete("/events/:eventId/admin-remove-player", async (req, res) => {
   const eventId = req.params.eventId;
   const { playerId } = req.body;
 
-  if (!playerDiscordID) {
+  if (!playerId) {
     return res.status(400).json({ error: "PlayerID is required." });
   }
 
