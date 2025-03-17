@@ -338,7 +338,7 @@ Vue.createApp({
 
     pushEvent() {
       const dateString = this.newEvent.Date;
-      const formattedDate = new Date(dateString).toISOString().split("T")[0];
+      // const formattedDate = new Date(dateString).split("T")[0];
 
       const newEvent = {
         eventTitle: this.newEvent.title,
@@ -347,7 +347,7 @@ Vue.createApp({
         eventDescription: this.newEvent.description,
         eventOrganizer: this.newEvent.organizer,
         organizerContactInfo: this.newEvent.organizer_contact,
-        eventDate: this.formattedDate,
+        eventDate: this.newEvent.Date,
         eventDay: this.newEvent.day,
         eventTime: this.newEvent.time,
         playerList: [],
