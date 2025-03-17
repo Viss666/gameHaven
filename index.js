@@ -155,6 +155,43 @@ app.put("/events/:eventId/add-player", async (req, res) => {
   }
 });
 
+//remove player as admin
+app.put("/events/:eventId/remove-player", async (req, res) => {
+  const eventId = req.params.eventId;
+  const { playerDiscordID } = req.body;
+
+  if (!playerDiscordID) {
+    return res.status(400).json({ error: "Player Discord ID is required." });
+  }
+
+  try {
+    const event = await model.Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    // Find the index of the player to remove
+    const playerIndex = event.playerList.findIndex(
+      (player) => player.playerDiscordID === playerDiscordID
+    );
+
+    if (playerIndex === -1) {
+      return res.status(400).json({ error: "Player not found in this event." });
+    }
+
+    // Remove the player from the list
+    event.playerList.splice(playerIndex, 1);
+    await event.save();
+
+    res
+      .status(200)
+      .json({ message: "Player successfully checked out.", event });
+  } catch (error) {
+    console.error("Error removing player:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // Remove a player from an event player side
 // Needs testing -> fuck postman cookies
 app.delete("/events/:eventId/remove-player", async (req, res) => {

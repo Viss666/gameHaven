@@ -410,6 +410,11 @@
                   :key="player.discord_id"
                 >
                   {{player.playerName}}
+                  <button
+                    @click="removePlayerFromEvent(activeEvent.id,player.discord_id)"
+                  >
+                    Remove player
+                  </button>
                 </li>
               </ul>
             </div>

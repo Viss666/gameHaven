@@ -254,6 +254,43 @@ Vue.createApp({
         });
     },
 
+    updateCheckedInEvents() {
+      // Get the latest checked-in events from the cookie
+      let storedEvents = Cookies.get("checkedInEvents");
+      storedEvents = storedEvents ? JSON.parse(storedEvents) : [];
+
+      // Filter out events where the user is no longer checked in
+      this.checkedInEvents = storedEvents.filter((eventId) => {
+        const event = this.events.find((e) => e.id === eventId);
+        if (!event) return false; // Event no longer exists
+
+        return event.registered_players.some(
+          (player) => player.discord_id === this.discordId
+        );
+      });
+
+      // Save the updated list back to the cookie
+      Cookies.set("checkedInEvents", JSON.stringify(this.checkedInEvents), {
+        expires: 999,
+      });
+    },
+
+    removePlayerFromEvent(eventId, playerDiscordID) {
+      fetch(`/events/${eventId}/remove-player`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ playerDiscordID }),
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("failed to remove player");
+          return response.json();
+        })
+        .then((data) => {
+          console.log("succesfully removed player", data);
+          this.getEvents();
+        });
+    },
+
     getEvents() {
       fetch("https://gamehavenstg.com/events")
         .then((response) => response.json())
@@ -277,6 +314,9 @@ Vue.createApp({
           }
 
           console.log("Normalized events:", this.events);
+          if (!this.isAdmin) {
+            this.updateCheckedInEvents();
+          }
         })
         .catch((error) => console.error("Error fetching events:", error));
     },
