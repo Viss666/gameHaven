@@ -199,6 +199,7 @@ Vue.createApp({
 
             this.isCheckedIn = true;
             this.showCheckInForm = false;
+            this.getEvents();
           })
           .catch((error) => {
             console.error("Error during check-in:", error);
@@ -245,6 +246,7 @@ Vue.createApp({
           });
 
           this.isCheckedIn = false;
+          this.getEvents();
         })
         .catch((error) => {
           console.error("Error during check-out:", error);
