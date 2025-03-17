@@ -143,6 +143,11 @@ Vue.createApp({
         this.isCheckedIn = false;
       }
       console.log(this.activeEvent.registered_players);
+      for (player in this.activeEvent.registered_players) {
+        console.log(player);
+        console.log(this.activeEvent.registered_players[player]);
+      }
+      // console.log(this.activeEvent.registered_players);
     },
     openCheckIn() {
       this.showCheckInForm = true;
@@ -275,11 +280,11 @@ Vue.createApp({
       });
     },
 
-    removePlayerFromEvent(eventId, playerID) {
+    removePlayerFromEvent(eventId, playerDiscordID) {
       fetch(`/events/${eventId}/admin-remove-player`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ playerID }),
+        body: JSON.stringify({ playerDiscordID }),
       })
         .then((response) => {
           if (!response.ok) throw new Error("failed to remove player");
