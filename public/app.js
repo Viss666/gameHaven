@@ -276,7 +276,7 @@ Vue.createApp({
     },
 
     removePlayerFromEvent(eventId, playerID) {
-      fetch(`/events/${eventId}/remove-player`, {
+      fetch(`/events/${eventId}/admin-remove-player`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ playerID }),
