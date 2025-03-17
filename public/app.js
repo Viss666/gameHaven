@@ -279,21 +279,21 @@ Vue.createApp({
         expires: 999,
       });
     },
-
-    removePlayerFromEvent(eventId, playerDiscordID) {
-      fetch(`/events/${eventId}/admin-remove-player`, {
+    removePlayerFromEvent(eventId, playerId) {
+      fetch(`https://gamehavenstg.com/events/${eventId}/admin-remove-player`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ playerDiscordID }),
+        body: JSON.stringify({ playerId }), // Correct key expected by backend
       })
         .then((response) => {
-          if (!response.ok) throw new Error("failed to remove player");
+          if (!response.ok) throw new Error("Failed to remove player");
           return response.json();
         })
         .then((data) => {
-          console.log("succesfully removed player", data);
-          this.getEvents();
-        });
+          console.log("Successfully removed player", data);
+          this.getEvents(); // Refresh the event list
+        })
+        .catch((error) => console.error("Error removing player:", error));
     },
 
     getEvents() {
@@ -309,7 +309,12 @@ Vue.createApp({
             description: event.eventDescription,
             organizer: event.eventOrganizer,
             organizer_contact: event.organizerContactInfo,
-            registered_players: event.playerList || [], // Map playerList to registered_players
+            registered_players:
+              event.playerList.map((player) => ({
+                playerName: player.playerName,
+                discord_id: player.playerDiscordID,
+                _id: player._id, // Include the player's _id
+              })) || [],
             day: event.eventDay,
             date: event.eventDate,
             time: event.eventTime,
