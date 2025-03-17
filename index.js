@@ -158,10 +158,10 @@ app.put("/events/:eventId/add-player", async (req, res) => {
 //remove player as admin
 app.put("/events/:eventId/remove-player", async (req, res) => {
   const eventId = req.params.eventId;
-  const { playerDiscordID } = req.body;
+  const { playerId } = req.body;
 
   if (!playerDiscordID) {
-    return res.status(400).json({ error: "Player Discord ID is required." });
+    return res.status(400).json({ error: "PlayerID is required." });
   }
 
   try {
@@ -172,7 +172,7 @@ app.put("/events/:eventId/remove-player", async (req, res) => {
 
     // Find the index of the player to remove
     const playerIndex = event.playerList.findIndex(
-      (player) => player.playerDiscordID === playerDiscordID
+      (player) => player._id === playerId
     );
 
     if (playerIndex === -1) {

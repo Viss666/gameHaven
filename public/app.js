@@ -275,11 +275,11 @@ Vue.createApp({
       });
     },
 
-    removePlayerFromEvent(eventId, playerDiscordID) {
+    removePlayerFromEvent(eventId, playerID) {
       fetch(`/events/${eventId}/remove-player`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ playerDiscordID }),
+        body: JSON.stringify({ playerID }),
       })
         .then((response) => {
           if (!response.ok) throw new Error("failed to remove player");
