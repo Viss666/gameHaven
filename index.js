@@ -170,25 +170,25 @@ app.delete("/events/:eventId/admin-remove-player", async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    // Find the index of the player to remove
+    // Convert playerId string to MongoDB ObjectId
+    const playerObjectId = new mongoose.Types.ObjectId(playerId);
+
+    // Find the player by _id
     const playerIndex = event.playerList.findIndex(
-      (player) => player._id === playerId
+      (player) => player._id.equals(playerObjectId) // ✅ Correct comparison
     );
 
     if (playerIndex === -1) {
-      return res.status(400).json({ error: "Player not found in this event." });
+      return res.status(400).json({ error: "Player not found." });
     }
 
-    // Remove the player from the list
     event.playerList.splice(playerIndex, 1);
     await event.save();
 
-    res
-      .status(200)
-      .json({ message: "Player successfully checked out.", event });
+    res.json({ message: "Player removed.", event });
   } catch (error) {
     console.error("Error removing player:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Server error." });
   }
 });
 
