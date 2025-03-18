@@ -156,7 +156,7 @@ app.put("/events/:eventId/add-player", async (req, res) => {
 });
 
 //remove player as admin
-app.delete("/events/:eventId/admin-remove-player", async (req, res) => {
+app.put("/events/:eventId/admin-remove-player", async (req, res) => {
   const eventId = req.params.eventId;
   const { playerId } = req.body;
 
@@ -170,12 +170,10 @@ app.delete("/events/:eventId/admin-remove-player", async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    // Convert playerId string to MongoDB ObjectId
-    const playerObjectId = new mongoose.Player.ObjectId(playerId);
+    const playerObjectId = new mongoose.Types.ObjectId(playerId);
 
-    // Find the player by _id
-    const playerIndex = event.playerList.findIndex(
-      (player) => player._id.equals(playerObjectId) // ✅ Correct comparison
+    const playerIndex = event.playerList.findIndex((player) =>
+      player._id.equals(playerObjectId)
     );
 
     if (playerIndex === -1) {
