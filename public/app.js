@@ -281,7 +281,7 @@ Vue.createApp({
     },
     removePlayerFromEvent(eventId, playerId) {
       fetch(`https://gamehavenstg.com/events/${eventId}/admin-remove-player`, {
-        method: "DELETE",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ playerId }), // Correct key expected by backend
       })
