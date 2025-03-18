@@ -171,7 +171,7 @@ app.delete("/events/:eventId/admin-remove-player", async (req, res) => {
     }
 
     // Convert playerId string to MongoDB ObjectId
-    const playerObjectId = new mongoose.Types.ObjectId(playerId);
+    const playerObjectId = new mongoose.Player.ObjectId(playerId);
 
     // Find the player by _id
     const playerIndex = event.playerList.findIndex(
