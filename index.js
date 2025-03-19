@@ -143,39 +143,61 @@ app.delete("/events/:eventId", async function (request, response) {
   }
 });
 
+// app.put("/events/:eventId/add-player", async (req, res) => {
+//   const eventId = req.params.eventId;
+//   const { playerName, playerDiscordID } = req.body;
+
+//   if (!playerName || !playerDiscordID) {
+//     return res
+//       .status(400)
+//       .json({ error: "Player name and Discord ID are required." });
+//   }
+
+//   try {
+//     const event = await model.Event.findById(eventId);
+//     if (!event) {
+//       return res.status(404).json({ error: "Event not found" });
+//     }
+
+//     // Check if the player is already in the list
+//     const existingPlayer = event.playerList.find(
+//       (player) => player.playerDiscordID === playerDiscordID
+//     );
+
+//     if (existingPlayer) {
+//       return res.status(400).json({ error: "Player is already checked in." });
+//     }
+
+//     // Add the player to the event
+//     event.playerList.push({ playerName, playerDiscordID });
+//     await event.save();
+
+//     res.status(200).json({ message: "Player successfully checked in.", event });
+//   } catch (error) {
+//     console.error("Error adding player:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 app.put("/events/:eventId/add-player", async (req, res) => {
-  const eventId = req.params.eventId;
-  const { playerName, playerDiscordID } = req.body;
-
-  if (!playerName || !playerDiscordID) {
-    return res
-      .status(400)
-      .json({ error: "Player name and Discord ID are required." });
-  }
-
   try {
-    const event = await model.Event.findById(eventId);
-    if (!event) {
-      return res.status(404).json({ error: "Event not found" });
+    const { playerName, playerDiscordID } = req.body;
+
+    // Check if player exists, or create new
+    let player = await Player.findOne({ playerDiscordID });
+    if (!player) {
+      player = await Player.create({ playerName, playerDiscordID });
     }
 
-    // Check if the player is already in the list
-    const existingPlayer = event.playerList.find(
-      (player) => player.playerDiscordID === playerDiscordID
+    // Update the event with player's ID
+    const event = await Event.findByIdAndUpdate(
+      req.params.eventId,
+      { $push: { playerList: player._id } }, // Store only ObjectId
+      { new: true }
     );
 
-    if (existingPlayer) {
-      return res.status(400).json({ error: "Player is already checked in." });
-    }
-
-    // Add the player to the event
-    event.playerList.push({ playerName, playerDiscordID });
-    await event.save();
-
-    res.status(200).json({ message: "Player successfully checked in.", event });
-  } catch (error) {
-    console.error("Error adding player:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.json(event);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

@@ -223,7 +223,7 @@ Vue.createApp({
             organizer: eventFromServer.eventOrganizer,
             organizer_contact: eventFromServer.organizerContactInfo,
             registered_players: eventFromServer.playerList.map((player) => ({
-              playerName: player.playerName,
+              player_name: player.playerName,
               discord_id: player.playerDiscordID,
               _id: player._id,
             })),
