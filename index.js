@@ -76,9 +76,13 @@ app.get("/events", function (request, response) {
 //get singular event
 app.get("/events/:eventId", async function (request, response) {
   try {
-    const event = await model.Event.findById(request.params.eventId).populate(
-      "matches.player1 matches.player2"
-    );
+    const event = await model.Event.findById(request.params.eventId)
+      .populate("playerList") // ✅ Populate referenced players
+      .populate({
+        path: "eventMatches",
+        populate: { path: "player1 player2", model: "Player" }, // ✅ Populate player1 and player2 inside eventMatches
+      });
+
     console.log("** Fetched event:", event);
 
     if (!event) {
