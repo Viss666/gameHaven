@@ -122,7 +122,7 @@ const eventSchema = new mongoose.Schema(
     },
 
     playerList: [{ type: mongoose.Schema.Types.ObjectId, ref: "Player" }], // ✅ Store as ObjectId references
-    eventMatches: [{ type: mongoose.Schema.Types.ObjectId, ref: "Match" }], // ✅ Store as ObjectId references
+    matches: [{ type: mongoose.Schema.Types.ObjectId, ref: "Match" }], // ✅ Store as ObjectId references
   },
   { _id: true }
 );

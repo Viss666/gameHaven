@@ -72,7 +72,7 @@ app.get("/events", async function (request, response) {
     const events = await model.Event.find()
       .populate("playerList")
       .populate({
-        path: "eventMatches",
+        path: "matches",
         populate: { path: "player1 player2", model: "Player" },
       });
 
