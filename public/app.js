@@ -127,11 +127,16 @@ Vue.createApp({
         const player2 = this.activeEvent.registered_players.find(
           (p) => p._id === this.selectedPlayers[1] // Use _id
         );
+        console.log(player1);
+        console.log(player2);
 
         if (player1 && player2) {
-          this.pairedPlayers.push({ player1: player1, player2: player2 });
+          this.pairedPlayers.push({
+            player1: player1._id, // Store player1's _id
+            player2: player2._id, // Store player2's _id
+          });
         }
-
+        console.log(this.selectedPlayers);
         this.savePairsToEvent(); // Update the event with the new pairs
 
         this.selectedPlayers = [];
@@ -146,7 +151,9 @@ Vue.createApp({
 
     savePairsToEvent() {
       // Update the active event with the current pairs
-      this.activeEvent.matches = this.pairedPlayers;
+      console.log("paired players:", this.pairedPlayers);
+      this.activeEvent.eventMatches = this.pairedPlayers;
+      this.modifiedFields.matches = this.pairedPlayers;
 
       // Send updated pairs to the backend
       this.saveEvent(this.activeEvent.id); // Assuming you have a saveEvent method
@@ -451,6 +458,7 @@ Vue.createApp({
             organizer: createdEvent.eventOrganizer,
             organizer_contact: createdEvent.organizerContactInfo,
             registered_players: createdEvent.playerList || [],
+            matches: createdEvent.matches || [],
             day: createdEvent.eventDay,
             date: createdEvent.eventDate,
             time: createdEvent.eventTime,
@@ -493,7 +501,7 @@ Vue.createApp({
     },
     saveEvent(eventId) {
       console.log("Modified fields:", this.modifiedFields); // Add this line
-    
+
       fetch(`https://gamehavenstg.com/events/${eventId}`, {
         method: "PUT",
         credentials: "include",

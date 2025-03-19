@@ -84,7 +84,7 @@ const eventSchema = new mongoose.Schema(
       type: [playerSchema],
       default: [],
     },
-    matches: { type: [matchSchema], default: [] }, // Stores player pairings
+    eventMatches: { type: [matchSchema], default: [] }, // Stores player pairings
   },
   { _id: true }
 );
