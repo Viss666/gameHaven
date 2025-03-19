@@ -4,6 +4,8 @@ const model = require("./model");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const Player = model.Player; // Correct import
+const Event = model.Event;
 
 var session = require("express-session");
 

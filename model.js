@@ -127,8 +127,8 @@ const eventSchema = new mongoose.Schema(
   { _id: true }
 );
 
-const Event = new mongoose.model("Event", eventSchema);
-const Player = new mongoose.model("Player", playerSchema);
+const Event = mongoose.model("Event", eventSchema);
+const Player = mongoose.model("Player", playerSchema);
 const Match = mongoose.model("Match", matchSchema);
 
 module.exports = {
