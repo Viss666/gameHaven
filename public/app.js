@@ -234,7 +234,8 @@ Vue.createApp({
             time: eventFromServer.eventTime,
             matches: eventFromServer.matches, // Matches array will be populated
           };
-          this.pairedPlayers = eventFromServer.matches.map((match) => ({
+          console.log(this.activeEvent.registered_players);
+          this.pairedPlayers = eventFromServer.eventMatches.map((match) => ({
             player1: match.player1
               ? {
                   playerName: match.player1.playerName,
@@ -389,6 +390,7 @@ Vue.createApp({
       });
     },
     removePlayerFromEvent(eventId, playerId) {
+      console.log(eventId, playerId);
       fetch(`https://gamehavenstg.com/events/${eventId}/admin-remove-player`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -420,13 +422,14 @@ Vue.createApp({
             organizer_contact: event.organizerContactInfo,
             registered_players:
               event.playerList.map((player) => ({
-                playerName: player.playerName,
+                player_name: player.playerName,
                 discord_id: player.playerDiscordID,
                 _id: player._id, // Include the player's _id
               })) || [],
             day: event.eventDay,
             date: event.eventDate,
             time: event.eventTime,
+            matches: event.matches,
           }));
           if (this.events.length > 0) {
             this.activeEvent = this.events[0]; // Set the first event as active
@@ -513,6 +516,7 @@ Vue.createApp({
     editEvent(eventId) {
       this.currentPage = "edit";
       this.activeEvent = this.events.find((event) => event.id === eventId);
+      // this.viewEvent(eventId);
     },
     deleteEvent(eventId) {
       fetch(`https://gamehavenstg.com/events/${eventId}`, {

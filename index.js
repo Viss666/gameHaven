@@ -67,12 +67,22 @@ app.listen(PORT, function () {
   console.log(`Server is running on port ${PORT}...`);
 });
 
-app.get("/events", function (request, response) {
-  console.log("events: ", request.session);
-  model.Event.find().then((Events) => {
-    console.log("All events: ", Events);
-    response.json(Events);
-  });
+app.get("/events", async function (request, response) {
+  try {
+    const events = await model.Event.find()
+      .populate("playerList")
+      .populate({
+        path: "eventMatches",
+        populate: { path: "player1 player2", model: "Player" },
+      });
+
+    console.log("All events (populated):", events);
+
+    response.status(200).json(events);
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    response.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
 //get singular event

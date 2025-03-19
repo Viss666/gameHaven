@@ -191,7 +191,7 @@
                   v-for="player in activeEvent.registered_players ?? [] "
                   :key="player.discord_id"
                 >
-                  {{player.playerName}}
+                  {{player.player_name}}
                 </li>
               </ul>
             </div>
@@ -498,7 +498,7 @@
                   :class="{ selected: selectedPlayers.includes(player._id) }"
                   @click="togglePlayerSelection(player._id)"
                 >
-                  {{player.playerName}}
+                  {{player.player_name}}
                   <button
                     @click="removePlayerFromEvent(activeEvent.id,player._id)"
                   >
@@ -521,7 +521,8 @@
               <h2>Paired Players</h2>
               <ul>
                 <li v-for="(pair, index) in pairedPlayers" :key="index">
-                  {{ pair.player1.playerName }} vs {{ pair.player2.playerName }}
+                  {{ pair.player1.player_name }} vs {{ pair.player2.player_name
+                  }}
                   <button @click="removePair(index)">Delete</button>
                 </li>
               </ul>
