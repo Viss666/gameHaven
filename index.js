@@ -234,12 +234,12 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
 // Update event information
 // Tested and functional (needs testing with matches)
 app.put("/events/:eventId", async function (request, response) {
-  console.log("Received request body:", request.body); // Add this line
+  console.log("Received request body:", request.body);
 
   try {
     const updatedEvent = await model.Event.findByIdAndUpdate(
       request.params.eventId,
-      request.body,
+      { $set: request.body }, // Use $set to explicitly set fields
       { new: true, runValidators: true }
     );
 
