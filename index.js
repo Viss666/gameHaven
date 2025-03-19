@@ -73,6 +73,24 @@ app.get("/events", function (request, response) {
   });
 });
 
+//get singular event
+app.get("/events/:eventId", async function (request, response) {
+  try {
+    const event = await model.Event.findById(request.params.eventId).populate(
+      "matches.player1 matches.player2"
+    );
+
+    if (!event) {
+      return response.status(404).json({ message: "Event not found" });
+    }
+
+    response.status(200).json(event);
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    response.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 // Create an event
 // Tested and functional
 app.post("/events", async function (request, response) {

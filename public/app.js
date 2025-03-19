@@ -210,22 +210,39 @@ Vue.createApp({
     },
     // Navigates to an event in the events section based off the events id
     viewEvent(eventId) {
-      // Find the event with the matching id
-      // console.log(this.events);
-      this.activeEvent = this.events.find((event) => event.id === eventId);
-      // Navigate to the event info/sign-up page (assumed to be "viewEvent")
+      fetch(`https://gamehavenstg.com/events/${eventId}`)
+        .then((response) => response.json())
+        .then((eventFromServer) => {
+          // Normalize the event data (if needed)
+          this.activeEvent = {
+            id: eventFromServer._id,
+            title: eventFromServer.eventTitle,
+            game: eventFromServer.eventGame,
+            type: eventFromServer.eventType,
+            description: eventFromServer.eventDescription,
+            organizer: eventFromServer.eventOrganizer,
+            organizer_contact: eventFromServer.organizerContactInfo,
+            registered_players: eventFromServer.playerList.map((player) => ({
+              playerName: player.playerName,
+              discord_id: player.playerDiscordID,
+              _id: player._id,
+            })),
+            day: eventFromServer.eventDay,
+            date: eventFromServer.eventDate,
+            time: eventFromServer.eventTime,
+            matches: eventFromServer.matches, // Matches array will be populated
+          };
+          this.pairedPlayers = this.activeEvent.matches;
+
+          if (this.checkedInEvents.includes(this.activeEvent.id)) {
+            this.isCheckedIn = true;
+          } else {
+            this.isCheckedIn = false;
+          }
+        })
+        .catch((error) => console.error("Error fetching single event:", error));
+
       this.currentPage = "viewEvent";
-      if (this.checkedInEvents.includes(this.activeEvent.id)) {
-        this.isCheckedIn = true;
-      } else {
-        this.isCheckedIn = false;
-      }
-      console.log(this.activeEvent.registered_players);
-      for (player in this.activeEvent.registered_players) {
-        console.log(player);
-        console.log(this.activeEvent.registered_players[player]);
-      }
-      // console.log(this.activeEvent.registered_players);
     },
     openCheckIn() {
       this.showCheckInForm = true;
