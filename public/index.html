@@ -289,7 +289,7 @@
           </select>
           <button @click="pushEvent()">Submit</button>
         </div>
-        <div v-if="currentPage == 'edit'">
+        <!-- <div v-if="currentPage == 'edit'" class="edit-page-content">
           <div class="event-header">
             <p class="back-link" @click="navigatePage('events')">
               < Back to All Events
@@ -360,12 +360,14 @@
               <strong>Current Player Count:</strong>
               {{activeEvent.registered_players.length}} / 16
             </p>
-            <div class="registered-players">
+            <div id="player-list">
               <h3>Registered Players</h3>
-              <ul class="player-list">
+              <ul id="players">
                 <li
                   v-for="player in activeEvent.registered_players ?? [] "
-                  :key="player.discord_id"
+                  :key="player._id"
+                  :class="{ selected: selectedPlayers.includes(player._id) }"
+                  @click="togglePlayerSelection(player._id)"
                 >
                   {{player.playerName}}
                   <button
@@ -373,6 +375,154 @@
                   >
                     Remove player
                   </button>
+                </li>
+              </ul>
+            </div>
+            <div id="pairing-controls">
+              <button
+                id="pair-button"
+                @click="pairSelectedPlayers"
+                ref="pairButton"
+                disabled
+              >
+                Pair Selected Players
+              </button>
+            </div>
+            <div id="paired-list">
+              <h2>Paired Players</h2>
+              <ul>
+                <li v-for="(pair, index) in pairedPlayers" :key="index">
+                  {{ pair.player1.playerName }} vs {{ pair.player2.playerName }}
+                  <button @click="removePair(index)">Delete</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div> -->
+        <div v-if="currentPage == 'edit'" class="edit-page-content">
+          <div class="event-header">
+            <p class="back-link" @click="navigatePage('events')">
+              < Back to All Events
+            </p>
+            <h1 class="event-title">{{activeEvent.title}}</h1>
+            <input
+              class="event-title"
+              v-model="activeEvent.title"
+              placeholder="activeEvent.title"
+              @input="updateActiveEvent('title', $event.target.value)"
+            />
+            <p class="event-day">
+              {{activeEvent.day}} - {{activeEvent.time}} - {{activeEvent.date}}
+            </p>
+
+            <label for="event-day">Day:</label>
+            <select
+              id="event-day"
+              v-model="activeEvent.day"
+              @change="updateActiveEvent('day', $event.target.value)"
+            >
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+
+            <label for="event-date">Date:</label>
+            <input
+              type="date"
+              id="event-date"
+              v-model="activeEvent.date"
+              @change="updateActiveEvent('date', $event.target.value)"
+            />
+
+            <label for="event-time">Time:</label>
+            <input
+              type="time"
+              id="event-time"
+              v-model="activeEvent.time"
+              @change="updateActiveEvent('time', $event.target.value)"
+            />
+
+            <button @click="deleteEvent(activeEvent.id)" class="btn">
+              Delete
+            </button>
+            <button @click="saveEvent(activeEvent.id)" class="btn">Save</button>
+          </div>
+          <div class="event-body">
+            <p class="event-game">{{activeEvent.game}}</p>
+            <input
+              v-model="activeEvent.game"
+              placeholder="activeEvent.game"
+              class="event-game"
+              @input="updateActiveEvent('game', $event.target.value)"
+            />
+            <p class="event-description">{{activeEvent.description}}</p>
+            <input
+              v-model="activeEvent.description"
+              placeholder="activeEvent.description"
+              class="event-description"
+              @input="updateActiveEvent('description', $event.target.value)"
+            />
+            <p class="event-organizer">
+              <strong>Organizer:</strong> {{activeEvent.organizer}}
+            </p>
+            <input
+              class="event-organizer"
+              v-model="activeEvent.organizer"
+              placeholder="activeEvent.organizer"
+              @input="updateActiveEvent('organizer', $event.target.value)"
+            />
+            <p class="organizer-contact">
+              <strong>Organizer Contact Info:</strong>
+              {{activeEvent.organizer_contact}}
+            </p>
+            <input
+              class="organizer-contact"
+              v-model="activeEvent.organizer_contact"
+              placeholder="activeEvent.organizer_contact"
+              @input="updateActiveEvent('organizer_contact', $event.target.value)"
+            />
+            <p class="player-count">
+              <strong>Current Player Count:</strong>
+              {{activeEvent.registered_players.length}} / 16
+            </p>
+            <div id="player-list">
+              <h3>Registered Players</h3>
+              <ul id="players">
+                <li
+                  v-for="player in activeEvent.registered_players ?? [] "
+                  :key="player._id"
+                  :class="{ selected: selectedPlayers.includes(player._id) }"
+                  @click="togglePlayerSelection(player._id)"
+                >
+                  {{player.playerName}}
+                  <button
+                    @click="removePlayerFromEvent(activeEvent.id,player._id)"
+                  >
+                    Remove player
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div id="pairing-controls">
+              <button
+                id="pair-button"
+                @click="pairSelectedPlayers"
+                ref="pairButton"
+                disabled
+              >
+                Pair Selected Players
+              </button>
+            </div>
+            <div id="paired-list">
+              <h2>Paired Players</h2>
+              <ul>
+                <li v-for="(pair, index) in pairedPlayers" :key="index">
+                  {{ pair.player1.playerName }} vs {{ pair.player2.playerName }}
+                  <button @click="removePair(index)">Delete</button>
                 </li>
               </ul>
             </div>

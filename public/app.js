@@ -7,7 +7,7 @@ Vue.createApp({
         tcg: false,
         games: false,
       },
-      isAdmin: false,
+      isAdmin: true,
       adminPassword: "",
       mobileSubmenuOpen: null,
       showCheckInForm: false,
@@ -55,6 +55,9 @@ Vue.createApp({
       },
       activeEvent: null,
       checkedInEvents: [],
+      selectedPlayers: [],
+      pairedPlayers: [],
+      modifiedFields: {},
     };
   },
   computed: {
@@ -90,6 +93,63 @@ Vue.createApp({
       const cookies = document.cookie.split("; ");
       const cookie = cookies.find((row) => row.startsWith(name + "="));
       return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+    },
+
+    updateActiveEvent(field, value) {
+      this.activeEvent[field] = value;
+      this.modifiedFields[field] = value;
+    },
+
+    togglePlayerSelection(playerId) {
+      const playerIndex = this.selectedPlayers.indexOf(playerId);
+      if (playerIndex === -1) {
+        this.selectedPlayers.push(playerId);
+      } else {
+        this.selectedPlayers.splice(playerIndex, 1);
+      }
+      this.updatePairButtonState();
+    },
+
+    updatePairButtonState() {
+      this.$nextTick(() => {
+        if (this.$refs.pairButton) {
+          this.$refs.pairButton.disabled = this.selectedPlayers.length !== 2;
+        }
+      });
+    },
+
+    pairSelectedPlayers() {
+      if (this.selectedPlayers.length === 2) {
+        // Assuming your players are in activeEvent.registered_players
+        const player1 = this.activeEvent.registered_players.find(
+          (p) => p._id === this.selectedPlayers[0] // Use _id
+        );
+        const player2 = this.activeEvent.registered_players.find(
+          (p) => p._id === this.selectedPlayers[1] // Use _id
+        );
+
+        if (player1 && player2) {
+          this.pairedPlayers.push({ player1: player1, player2: player2 });
+        }
+
+        this.savePairsToEvent(); // Update the event with the new pairs
+
+        this.selectedPlayers = [];
+        this.updatePairButtonState();
+      }
+    },
+
+    removePair(index) {
+      this.pairedPlayers.splice(index, 1);
+      this.savePairsToEvent(); // Update the event after removing a pair
+    },
+
+    savePairsToEvent() {
+      // Update the active event with the current pairs
+      this.activeEvent.matches = this.pairedPlayers;
+
+      // Send updated pairs to the backend
+      this.saveEvent(this.activeEvent.id); // Assuming you have a saveEvent method
     },
 
     // Explanatory
@@ -436,19 +496,7 @@ Vue.createApp({
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          eventTitle: this.activeEvent.title,
-          eventGame: this.activeEvent.game,
-          eventType: this.activeEvent.type,
-          eventDescription: this.activeEvent.description,
-          eventOrganizer: this.activeEvent.organizer,
-          organizerContactInfo: this.activeEvent.organizer_contact,
-          eventDate: this.activeEvent.date,
-          eventDay: this.activeEvent.day,
-          eventTime: this.activeEvent.time,
-          playerList: this.activeEvent.registered_players || [],
-          matches: this.activeEvent.matches || [],
-        }),
+        body: JSON.stringify(this.modifiedFields), // Send only modified fields
       })
         .then((response) => {
           if (!response.ok) {
@@ -462,6 +510,8 @@ Vue.createApp({
           this.events = this.events.map((event) =>
             event.id === eventId ? { ...event, ...this.activeEvent } : event
           );
+          // Reset modifiedFields after successful save
+          this.modifiedFields = {};
         })
         .catch((error) => console.error("Error updating event:", error));
     },

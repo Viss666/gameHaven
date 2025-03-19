@@ -202,6 +202,14 @@ nav ul li a.active {
   background-position: center;
 }
 
+.edit-page-content {
+  background-color: #f3eff5;
+}
+
+.admin-event-content {
+  background-color: #f3eff5;
+}
+
 .events-wrapper {
   display: flex;
   justify-content: center;
@@ -211,7 +219,7 @@ nav ul li a.active {
   flex-direction: column;
 }
 .event-card {
-  width: 100%;
+  width: 60%;
   display: flex;
   flex-direction: column;
   /* max-width: 400px; */
@@ -274,6 +282,36 @@ nav ul li a.active {
 }
 .event-time {
   /* padding: 2px; */
+}
+
+#player-list,
+#paired-list {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+#players li,
+#pairs li {
+  padding: 5px;
+  cursor: pointer;
+}
+
+#players li.selected {
+  background-color: #e0f7fa;
+}
+
+#pair-button {
+  padding: 10px 20px;
+}
+
+#pair-button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+#pairs li button {
+  margin-left: 10px;
 }
 
 .player-list {
