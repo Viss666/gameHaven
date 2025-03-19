@@ -91,7 +91,7 @@ app.get("/events/:eventId", async function (request, response) {
     const event = await model.Event.findById(request.params.eventId)
       .populate("playerList") // ✅ Populate referenced players
       .populate({
-        path: "eventMatches",
+        path: "matches",
         populate: { path: "player1 player2", model: "Player" }, // ✅ Populate player1 and player2 inside eventMatches
       });
 

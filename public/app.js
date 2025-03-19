@@ -132,10 +132,11 @@ Vue.createApp({
 
         if (player1 && player2) {
           this.pairedPlayers.push({
-            player1: player1._id, // Store player1's _id
-            player2: player2._id, // Store player2's _id
+            player1: player1, // Store player1's _id
+            player2: player2, // Store player2's _id
           });
         }
+        console.log("paired players:", this.pairedPlayers);
         console.log(this.selectedPlayers);
         this.savePairsToEvent(); // Update the event with the new pairs
 
@@ -235,16 +236,16 @@ Vue.createApp({
             matches: eventFromServer.matches, // Matches array will be populated
           };
           console.log(this.activeEvent.registered_players);
-          this.pairedPlayers = eventFromServer.eventMatches.map((match) => ({
+          this.pairedPlayers = eventFromServer.matches.map((match) => ({
             player1: match.player1
               ? {
-                  playerName: match.player1.playerName,
+                  player_name: match.player1.playerName,
                   _id: match.player1._id,
                 }
               : null,
             player2: match.player2
               ? {
-                  playerName: match.player2.playerName,
+                  player_name: match.player2.playerName,
                   _id: match.player2._id,
                 }
               : null,
@@ -413,22 +414,22 @@ Vue.createApp({
         .then((eventsFromServer) => {
           // Normalize each event to match your template's properties
           this.events = eventsFromServer.map((event) => ({
-            id: event._id, // assuming _id from MongoDB
-            title: event.eventTitle,
-            game: event.eventGame,
-            type: event.eventType,
-            description: event.eventDescription,
-            organizer: event.eventOrganizer,
-            organizer_contact: event.organizerContactInfo,
-            registered_players:
+            _id: event._id, // assuming _id from MongoDB
+            eventTitle: event.eventTitle,
+            eventGame: event.eventGame,
+            eventType: event.eventType,
+            eventDescription: event.eventDescription,
+            eventOrganizer: event.eventOrganizer,
+            organizerContactInfo: event.organizerContactInfo,
+            playerList:
               event.playerList.map((player) => ({
                 player_name: player.playerName,
                 discord_id: player.playerDiscordID,
                 _id: player._id, // Include the player's _id
               })) || [],
-            day: event.eventDay,
-            date: event.eventDate,
-            time: event.eventTime,
+            eventDay: event.eventDay,
+            eventDate: event.eventDate,
+            eventTime: event.eventTime,
             matches: event.matches,
           }));
           if (this.events.length > 0) {
