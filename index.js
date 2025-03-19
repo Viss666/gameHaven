@@ -315,28 +315,36 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
 
 // Update event information
 // Tested and functional (needs testing with matches)
-app.put("/events/:eventId", async function (request, response) {
-  console.log("Received request body:", request.body);
-
+app.put("/events/:eventId", async (req, res) => {
   try {
-    const updatedEvent = await model.Event.findByIdAndUpdate(
-      request.params.eventId,
-      { $set: request.body },
-      { new: true, runValidators: true }
-    );
+    const eventId = req.params.eventId;
+    const { matches, ...otherFields } = req.body; // Separate matches from other fields
+    console.log("Received request body:", req.body);
 
-    if (!updatedEvent) {
-      return response.status(404).json({ message: "Event not found" });
+    let matchIds = [];
+
+    if (matches && matches.length > 0) {
+      for (const matchData of matches) {
+        // Create Match document
+        const match = new model.Match({
+          player1: matchData.player1._id, // Use player1's _id
+          player2: matchData.player2._id, // Use player2's _id
+        });
+        await match.save();
+        matchIds.push(match._id); // Push the match's _id
+      }
     }
 
-    console.log("Updated event:", updatedEvent); // Add this line
+    // Update the event with other fields and matchIds
+    const updatedEvent = await model.Event.findByIdAndUpdate(
+      eventId,
+      { ...otherFields, matches: matchIds }, // Save the matchIds array
+      { new: true }
+    );
 
-    response
-      .status(200)
-      .json({ message: "Event updated successfully", updatedEvent });
+    // ...
   } catch (error) {
-    console.error("Error updating event:", error);
-    response.status(500).json({ message: "Internal Server Error" });
+    // ...
   }
 });
 

@@ -150,14 +150,29 @@ Vue.createApp({
       this.savePairsToEvent(); // Update the event after removing a pair
     },
 
+    // savePairsToEvent() {
+    //   // Update the active event with the current pairs
+    //   console.log("paired players:", this.pairedPlayers);
+    //   this.activeEvent.matches = this.pairedPlayers;
+    //   this.modifiedFields.matches = this.pairedPlayers;
+
+    //   // Send updated pairs to the backend
+    //   this.saveEvent(this.activeEvent.id); // Assuming you have a saveEvent method
+    // },
+
     savePairsToEvent() {
-      // Update the active event with the current pairs
       console.log("paired players:", this.pairedPlayers);
-      this.activeEvent.matches = this.pairedPlayers;
-      this.modifiedFields.matches = this.pairedPlayers;
+
+      // Prepare the matches data with player _ids
+      const matchesToSend = this.pairedPlayers.map((pair) => ({
+        player1: { _id: pair.player1._id },
+        player2: { _id: pair.player2._id },
+      }));
+
+      this.modifiedFields.matches = matchesToSend;
 
       // Send updated pairs to the backend
-      this.saveEvent(this.activeEvent.id); // Assuming you have a saveEvent method
+      this.saveEvent(this.activeEvent.id);
     },
 
     // Explanatory
