@@ -79,6 +79,7 @@ app.get("/events/:eventId", async function (request, response) {
     const event = await model.Event.findById(request.params.eventId).populate(
       "matches.player1 matches.player2"
     );
+    console.log("** Fetched event:", event);
 
     if (!event) {
       return response.status(404).json({ message: "Event not found" });

@@ -152,7 +152,7 @@ Vue.createApp({
     savePairsToEvent() {
       // Update the active event with the current pairs
       console.log("paired players:", this.pairedPlayers);
-      this.activeEvent.eventMatches = this.pairedPlayers;
+      this.activeEvent.matches = this.pairedPlayers;
       this.modifiedFields.matches = this.pairedPlayers;
 
       // Send updated pairs to the backend
@@ -232,8 +232,20 @@ Vue.createApp({
             time: eventFromServer.eventTime,
             matches: eventFromServer.matches, // Matches array will be populated
           };
-          this.pairedPlayers = this.activeEvent.matches;
-
+          this.pairedPlayers = eventFromServer.matches.map((match) => ({
+            player1: match.player1
+              ? {
+                  playerName: match.player1.playerName,
+                  _id: match.player1._id,
+                }
+              : null,
+            player2: match.player2
+              ? {
+                  playerName: match.player2.playerName,
+                  _id: match.player2._id,
+                }
+              : null,
+          }));
           if (this.checkedInEvents.includes(this.activeEvent.id)) {
             this.isCheckedIn = true;
           } else {
