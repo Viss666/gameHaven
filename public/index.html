@@ -126,19 +126,20 @@
             </button>
           </div>
           <div class="events-wrapper">
-            <div class="event-card" v-for="event in events" :key="event.id">
+            <div class="event-card" v-for="event in events" :key="event._id">
               <div class="event-header">
-                <div class="event-title">{{ event.title }}</div>
-                <div class="event-day">{{ event.date }}</div>
+                <div class="event-title">{{ event.eventTitle }}</div>
+                <div class="event-day">{{ event.eventDate }}</div>
               </div>
               <div class="event-main-info">
                 <div class="event-side-info">
-                  <div class="event-game">{{event.game}}</div>
+                  <div class="event-game">{{event.eventGame}}</div>
                   <div class="event-players-signed">
-                    Current Player Count: {{
-                    event.registered_players.length}}/16
+                    Current Player Count: {{ event.playerList.length}}/16
                   </div>
-                  <div class="event-time">{{event.day}} - {{ event.time }}</div>
+                  <div class="event-time">
+                    {{event.eventDay}} - {{ event.eventTime }}
+                  </div>
                 </div>
                 <button
                   v-if="isAdmin == true"
@@ -164,31 +165,32 @@
             <p class="back-link" @click="navigatePage('events')">
               < Back to All Events
             </p>
-            <h1 class="event-title">{{activeEvent.title}}</h1>
+            <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
             <p class="event-day">
-              {{activeEvent.day}} - {{activeEvent.time}} - {{activeEvent.date}}
+              {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
+              {{activeEvent.eventDate}}
             </p>
           </div>
           <!-- Body Section -->
           <div class="event-body">
-            <div class="event-game">{{activeEvent.game}}</div>
-            <p class="event-description">{{activeEvent.description}}</p>
+            <div class="event-game">{{activeEvent.eventGame}}</div>
+            <p class="event-description">{{activeEvent.eventDescription}}</p>
             <p class="event-organizer">
-              <strong>Organizer:</strong> {{activeEvent.organizer}}
+              <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
             </p>
             <p class="organizer-contact">
               <strong>Organizer Contact Info:</strong>
-              {{activeEvent.organizer_contact}}
+              {{activeEvent.organizerContactInfo}}
             </p>
             <p class="player-count">
               <strong>Current Player Count:</strong>
-              {{activeEvent.registered_players.length}} / 16
+              {{activeEvent.playerList.length}} / 16
             </p>
             <div class="registered-players">
               <h3>Registered Players</h3>
               <ul class="player-list">
                 <li
-                  v-for="player in activeEvent.registered_players ?? [] "
+                  v-for="player in activeEvent.playerList ?? [] "
                   :key="player.discord_id"
                 >
                   {{player.player_name}}
@@ -254,18 +256,21 @@
           </div>
         </div>
         <div v-if="currentPage == 'creation'" class="admin-event-content">
-          <input v-model="newEvent.title" placeholder="Title" />
-          <input v-model="newEvent.game" placeholder="Game" />
-          <input v-model="newEvent.type" placeholder="Type" />
-          <input v-model="newEvent.description" placeholder="Description" />
-          <input v-model="newEvent.organizer" placeholder="Organizer" />
+          <input v-model="newEvent.eventTitle" placeholder="Title" />
+          <input v-model="newEvent.eventGame" placeholder="Game" />
+          <input v-model="newEvent.eventType" placeholder="Type" />
           <input
-            v-model="newEvent.organizer_contact"
+            v-model="newEvent.eventDescription"
+            placeholder="Description"
+          />
+          <input v-model="newEvent.eventOrganizer" placeholder="Organizer" />
+          <input
+            v-model="newEvent.organizerContactInfo"
             placeholder="Organizer Contact"
           />
 
           <label for="event-day">Day:</label>
-          <select id="event-day" v-model="newEvent.day">
+          <select id="event-day" v-model="newEvent.eventDay">
             <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>
             <option value="Wednesday">Wednesday</option>
@@ -276,10 +281,10 @@
           </select>
 
           <label for="event-date">Date:</label>
-          <input type="date" id="event-date" v-model="newEvent.date" />
+          <input type="date" id="event-date" v-model="newEvent.eventDate" />
 
           <label for="event-time">Time:</label>
-          <input type="time" id="event-time" v-model="newEvent.time" />
+          <input type="time" id="event-time" v-model="newEvent.eventTime" />
 
           <label for="templates">Template:</label>
           <select id="templates" name="templates">
@@ -404,21 +409,22 @@
             <p class="back-link" @click="navigatePage('events')">
               < Back to All Events
             </p>
-            <h1 class="event-title">{{activeEvent.title}}</h1>
+            <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
             <input
               class="event-title"
-              v-model="activeEvent.title"
-              placeholder="activeEvent.title"
+              v-model="activeEvent.eventTitle"
+              placeholder="activeEvent.eventTitle"
               @input="updateActiveEvent('eventTitle', $event.target.value)"
             />
             <p class="event-day">
-              {{activeEvent.day}} - {{activeEvent.time}} - {{activeEvent.date}}
+              {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
+              {{activeEvent.eventDate}}
             </p>
 
             <label for="event-day">Day:</label>
             <select
               id="event-day"
-              v-model="activeEvent.day"
+              v-model="activeEvent.eventDay"
               @change="updateActiveEvent('eventDay', $event.target.value)"
             >
               <option value="Monday">Monday</option>
@@ -452,48 +458,48 @@
             <button @click="saveEvent(activeEvent.id)" class="btn">Save</button>
           </div>
           <div class="event-body">
-            <p class="event-game">{{activeEvent.game}}</p>
+            <p class="event-game">{{activeEvent.eventGame}}</p>
             <input
-              v-model="activeEvent.game"
-              placeholder="activeEvent.game"
+              v-model="activeEvent.eventGame"
+              placeholder="activeEvent.eventGame"
               class="event-game"
               @input="updateActiveEvent('eventGame', $event.target.value)"
             />
-            <p class="event-description">{{activeEvent.description}}</p>
+            <p class="event-description">{{activeEvent.eventDescription}}</p>
             <input
-              v-model="activeEvent.description"
-              placeholder="activeEvent.description"
+              v-model="activeEvent.eventDescription"
+              placeholder="activeEvent.eventDescription"
               class="event-description"
               @input="updateActiveEvent('eventDescription', $event.target.value)"
             />
             <p class="event-organizer">
-              <strong>Organizer:</strong> {{activeEvent.organizer}}
+              <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
             </p>
             <input
               class="event-organizer"
-              v-model="activeEvent.organizer"
-              placeholder="activeEvent.organizer"
+              v-model="activeEvent.eventOrganizer"
+              placeholder="activeEvent.eventOrganizer"
               @input="updateActiveEvent('eventOrganizer', $event.target.value)"
             />
             <p class="organizer-contact">
               <strong>Organizer Contact Info:</strong>
-              {{activeEvent.organizer_contact}}
+              {{activeEvent.organizerContactInfo}}
             </p>
             <input
               class="organizer-contact"
-              v-model="activeEvent.organizer_contact"
-              placeholder="activeEvent.organizer_contact"
+              v-model="activeEvent.organizerContactInfo"
+              placeholder="activeEvent.organizerContactInfo"
               @input="updateActiveEvent('organizerContactInfo', $event.target.value)"
             />
             <p class="player-count">
               <strong>Current Player Count:</strong>
-              {{activeEvent.registered_players.length}} / 16
+              {{activeEvent.playerList.length}} / 16
             </p>
             <div id="player-list">
               <h3>Registered Players</h3>
               <ul id="players">
                 <li
-                  v-for="player in activeEvent.registered_players ?? [] "
+                  v-for="player in activeEvent.playerList ?? [] "
                   :key="player._id"
                   :class="{ selected: selectedPlayers.includes(player._id) }"
                   @click="togglePlayerSelection(player._id)"

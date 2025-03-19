@@ -43,15 +43,15 @@ Vue.createApp({
         },
       ],
       newEvent: {
-        title: "",
-        game: "",
-        type: "",
-        description: "",
-        organizer: "",
-        organizer_contact: "",
-        day: "",
-        date: "",
-        time: "",
+        eventTitle: "",
+        eventGame: "",
+        eventType: "",
+        eventDescription: "",
+        eventOrganizer: "",
+        organizerContactInfo: "",
+        eventDay: "",
+        eventDate: "",
+        eventTime: "",
       },
       activeEvent: null,
       checkedInEvents: [],
@@ -121,10 +121,10 @@ Vue.createApp({
     pairSelectedPlayers() {
       if (this.selectedPlayers.length === 2) {
         // Assuming your players are in activeEvent.registered_players
-        const player1 = this.activeEvent.registered_players.find(
+        const player1 = this.activeEvent.playerList.find(
           (p) => p._id === this.selectedPlayers[0] // Use _id
         );
-        const player2 = this.activeEvent.registered_players.find(
+        const player2 = this.activeEvent.playerList.find(
           (p) => p._id === this.selectedPlayers[1] // Use _id
         );
         console.log(player1);
@@ -218,24 +218,24 @@ Vue.createApp({
 
           // Normalize the event data (if needed)
           this.activeEvent = {
-            id: eventFromServer._id,
-            title: eventFromServer.eventTitle,
-            game: eventFromServer.eventGame,
-            type: eventFromServer.eventType,
-            description: eventFromServer.eventDescription,
-            organizer: eventFromServer.eventOrganizer,
-            organizer_contact: eventFromServer.organizerContactInfo,
-            registered_players: eventFromServer.playerList.map((player) => ({
+            _id: eventFromServer._id,
+            eventTitle: eventFromServer.eventTitle,
+            eventGame: eventFromServer.eventGame,
+            eventType: eventFromServer.eventType,
+            eventDescription: eventFromServer.eventDescription,
+            eventOrganizer: eventFromServer.eventOrganizer,
+            organizerContactInfo: eventFromServer.organizerContactInfo,
+            playerList: eventFromServer.playerList.map((player) => ({
               player_name: player.playerName,
               discord_id: player.playerDiscordID,
               _id: player._id,
             })),
-            day: eventFromServer.eventDay,
-            date: eventFromServer.eventDate,
-            time: eventFromServer.eventTime,
+            eventDay: eventFromServer.eventDay,
+            eventDate: eventFromServer.eventDate,
+            eventTime: eventFromServer.eventTime,
             matches: eventFromServer.matches, // Matches array will be populated
           };
-          console.log(this.activeEvent.registered_players);
+          // console.log(this.activeEvent.registered_players);
           this.pairedPlayers = eventFromServer.matches.map((match) => ({
             player1: match.player1
               ? {
@@ -380,7 +380,7 @@ Vue.createApp({
         const event = this.events.find((e) => e.id === eventId);
         if (!event) return false; // Event no longer exists
 
-        return event.registered_players.some(
+        return event.playerList.some(
           (player) => player.discord_id === this.discordId
         );
       });
@@ -414,7 +414,7 @@ Vue.createApp({
         .then((eventsFromServer) => {
           // Normalize each event to match your template's properties
           this.events = eventsFromServer.map((event) => ({
-            _id: event._id, // assuming _id from MongoDB
+            id: event._id, // assuming _id from MongoDB
             eventTitle: event.eventTitle,
             eventGame: event.eventGame,
             eventType: event.eventType,
@@ -454,15 +454,15 @@ Vue.createApp({
       // const formattedDate = new Date(dateString).split("T")[0];
 
       const newEvent = {
-        eventTitle: this.newEvent.title,
-        eventGame: this.newEvent.game,
-        eventType: this.newEvent.type,
-        eventDescription: this.newEvent.description,
-        eventOrganizer: this.newEvent.organizer,
-        organizerContactInfo: this.newEvent.organizer_contact,
-        eventDate: this.newEvent.date,
-        eventDay: this.newEvent.day,
-        eventTime: this.newEvent.time,
+        eventTitle: this.newEvent.eventTitle,
+        eventGame: this.newEvent.eventGame,
+        eventType: this.newEvent.eventType,
+        eventDescription: this.newEvent.eventDescription,
+        eventOrganizer: this.newEvent.eventOrganizer,
+        organizerContactInfo: this.newEvent.organizerContactInfo,
+        eventDate: this.newEvent.eventDate,
+        eventDay: this.newEvent.eventDay,
+        eventTime: this.newEvent.eventTime,
         playerList: [],
         matches: [],
       };
@@ -485,31 +485,31 @@ Vue.createApp({
 
           // Add the created event to the local events array
           this.events.push({
-            id: createdEvent._id, // Assuming MongoDB returns _id
-            title: createdEvent.eventTitle,
-            game: createdEvent.eventGame,
-            type: createdEvent.eventType,
-            description: createdEvent.eventDescription,
-            organizer: createdEvent.eventOrganizer,
-            organizer_contact: createdEvent.organizerContactInfo,
-            registered_players: createdEvent.playerList || [],
+            _id: createdEvent._id, // Assuming MongoDB returns _id
+            eventTitle: createdEvent.eventTitle,
+            eventGame: createdEvent.eventGame,
+            eventType: createdEvent.eventType,
+            eventDescription: createdEvent.eventDescription,
+            eventOrganizer: createdEvent.eventOrganizer,
+            organizerContactInfo: createdEvent.organizerContactInfo,
+            playerList: createdEvent.playerList || [],
             matches: createdEvent.matches || [],
-            day: createdEvent.eventDay,
-            date: createdEvent.eventDate,
-            time: createdEvent.eventTime,
+            eventDay: createdEvent.eventDay,
+            eventDate: createdEvent.eventDate,
+            eventTime: createdEvent.eventTime,
           });
 
           // Reset form fields
           this.newEvent = {
-            title: "",
-            game: "",
-            type: "",
-            description: "",
-            organizer: "",
-            organizer_contact: "",
-            day: "",
-            date: "",
-            time: "",
+            eventTitle: "",
+            eventGame: "",
+            eventType: "",
+            eventDescription: "",
+            eventOrganizer: "",
+            organizerContactInfo: "",
+            eventDay: "",
+            eventDate: "",
+            eventTime: "",
           };
         })
         .catch((error) => console.error("Error creating event:", error));
