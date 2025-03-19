@@ -7,7 +7,8 @@ Vue.createApp({
         tcg: false,
         games: false,
       },
-      isAdmin: true,
+      isAdmin: false,
+      adminPassword: "",
       mobileSubmenuOpen: null,
       showCheckInForm: false,
       firstName: "",
@@ -58,18 +59,17 @@ Vue.createApp({
   },
   computed: {
     // I wanted to have it so that selecting a tab could give you a different background image, this is how I implemented that
-    backgroundStyle() {
-      const images = {
-        home: "url('images/hex2.png')",
-        tcg: "url('images/tcg.png')",
-        games: "url('images/games.png')",
-        events: "url('images/hex2.png')",
-        rentals: "url('images/rentals.png')",
-        contact: "url('images/contact.png')",
-      };
-
-      return { backgroundImage: images[this.currentPage] || "none" };
-    },
+    // backgroundStyle() {
+    //   const images = {
+    //     home: "url('images/hex2.png')",
+    //     tcg: "url('images/tcg.png')",
+    //     games: "url('images/games.png')",
+    //     events: "url('images/hex2.png')",
+    //     rentals: "url('images/rentals.png')",
+    //     contact: "url('images/contact.png')",
+    //   };
+    //   return { backgroundImage: images[this.currentPage] || "none" };
+    // },
   },
 
   // Mounted/unmounted, this is so that a user on mobile can tap off the navigation to make it disappear
@@ -105,6 +105,17 @@ Vue.createApp({
       }
       this.setActiveLink();
       this.mobileSubmenuOpen = null; // Close mobile submenu on page navigation
+    },
+
+    verifyAdmin() {
+      if (this.adminPassword == "friend") {
+        this.isAdmin = true;
+        this.currentPage = "events";
+      } else {
+        alert("wrong password you are not friend");
+        this.adminPassword = "";
+        return;
+      }
     },
 
     // Toggles submenus

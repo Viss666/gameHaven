@@ -89,6 +89,15 @@
               >
             </li>
 
+            <li>
+              <a
+                href="#"
+                @click="navigatePage('login')"
+                :class="{ active: currentPage === 'login' }"
+                >Admin Login</a
+              >
+            </li>
+
             <!-- <li>
               <a
                 href="#"
@@ -138,13 +147,13 @@
                 >
                   Edit Event
                 </button>
-                <a
+                <button
                   href="#"
-                  class="event-button"
+                  class="btn"
                   @click.prevent="viewEvent(event.id)"
                 >
                   Event Info &amp; Sign-Up
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -231,6 +240,17 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div v-if="currentPage == 'login'" class="login-content">
+          <div class="login-container">
+            <h2>Speak friend and enter:</h2>
+            <input
+              type="password"
+              placeholder="Password"
+              v-model="adminPassword"
+            />
+            <button @click="verifyAdmin()">Submit</button>
           </div>
         </div>
         <div v-if="currentPage == 'creation'" class="admin-event-content">
