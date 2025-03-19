@@ -213,6 +213,8 @@ Vue.createApp({
       fetch(`https://gamehavenstg.com/events/${eventId}`)
         .then((response) => response.json())
         .then((eventFromServer) => {
+          console.log("Fetched Event:", eventFromServer); // Debugging log
+
           // Normalize the event data (if needed)
           this.activeEvent = {
             id: eventFromServer._id,

@@ -178,9 +178,34 @@ app.delete("/events/:eventId", async function (request, response) {
 //     res.status(500).json({ error: "Internal Server Error" });
 //   }
 // });
+// app.put("/events/:eventId/add-player", async (req, res) => {
+//   try {
+//     const { playerName, playerDiscordID } = req.body;
+
+//     // Check if player exists, or create new
+//     let player = await Player.findOne({ playerDiscordID });
+//     if (!player) {
+//       player = await Player.create({ playerName, playerDiscordID });
+//     }
+
+//     // Update the event with player's ID
+//     const event = await Event.findByIdAndUpdate(
+//       req.params.eventId,
+//       { $push: { playerList: player._id } }, // Store only ObjectId
+//       { new: true }
+//     );
+
+//     res.json(event);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
 app.put("/events/:eventId/add-player", async (req, res) => {
   try {
     const { playerName, playerDiscordID } = req.body;
+
+    console.log("Received request body:", req.body);
 
     // Check if player exists, or create new
     let player = await Player.findOne({ playerDiscordID });
@@ -191,7 +216,7 @@ app.put("/events/:eventId/add-player", async (req, res) => {
     // Update the event with player's ID
     const event = await Event.findByIdAndUpdate(
       req.params.eventId,
-      { $push: { playerList: player._id } }, // Store only ObjectId
+      { $push: { playerList: player._id } },
       { new: true }
     );
 
