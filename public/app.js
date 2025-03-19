@@ -492,11 +492,13 @@ Vue.createApp({
         .catch((error) => console.error("Error deleting event:", error));
     },
     saveEvent(eventId) {
+      console.log("Modified fields:", this.modifiedFields); // Add this line
+    
       fetch(`https://gamehavenstg.com/events/${eventId}`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(this.modifiedFields), // Send only modified fields
+        body: JSON.stringify(this.modifiedFields),
       })
         .then((response) => {
           if (!response.ok) {
@@ -505,13 +507,8 @@ Vue.createApp({
           return response.json();
         })
         .then((data) => {
-          console.log("Event updated:", data);
-          // Optionally update the local events list
-          this.events = this.events.map((event) =>
-            event.id === eventId ? { ...event, ...this.activeEvent } : event
-          );
-          // Reset modifiedFields after successful save
-          this.modifiedFields = {};
+          console.log("Event updated:", data); // Add this line
+          // ...
         })
         .catch((error) => console.error("Error updating event:", error));
     },

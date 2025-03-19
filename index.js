@@ -239,13 +239,15 @@ app.put("/events/:eventId", async function (request, response) {
   try {
     const updatedEvent = await model.Event.findByIdAndUpdate(
       request.params.eventId,
-      { $set: request.body }, // Use $set to explicitly set fields
+      { $set: request.body },
       { new: true, runValidators: true }
     );
 
     if (!updatedEvent) {
       return response.status(404).json({ message: "Event not found" });
     }
+
+    console.log("Updated event:", updatedEvent); // Add this line
 
     response
       .status(200)
