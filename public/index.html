@@ -509,7 +509,7 @@
               placeholder="activeEvent.organizerContactInfo"
               @input="updateActiveEvent('organizerContactInfo', $event.target.value)"
             />
-            <p class="player-count">
+            <p class="player-count" v-if="activeEvent">
               <strong>Current Player Count:</strong>
               {{activeEvent.playerList.length}} / 16
             </p>

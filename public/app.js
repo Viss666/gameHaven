@@ -301,6 +301,8 @@ Vue.createApp({
             eventTime: eventFromServer.eventTime,
             matches: eventFromServer.matches, // Matches array will be populated
           };
+          console.log("activeEvent:", this.activeEvent); // Log the activeEvent
+
           // console.log(this.activeEvent.registered_players);
           this.pairedPlayers = eventFromServer.matches.map((match) => ({
             player1: match.player1
@@ -340,11 +342,6 @@ Vue.createApp({
         return;
       }
 
-      // Get existing events from cookie
-      // let checkedInEvents = Cookies.get("checkedInEvents");
-      // checkedInEvents = checkedInEvents ? JSON.parse(checkedInEvents) : [];
-
-      // Prevent duplicate entries
       if (this.checkedInEvents.includes(eventId)) {
         alert("You are already checked in to this event.");
         return;
@@ -353,7 +350,6 @@ Vue.createApp({
       console.log("first name and discord id:", this.firstName, this.discordId);
 
       if (this.firstName && this.discordId) {
-        // Save user info
         Cookies.set("firstName", this.firstName, { expires: 999 });
         Cookies.set("discordId", this.discordId, { expires: 999 });
 
@@ -373,7 +369,6 @@ Vue.createApp({
           .then((data) => {
             console.log("Check-in successful:", data);
 
-            // Add event ID to the cookie
             this.checkedInEvents.push(eventId);
             Cookies.set(
               "checkedInEvents",
@@ -385,7 +380,10 @@ Vue.createApp({
 
             this.isCheckedIn = true;
             this.showCheckInForm = false;
-            this.getEvents();
+            // Wait for getEvents to finish before viewEvent
+            this.getEvents().then(() => {
+              this.viewEvent(eventId);
+            });
           })
           .catch((error) => {
             console.error("Error during check-in:", error);
@@ -395,6 +393,68 @@ Vue.createApp({
         alert("Please enter both your name and Discord ID.");
       }
     },
+    // submitCheckIn(eventId) {
+    //   if (!eventId || typeof eventId !== "string") {
+    //     console.error("Invalid event ID:", eventId);
+    //     return;
+    //   }
+
+    //   // Get existing events from cookie
+    //   // let checkedInEvents = Cookies.get("checkedInEvents");
+    //   // checkedInEvents = checkedInEvents ? JSON.parse(checkedInEvents) : [];
+
+    //   // Prevent duplicate entries
+    //   if (this.checkedInEvents.includes(eventId)) {
+    //     alert("You are already checked in to this event.");
+    //     return;
+    //   }
+
+    //   console.log("first name and discord id:", this.firstName, this.discordId);
+
+    //   if (this.firstName && this.discordId) {
+    //     // Save user info
+    //     Cookies.set("firstName", this.firstName, { expires: 999 });
+    //     Cookies.set("discordId", this.discordId, { expires: 999 });
+
+    //     fetch(`https://gamehavenstg.com/events/${eventId}/add-player`, {
+    //       method: "PUT",
+    //       credentials: "include",
+    //       headers: { "Content-Type": "application/json" },
+    //       body: JSON.stringify({
+    //         playerName: this.firstName,
+    //         playerDiscordID: this.discordId,
+    //       }),
+    //     })
+    //       .then((response) => {
+    //         if (!response.ok) throw new Error("Failed to check in.");
+    //         return response.json();
+    //       })
+    //       .then((data) => {
+    //         console.log("Check-in successful:", data);
+
+    //         // Add event ID to the cookie
+    //         this.checkedInEvents.push(eventId);
+    //         Cookies.set(
+    //           "checkedInEvents",
+    //           JSON.stringify(this.checkedInEvents),
+    //           {
+    //             expires: 999,
+    //           }
+    //         );
+
+    //         this.isCheckedIn = true;
+    //         this.showCheckInForm = false;
+    //         this.getEvents();
+    //         this.viewEvent(activeEvent.id);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error during check-in:", error);
+    //         // alert("Failed to check in. Please try again.");
+    //       });
+    //   } else {
+    //     alert("Please enter both your name and Discord ID.");
+    //   }
+    // },
     submitCheckOut(eventId) {
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
@@ -445,7 +505,7 @@ Vue.createApp({
           // this.getEvents().then(() => {
           //   this.viewEvent(eventId);
           // });
-          this.getEvents();
+          // this.getEvents();
           this.viewEvent(eventId);
         })
         .catch((error) => {
@@ -501,8 +561,44 @@ Vue.createApp({
         .catch((error) => console.error("Error removing player:", error));
     },
 
+    // getEvents() {
+    //   fetch("https://gamehavenstg.com/events")
+    //     .then((response) => response.json())
+    //     .then((eventsFromServer) => {
+    //       // Normalize each event to match your template's properties
+    //       this.events = eventsFromServer.map((event) => ({
+    //         id: event._id, // assuming _id from MongoDB
+    //         eventTitle: event.eventTitle,
+    //         eventGame: event.eventGame,
+    //         eventType: event.eventType,
+    //         eventDescription: event.eventDescription,
+    //         eventOrganizer: event.eventOrganizer,
+    //         organizerContactInfo: event.organizerContactInfo,
+    //         playerList:
+    //           event.playerList.map((player) => ({
+    //             player_name: player.playerName,
+    //             discord_id: player.playerDiscordID,
+    //             _id: player._id, // Include the player's _id
+    //           })) || [],
+    //         eventDay: event.eventDay,
+    //         eventDate: event.eventDate,
+    //         eventTime: event.eventTime,
+    //         matches: event.matches,
+    //       }));
+    //       // if (this.events.length > 0) {
+    //       //   this.activeEvent = this.events[0]; // Set the first event as active
+    //       // }
+
+    //       console.log("Normalized events:", this.events);
+    //       if (!this.isAdmin) {
+    //         this.updateCheckedInEvents();
+    //       }
+    //     })
+    //     .catch((error) => console.error("Error fetching events:", error));
+    // },
+
     getEvents() {
-      fetch("https://gamehavenstg.com/events")
+      return fetch("https://gamehavenstg.com/events") // Return the fetch promise
         .then((response) => response.json())
         .then((eventsFromServer) => {
           // Normalize each event to match your template's properties
@@ -525,9 +621,6 @@ Vue.createApp({
             eventTime: event.eventTime,
             matches: event.matches,
           }));
-          // if (this.events.length > 0) {
-          //   this.activeEvent = this.events[0]; // Set the first event as active
-          // }
 
           console.log("Normalized events:", this.events);
           if (!this.isAdmin) {
@@ -536,7 +629,6 @@ Vue.createApp({
         })
         .catch((error) => console.error("Error fetching events:", error));
     },
-
     createEvent() {
       this.activeEvent = null;
       this.navigatePage("creation");
