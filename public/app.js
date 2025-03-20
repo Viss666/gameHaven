@@ -274,6 +274,7 @@ Vue.createApp({
         .catch((error) => console.error("Error fetching single event:", error));
 
       this.currentPage = "viewEvent";
+      console.log("viewed event: ", this.activeEvent.id);
     },
     openCheckIn() {
       this.showCheckInForm = true;
