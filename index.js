@@ -278,10 +278,12 @@ app.put("/events/:eventId/admin-remove-player", async (req, res) => {
 app.delete("/events/:eventId/remove-player", async (req, res) => {
   try {
     const eventId = req.params.eventId;
-    const playerId = req.cookies.discordId;
+    const playerDiscordId = req.cookies.discordId; // Rename to playerDiscordId for clarity
 
-    if (!playerId) {
-      return res.status(400).json({ error: "Player ID not found in cookie" });
+    if (!playerDiscordId) {
+      return res
+        .status(400)
+        .json({ error: "Player Discord ID not found in cookie" });
     }
 
     const event = await model.Event.findById(eventId);
@@ -289,9 +291,17 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    const playerIndex = event.playerList.findIndex(
-      (player) => player.playerDiscordID?.toString() === playerId
-    );
+    // Find the Player document using the discordId
+    const player = await model.Player.findOne({
+      playerDiscordID: playerDiscordId,
+    });
+
+    if (!player) {
+      return res.status(404).json({ error: "Player not found" });
+    }
+
+    // Find the index of the player's ObjectId in the event's playerList
+    const playerIndex = event.playerList.indexOf(player._id);
 
     if (playerIndex === -1) {
       return res
@@ -299,6 +309,7 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
         .json({ error: "Player not registered for this event" });
     }
 
+    // Remove the player's ObjectId from the playerList
     event.playerList.splice(playerIndex, 1);
     await event.save();
 
