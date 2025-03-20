@@ -312,116 +312,7 @@
             <button @click="pushEvent()">Submit</button>
           </div>
         </div>
-        <!-- <div v-if="currentPage == 'edit'" class="edit-page-content">
-          <div class="event-header">
-            <p class="back-link" @click="navigatePage('events')">
-              < Back to All Events
-            </p>
-            <h1 class="event-title">{{activeEvent.title}}</h1>
-            <input
-              class="event-title"
-              v-model="activeEvent.title"
-              placeholder="activeEvent.title"
-            />
-            <p class="event-day">
-              {{activeEvent.day}} - {{activeEvent.time}} - {{activeEvent.date}}
-            </p>
 
-            <label for="event-day">Day:</label>
-            <select id="event-day" v-model="activeEvent.day">
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
-              <option value="Sunday">Sunday</option>
-            </select>
-
-            <label for="event-date">Date:</label>
-            <input type="date" id="event-date" v-model="activeEvent.date" />
-
-            <label for="event-time">Time:</label>
-            <input type="time" id="event-time" v-model="activeEvent.time" />
-
-            <button @click="deleteEvent(activeEvent.id)" class="btn">
-              Delete
-            </button>
-            <button @click="saveEvent(activeEvent.id)" class="btn">Save</button>
-          </div>
-          <div class="event-body">
-            <p class="event-game">{{activeEvent.game}}</p>
-            <input
-              v-model="activeEvent.game"
-              placeholder="activeEvent.game"
-              class="event-game"
-            />
-            <p class="event-description">{{activeEvent.description}}</p>
-            <input
-              v-model="activeEvent.description"
-              placeholder="activeEvent.description"
-              class="event-description"
-            />
-            <p class="event-organizer">
-              <strong>Organizer:</strong> {{activeEvent.organizer}}
-            </p>
-            <input
-              class="event-organizer"
-              v-model="activeEvent.organizer"
-              placeholder="activeEvent.organizer"
-            />
-            <p class="organizer-contact">
-              <strong>Organizer Contact Info:</strong>
-              {{activeEvent.organizer_contact}}
-            </p>
-            <input
-              class="organizer-contact"
-              v-model="activeEvent.organizer_contact"
-              placeholder="activeEvent.organizer_contact"
-            />
-            <p class="player-count">
-              <strong>Current Player Count:</strong>
-              {{activeEvent.registered_players.length}} / 16
-            </p>
-            <div id="player-list">
-              <h3>Registered Players</h3>
-              <ul id="players">
-                <li
-                  v-for="player in activeEvent.registered_players ?? [] "
-                  :key="player._id"
-                  :class="{ selected: selectedPlayers.includes(player._id) }"
-                  @click="togglePlayerSelection(player._id)"
-                >
-                  {{player.playerName}}
-                  <button
-                    @click="removePlayerFromEvent(activeEvent.id,player._id)"
-                  >
-                    Remove player
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div id="pairing-controls">
-              <button
-                id="pair-button"
-                @click="pairSelectedPlayers"
-                ref="pairButton"
-                disabled
-              >
-                Pair Selected Players
-              </button>
-            </div>
-            <div id="paired-list">
-              <h2>Paired Players</h2>
-              <ul>
-                <li v-for="(pair, index) in pairedPlayers" :key="index">
-                  {{ pair.player1.playerName }} vs {{ pair.player2.playerName }}
-                  <button @click="removePair(index)">Delete</button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div> -->
         <div v-if="currentPage == 'edit'" class="edit-page-content">
           <div class="event-header">
             <p class="back-link" @click="navigatePage('events')">
@@ -566,43 +457,43 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="footer">
-        <div class="times">
-          <div id="open">
-            <div class="footer-header">STORE</div>
-            <br />
-            <p>Game Haven</p>
-            <p>250 Red Cliffs Dr #32</p>
-            <p>St. George, UT 84790</p>
-            <br />
+        <div class="footer">
+          <div class="times">
+            <div id="open">
+              <div class="footer-header">STORE</div>
+              <br />
+              <p>Game Haven</p>
+              <p>250 Red Cliffs Dr #32</p>
+              <p>St. George, UT 84790</p>
+              <br />
+            </div>
           </div>
-        </div>
 
-        <div class="about-us">
-          <div class="footer-header">ABOUT US</div>
-        </div>
-        <div class="social">
-          <div class="footer-header">CONNECT</div>
-          <br />
-          <a
-            href="https://discord.gg/ZvvbE3e4Sp"
-            class="icon-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="https://discord.gg/GkBxQasQ"
-          >
-            <img src="images/discord-white-icon.png" class="social-icon" />
-          </a>
-          <a
-            href="https://www.facebook.com/GameHavenSTG/"
-            class="icon-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="https://www.facebook.com/GameHavenSTG/"
-          >
-            <img src="images/facebook.png" class="social-icon" />
-          </a>
+          <div class="about-us">
+            <div class="footer-header">ABOUT US</div>
+          </div>
+          <div class="social">
+            <div class="footer-header">CONNECT</div>
+            <br />
+            <a
+              href="https://discord.gg/ZvvbE3e4Sp"
+              class="icon-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="https://discord.gg/GkBxQasQ"
+            >
+              <img src="images/discord-white-icon.png" class="social-icon" />
+            </a>
+            <a
+              href="https://www.facebook.com/GameHavenSTG/"
+              class="icon-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="https://www.facebook.com/GameHavenSTG/"
+            >
+              <img src="images/facebook.png" class="social-icon" />
+            </a>
+          </div>
         </div>
       </div>
     </div>

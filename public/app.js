@@ -7,7 +7,7 @@ Vue.createApp({
         tcg: false,
         games: false,
       },
-      isAdmin: true,
+      isAdmin: false,
       adminPassword: "",
       mobileSubmenuOpen: null,
       showCheckInForm: false,
@@ -150,16 +150,6 @@ Vue.createApp({
       this.savePairsToEvent(); // Update the event after removing a pair
     },
 
-    // savePairsToEvent() {
-    //   // Update the active event with the current pairs
-    //   console.log("paired players:", this.pairedPlayers);
-    //   this.activeEvent.matches = this.pairedPlayers;
-    //   this.modifiedFields.matches = this.pairedPlayers;
-
-    //   // Send updated pairs to the backend
-    //   this.saveEvent(this.activeEvent.id); // Assuming you have a saveEvent method
-    // },
-
     savePairsToEvent() {
       console.log("paired players:", this.pairedPlayers);
 
@@ -177,6 +167,9 @@ Vue.createApp({
 
     // Explanatory
     navigatePage(page) {
+      if (page == "events") {
+        this.getEvents();
+      }
       this.currentPage = page;
       // Close all dropdowns on navigation
 
@@ -186,7 +179,7 @@ Vue.createApp({
       if (this.menuOpen) {
         this.menuOpen = false;
       }
-      this.setActiveLink();
+      // this.setActiveLink();
       this.mobileSubmenuOpen = null; // Close mobile submenu on page navigation
     },
 
@@ -224,58 +217,7 @@ Vue.createApp({
         this.mobileSubmenuOpen = null; // Close mobile submenu when menu closes
       }
     },
-    // Navigates to an event in the events section based off the events id
-    // viewEvent(eventId) {
-    //   fetch(`https://gamehavenstg.com/events/${eventId}`)
-    //     .then((response) => response.json())
-    //     .then((eventFromServer) => {
-    //       console.log("Fetched Event:", eventFromServer); // Debugging log
 
-    //       // Normalize the event data (if needed)
-    //       this.activeEvent = {
-    //         _id: eventFromServer._id,
-    //         eventTitle: eventFromServer.eventTitle,
-    //         eventGame: eventFromServer.eventGame,
-    //         eventType: eventFromServer.eventType,
-    //         eventDescription: eventFromServer.eventDescription,
-    //         eventOrganizer: eventFromServer.eventOrganizer,
-    //         organizerContactInfo: eventFromServer.organizerContactInfo,
-    //         playerList: eventFromServer.playerList.map((player) => ({
-    //           player_name: player.playerName,
-    //           discord_id: player.playerDiscordID,
-    //           _id: player._id,
-    //         })),
-    //         eventDay: eventFromServer.eventDay,
-    //         eventDate: eventFromServer.eventDate,
-    //         eventTime: eventFromServer.eventTime,
-    //         matches: eventFromServer.matches, // Matches array will be populated
-    //       };
-    //       // console.log(this.activeEvent.registered_players);
-    //       this.pairedPlayers = eventFromServer.matches.map((match) => ({
-    //         player1: match.player1
-    //           ? {
-    //               player_name: match.player1.playerName,
-    //               _id: match.player1._id,
-    //             }
-    //           : null,
-    //         player2: match.player2
-    //           ? {
-    //               player_name: match.player2.playerName,
-    //               _id: match.player2._id,
-    //             }
-    //           : null,
-    //       }));
-    //       if (this.checkedInEvents.includes(this.activeEvent._id)) {
-    //         this.isCheckedIn = true;
-    //       } else {
-    //         this.isCheckedIn = false;
-    //       }
-    //     })
-    //     .catch((error) => console.error("Error fetching single event:", error));
-
-    //   this.currentPage = "viewEvent";
-    //   console.log("viewed event: ", this.activeEvent.id);
-    // },
     viewEvent(eventId) {
       fetch(`https://gamehavenstg.com/events/${eventId}`)
         .then((response) => response.json())
@@ -323,12 +265,15 @@ Vue.createApp({
           } else {
             this.isCheckedIn = false;
           }
+
+          this.currentPage = "viewEvent";
+          console.log("viewed event: ", this.activeEvent.id);
+
           //Place any code here that enables the check out button.
         })
         .catch((error) => console.error("Error fetching single event:", error));
 
-      this.currentPage = "viewEvent";
-      console.log("viewed event: ", this.activeEvent.id);
+      // this.currentPage = "viewEvent";
     },
     openCheckIn() {
       this.showCheckInForm = true;
@@ -393,68 +338,7 @@ Vue.createApp({
         alert("Please enter both your name and Discord ID.");
       }
     },
-    // submitCheckIn(eventId) {
-    //   if (!eventId || typeof eventId !== "string") {
-    //     console.error("Invalid event ID:", eventId);
-    //     return;
-    //   }
 
-    //   // Get existing events from cookie
-    //   // let checkedInEvents = Cookies.get("checkedInEvents");
-    //   // checkedInEvents = checkedInEvents ? JSON.parse(checkedInEvents) : [];
-
-    //   // Prevent duplicate entries
-    //   if (this.checkedInEvents.includes(eventId)) {
-    //     alert("You are already checked in to this event.");
-    //     return;
-    //   }
-
-    //   console.log("first name and discord id:", this.firstName, this.discordId);
-
-    //   if (this.firstName && this.discordId) {
-    //     // Save user info
-    //     Cookies.set("firstName", this.firstName, { expires: 999 });
-    //     Cookies.set("discordId", this.discordId, { expires: 999 });
-
-    //     fetch(`https://gamehavenstg.com/events/${eventId}/add-player`, {
-    //       method: "PUT",
-    //       credentials: "include",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify({
-    //         playerName: this.firstName,
-    //         playerDiscordID: this.discordId,
-    //       }),
-    //     })
-    //       .then((response) => {
-    //         if (!response.ok) throw new Error("Failed to check in.");
-    //         return response.json();
-    //       })
-    //       .then((data) => {
-    //         console.log("Check-in successful:", data);
-
-    //         // Add event ID to the cookie
-    //         this.checkedInEvents.push(eventId);
-    //         Cookies.set(
-    //           "checkedInEvents",
-    //           JSON.stringify(this.checkedInEvents),
-    //           {
-    //             expires: 999,
-    //           }
-    //         );
-
-    //         this.isCheckedIn = true;
-    //         this.showCheckInForm = false;
-    //         this.getEvents();
-    //         this.viewEvent(activeEvent.id);
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error during check-in:", error);
-    //         // alert("Failed to check in. Please try again.");
-    //       });
-    //   } else {
-    //     alert("Please enter both your name and Discord ID.");
-    //   }
-    // },
     submitCheckOut(eventId) {
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
@@ -501,11 +385,6 @@ Vue.createApp({
 
           this.isCheckedIn = false;
 
-          // Refresh events and active event
-          // this.getEvents().then(() => {
-          //   this.viewEvent(eventId);
-          // });
-          // this.getEvents();
           this.viewEvent(eventId);
         })
         .catch((error) => {
@@ -560,42 +439,6 @@ Vue.createApp({
         })
         .catch((error) => console.error("Error removing player:", error));
     },
-
-    // getEvents() {
-    //   fetch("https://gamehavenstg.com/events")
-    //     .then((response) => response.json())
-    //     .then((eventsFromServer) => {
-    //       // Normalize each event to match your template's properties
-    //       this.events = eventsFromServer.map((event) => ({
-    //         id: event._id, // assuming _id from MongoDB
-    //         eventTitle: event.eventTitle,
-    //         eventGame: event.eventGame,
-    //         eventType: event.eventType,
-    //         eventDescription: event.eventDescription,
-    //         eventOrganizer: event.eventOrganizer,
-    //         organizerContactInfo: event.organizerContactInfo,
-    //         playerList:
-    //           event.playerList.map((player) => ({
-    //             player_name: player.playerName,
-    //             discord_id: player.playerDiscordID,
-    //             _id: player._id, // Include the player's _id
-    //           })) || [],
-    //         eventDay: event.eventDay,
-    //         eventDate: event.eventDate,
-    //         eventTime: event.eventTime,
-    //         matches: event.matches,
-    //       }));
-    //       // if (this.events.length > 0) {
-    //       //   this.activeEvent = this.events[0]; // Set the first event as active
-    //       // }
-
-    //       console.log("Normalized events:", this.events);
-    //       if (!this.isAdmin) {
-    //         this.updateCheckedInEvents();
-    //       }
-    //     })
-    //     .catch((error) => console.error("Error fetching events:", error));
-    // },
 
     getEvents() {
       return fetch("https://gamehavenstg.com/events") // Return the fetch promise
@@ -696,6 +539,7 @@ Vue.createApp({
             eventDate: "",
             eventTime: "",
           };
+          this.currentPage = "events";
         })
         .catch((error) => console.error("Error creating event:", error));
     },
@@ -717,6 +561,7 @@ Vue.createApp({
         .then((data) => {
           console.log("Deleted event:", data);
           this.events = this.events.filter((event) => event.id !== eventId);
+          this.currentPage = "events";
         })
         .catch((error) => console.error("Error deleting event:", error));
     },
@@ -737,24 +582,11 @@ Vue.createApp({
         })
         .then((data) => {
           console.log("Event updated:", data); // Add this line
-          // ...
         })
         .catch((error) => console.error("Error updating event:", error));
     },
   },
   created: function () {
-    // console.log("Hello, world.")
-    // this.getStories();
-    // fetch("/sessions", {
-    //     method: "GET",
-    // }).then((response) => {
-    //     response.json().then(data => {
-    //         this.userId = data._id;
-    //         this.user.username = data.username;
-    //         this.user.isAdmin = data.isAdmin;
-    //     })
-    // })
-    console.log("Hello, world");
     this.getEvents();
     if (this.events.length > 0) {
       this.activeEvent = this.events[0];
@@ -764,7 +596,5 @@ Vue.createApp({
     this.checkedInEvents = JSON.parse(
       this.getCookie("checkedInEvents") || "[]"
     );
-    //this fetch will grab the first name/discord id from their cookie?
-    //fetch()
   },
 }).mount("#app");
