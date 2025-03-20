@@ -442,9 +442,11 @@ Vue.createApp({
           this.isCheckedIn = false;
 
           // Refresh events and active event
-          this.getEvents().then(() => {
-            this.viewEvent(eventId);
-          });
+          // this.getEvents().then(() => {
+          //   this.viewEvent(eventId);
+          // });
+          this.getEvents();
+          this.viewEvent(eventId);
         })
         .catch((error) => {
           console.error("Error during check-out:", error);
