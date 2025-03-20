@@ -159,6 +159,7 @@
             </div>
           </div>
         </div>
+
         <div v-if="currentPage == 'viewEvent'" class="view-event-content">
           <!-- Header Section -->
           <div class="event-header">
@@ -456,6 +457,10 @@
               <p>Right Content</p>
             </div>
           </div>
+        </div>
+        <div v-show="loading" class="loading-container">
+          <div class="spinner-text"><p>Loading event details...</p></div>
+          <div class="spinner"></div>
         </div>
         <div class="footer">
           <div class="times">

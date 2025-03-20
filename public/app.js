@@ -58,6 +58,7 @@ Vue.createApp({
       selectedPlayers: [],
       pairedPlayers: [],
       modifiedFields: {},
+      loading: false,
     };
   },
   computed: {
@@ -219,6 +220,7 @@ Vue.createApp({
     },
 
     viewEvent(eventId) {
+      // this.loading = true;
       fetch(`https://gamehavenstg.com/events/${eventId}`)
         .then((response) => response.json())
         .then((eventFromServer) => {
@@ -267,11 +269,15 @@ Vue.createApp({
           }
 
           this.currentPage = "viewEvent";
-          console.log("viewed event: ", this.activeEvent.id);
+          // console.log("viewed event: ", this.activeEvent.id);
 
           //Place any code here that enables the check out button.
         })
-        .catch((error) => console.error("Error fetching single event:", error));
+        .catch((error) => console.error("Error fetching single event:", error))
+        .finally(() => {
+          // this.loading = false;
+          console.log("viewed event: ", this.activeEvent.id);
+        });
 
       // this.currentPage = "viewEvent";
     },
@@ -282,6 +288,7 @@ Vue.createApp({
       this.showCheckInForm = false;
     },
     submitCheckIn(eventId) {
+      this.loading = true;
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
         return;
@@ -325,14 +332,22 @@ Vue.createApp({
 
             this.isCheckedIn = true;
             this.showCheckInForm = false;
-            // Wait for getEvents to finish before viewEvent
-            this.getEvents().then(() => {
-              this.viewEvent(eventId);
+
+            this.activeEvent.playerList.push({
+              player_name: this.firstName,
+              discord_id: this.discordId,
             });
+            // Wait for getEvents to finish before viewEvent
           })
           .catch((error) => {
             console.error("Error during check-in:", error);
             alert("Failed to check in. Please try again.");
+          })
+          .finally(() => {
+            this.loading = false;
+            this.getEvents().then(() => {
+              this.viewEvent(eventId);
+            });
           });
       } else {
         alert("Please enter both your name and Discord ID.");
@@ -340,6 +355,7 @@ Vue.createApp({
     },
 
     submitCheckOut(eventId) {
+      this.loading = true;
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
         return;
@@ -384,12 +400,15 @@ Vue.createApp({
           }
 
           this.isCheckedIn = false;
-
-          this.viewEvent(eventId);
         })
         .catch((error) => {
           console.error("Error during check-out:", error);
           alert("Failed to check out. Please try again.");
+        })
+        .finally(() => {
+          this.loading = false;
+
+          this.viewEvent(eventId);
         });
     },
     updateCheckedInEvents() {
