@@ -225,6 +225,57 @@ Vue.createApp({
       }
     },
     // Navigates to an event in the events section based off the events id
+    // viewEvent(eventId) {
+    //   fetch(`https://gamehavenstg.com/events/${eventId}`)
+    //     .then((response) => response.json())
+    //     .then((eventFromServer) => {
+    //       console.log("Fetched Event:", eventFromServer); // Debugging log
+
+    //       // Normalize the event data (if needed)
+    //       this.activeEvent = {
+    //         _id: eventFromServer._id,
+    //         eventTitle: eventFromServer.eventTitle,
+    //         eventGame: eventFromServer.eventGame,
+    //         eventType: eventFromServer.eventType,
+    //         eventDescription: eventFromServer.eventDescription,
+    //         eventOrganizer: eventFromServer.eventOrganizer,
+    //         organizerContactInfo: eventFromServer.organizerContactInfo,
+    //         playerList: eventFromServer.playerList.map((player) => ({
+    //           player_name: player.playerName,
+    //           discord_id: player.playerDiscordID,
+    //           _id: player._id,
+    //         })),
+    //         eventDay: eventFromServer.eventDay,
+    //         eventDate: eventFromServer.eventDate,
+    //         eventTime: eventFromServer.eventTime,
+    //         matches: eventFromServer.matches, // Matches array will be populated
+    //       };
+    //       // console.log(this.activeEvent.registered_players);
+    //       this.pairedPlayers = eventFromServer.matches.map((match) => ({
+    //         player1: match.player1
+    //           ? {
+    //               player_name: match.player1.playerName,
+    //               _id: match.player1._id,
+    //             }
+    //           : null,
+    //         player2: match.player2
+    //           ? {
+    //               player_name: match.player2.playerName,
+    //               _id: match.player2._id,
+    //             }
+    //           : null,
+    //       }));
+    //       if (this.checkedInEvents.includes(this.activeEvent._id)) {
+    //         this.isCheckedIn = true;
+    //       } else {
+    //         this.isCheckedIn = false;
+    //       }
+    //     })
+    //     .catch((error) => console.error("Error fetching single event:", error));
+
+    //   this.currentPage = "viewEvent";
+    //   console.log("viewed event: ", this.activeEvent.id);
+    // },
     viewEvent(eventId) {
       fetch(`https://gamehavenstg.com/events/${eventId}`)
         .then((response) => response.json())
@@ -261,7 +312,7 @@ Vue.createApp({
             player2: match.player2
               ? {
                   player_name: match.player2.playerName,
-                  _id: match.player2._id,
+                  _id: match.player2.id,
                 }
               : null,
           }));
@@ -270,6 +321,7 @@ Vue.createApp({
           } else {
             this.isCheckedIn = false;
           }
+          //Place any code here that enables the check out button.
         })
         .catch((error) => console.error("Error fetching single event:", error));
 
@@ -347,9 +399,18 @@ Vue.createApp({
         return;
       }
 
-      // Ensure user is checked into this event
       if (!this.checkedInEvents.includes(eventId)) {
         alert("You are not checked in to this event.");
+        return;
+      }
+
+      // Find the player's _id
+      const player = this.activeEvent.playerList.find(
+        (p) => p.discord_id === this.discordId
+      );
+
+      if (!player) {
+        console.error("Player not found in activeEvent.playerList");
         return;
       }
 
@@ -357,10 +418,7 @@ Vue.createApp({
         method: "DELETE",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          playerName: this.firstName,
-          playerDiscordID: this.discordId,
-        }),
+        body: JSON.stringify({ playerId: player._id }), // Send the player's _id
       })
         .then((response) => {
           if (!response.ok) throw new Error("Failed to check out.");
@@ -369,23 +427,13 @@ Vue.createApp({
         .then((data) => {
           console.log("Check-out successful:", data);
 
-          // Remove event ID from checked-in events
-          this.checkedInEvents = this.checkedInEvents.filter(
-            (id) => id !== eventId
-          );
-          Cookies.set("checkedInEvents", JSON.stringify(this.checkedInEvents), {
-            expires: 999,
-          });
-
-          this.isCheckedIn = false;
-          this.getEvents();
+          // ... rest of your check-out logic ...
         })
         .catch((error) => {
           console.error("Error during check-out:", error);
           alert("Failed to check out. Please try again.");
         });
     },
-
     updateCheckedInEvents() {
       // Get the latest checked-in events from the cookie
       let storedEvents = Cookies.get("checkedInEvents");
@@ -448,9 +496,9 @@ Vue.createApp({
             eventTime: event.eventTime,
             matches: event.matches,
           }));
-          if (this.events.length > 0) {
-            this.activeEvent = this.events[0]; // Set the first event as active
-          }
+          // if (this.events.length > 0) {
+          //   this.activeEvent = this.events[0]; // Set the first event as active
+          // }
 
           console.log("Normalized events:", this.events);
           if (!this.isAdmin) {

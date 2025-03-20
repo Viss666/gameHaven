@@ -206,7 +206,7 @@
               </button>
 
               <button
-                v-if="isCheckedIn"
+                v-if="isCheckedIn && activeEvent && activeEvent._id"
                 @click="submitCheckOut(activeEvent._id)"
                 class="btn"
               >

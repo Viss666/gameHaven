@@ -278,12 +278,10 @@ app.put("/events/:eventId/admin-remove-player", async (req, res) => {
 app.delete("/events/:eventId/remove-player", async (req, res) => {
   try {
     const eventId = req.params.eventId;
-    const playerDiscordId = req.cookies.discordId; // Rename to playerDiscordId for clarity
+    const playerId = req.body.playerId; // Get playerId from request body
 
-    if (!playerDiscordId) {
-      return res
-        .status(400)
-        .json({ error: "Player Discord ID not found in cookie" });
+    if (!playerId) {
+      return res.status(400).json({ error: "Player ID not provided" });
     }
 
     const event = await model.Event.findById(eventId);
@@ -291,10 +289,8 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    // Find the Player document using the discordId
-    const player = await model.Player.findOne({
-      playerDiscordID: playerDiscordId,
-    });
+    // Find the Player document using the playerId
+    const player = await model.Player.findById(playerId);
 
     if (!player) {
       return res.status(404).json({ error: "Player not found" });
