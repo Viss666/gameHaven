@@ -350,6 +350,8 @@ Vue.createApp({
         return;
       }
 
+      console.log("first name and discord id:", this.firstName, this.discordId);
+
       if (this.firstName && this.discordId) {
         // Save user info
         Cookies.set("firstName", this.firstName, { expires: 999 });
@@ -404,13 +406,12 @@ Vue.createApp({
         return;
       }
 
-      // Find the player's _id
       const player = this.activeEvent.playerList.find(
         (p) => p.discord_id === this.discordId
       );
 
       if (!player) {
-        console.error("Player not found in activeEvent.playerList");
+        alert("Player not found.");
         return;
       }
 
@@ -418,7 +419,7 @@ Vue.createApp({
         method: "DELETE",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ playerId: player._id }), // Send the player's _id
+        body: JSON.stringify({ playerId: player._id }),
       })
         .then((response) => {
           if (!response.ok) throw new Error("Failed to check out.");
@@ -427,7 +428,23 @@ Vue.createApp({
         .then((data) => {
           console.log("Check-out successful:", data);
 
-          // ... rest of your check-out logic ...
+          // Remove from checkedInEvents
+          const index = this.checkedInEvents.indexOf(eventId);
+          if (index > -1) {
+            this.checkedInEvents.splice(index, 1);
+            Cookies.set(
+              "checkedInEvents",
+              JSON.stringify(this.checkedInEvents),
+              { expires: 999 }
+            );
+          }
+
+          this.isCheckedIn = false;
+
+          // Refresh events and active event
+          this.getEvents().then(() => {
+            this.viewEvent(eventId);
+          });
         })
         .catch((error) => {
           console.error("Error during check-out:", error);
@@ -439,14 +456,24 @@ Vue.createApp({
       let storedEvents = Cookies.get("checkedInEvents");
       storedEvents = storedEvents ? JSON.parse(storedEvents) : [];
 
+      // Get the player's _id
+      const player = this.activeEvent?.playerList.find(
+        (p) => p.discord_id === this.discordId
+      );
+
+      if (!player) {
+        // Player not found, clear checked-in events
+        this.checkedInEvents = [];
+        Cookies.set("checkedInEvents", JSON.stringify([]), { expires: 999 });
+        return;
+      }
+
       // Filter out events where the user is no longer checked in
       this.checkedInEvents = storedEvents.filter((eventId) => {
         const event = this.events.find((e) => e.id === eventId);
         if (!event) return false; // Event no longer exists
 
-        return event.playerList.some(
-          (player) => player.discord_id === this.discordId
-        );
+        return event.playerList.some((p) => p._id === player._id);
       });
 
       // Save the updated list back to the cookie
