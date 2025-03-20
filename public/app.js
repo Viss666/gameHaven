@@ -265,7 +265,7 @@ Vue.createApp({
                 }
               : null,
           }));
-          if (this.checkedInEvents.includes(this.activeEvent.id)) {
+          if (this.checkedInEvents.includes(this.activeEvent._id)) {
             this.isCheckedIn = true;
           } else {
             this.isCheckedIn = false;

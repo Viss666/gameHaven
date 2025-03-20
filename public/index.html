@@ -207,7 +207,7 @@
 
               <button
                 v-if="isCheckedIn"
-                @click="submitCheckOut(activeEvent.id)"
+                @click="submitCheckOut(activeEvent._id)"
                 class="btn"
               >
                 Check Out
@@ -230,7 +230,7 @@
                   />
                   <div class="button-container">
                     <button
-                      @click="submitCheckIn(activeEvent.id)"
+                      @click="submitCheckIn(activeEvent._id)"
                       class="submit-btn"
                     >
                       Submit
@@ -256,43 +256,61 @@
           </div>
         </div>
         <div v-if="currentPage == 'creation'" class="admin-event-content">
-          <input v-model="newEvent.eventTitle" placeholder="Title" />
-          <input v-model="newEvent.eventGame" placeholder="Game" />
-          <input v-model="newEvent.eventType" placeholder="Type" />
-          <input
-            v-model="newEvent.eventDescription"
-            placeholder="Description"
-          />
-          <input v-model="newEvent.eventOrganizer" placeholder="Organizer" />
-          <input
-            v-model="newEvent.organizerContactInfo"
-            placeholder="Organizer Contact"
-          />
-
-          <label for="event-day">Day:</label>
-          <select id="event-day" v-model="newEvent.eventDay">
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-          </select>
-
-          <label for="event-date">Date:</label>
-          <input type="date" id="event-date" v-model="newEvent.eventDate" />
-
-          <label for="event-time">Time:</label>
-          <input type="time" id="event-time" v-model="newEvent.eventTime" />
-
-          <label for="templates">Template:</label>
-          <select id="templates" name="templates">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-          </select>
-          <button @click="pushEvent()">Submit</button>
+          <div>
+            <input v-model="newEvent.eventTitle" placeholder="Title" />
+          </div>
+          <div>
+            <input v-model="newEvent.eventGame" placeholder="Game" />
+          </div>
+          <div>
+            <input v-model="newEvent.eventType" placeholder="Type" />
+          </div>
+          <div>
+            <input
+              v-model="newEvent.eventDescription"
+              placeholder="Description"
+            />
+          </div>
+          <div>
+            <input v-model="newEvent.eventOrganizer" placeholder="Organizer" />
+          </div>
+          <div>
+            <input
+              v-model="newEvent.organizerContactInfo"
+              placeholder="Organizer Contact"
+            />
+          </div>
+          <div>
+            <label for="event-day">Day:</label>
+            <select id="event-day" v-model="newEvent.eventDay">
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+          </div>
+          <div>
+            <label for="event-date">Date:</label>
+            <input type="date" id="event-date" v-model="newEvent.eventDate" />
+          </div>
+          <div>
+            <label for="event-time">Time:</label>
+            <input type="time" id="event-time" v-model="newEvent.eventTime" />
+          </div>
+          <div>
+            <label for="templates">Template:</label>
+            <select id="templates" name="templates">
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </select>
+          </div>
+          <div>
+            <button @click="pushEvent()">Submit</button>
+          </div>
         </div>
         <!-- <div v-if="currentPage == 'edit'" class="edit-page-content">
           <div class="event-header">
