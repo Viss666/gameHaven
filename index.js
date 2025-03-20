@@ -278,22 +278,19 @@ app.put("/events/:eventId/admin-remove-player", async (req, res) => {
 app.delete("/events/:eventId/remove-player", async (req, res) => {
   try {
     const eventId = req.params.eventId;
-    // Get the player's ID from the cookie (ensure the cookie name matches)
     const playerId = req.cookies.discordId;
 
     if (!playerId) {
       return res.status(400).json({ error: "Player ID not found in cookie" });
     }
 
-    // Find the event by ID
     const event = await model.Event.findById(eventId);
     if (!event) {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    // Find the index of the player in the event's playerList
     const playerIndex = event.playerList.findIndex(
-      (player) => player.playerDiscordID.toString() === playerId
+      (player) => player.playerDiscordID?.toString() === playerId
     );
 
     if (playerIndex === -1) {
@@ -302,7 +299,6 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
         .json({ error: "Player not registered for this event" });
     }
 
-    // Remove the player from the playerList
     event.playerList.splice(playerIndex, 1);
     await event.save();
 
