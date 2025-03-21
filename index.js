@@ -126,6 +126,7 @@ app.post("/events", async function (request, response) {
       eventTime: request.body.eventTime,
       playerList: request.body.playerList || [],
       matches: request.body.matches || [],
+      isPublished: request.body.isPublished || false,
     });
 
     let savedEvent = await newEvent.save();
@@ -274,7 +275,7 @@ app.put("/events/:eventId/admin-remove-player", async (req, res) => {
 });
 
 // Remove a player from an event player side
-// Needs testing -> fuck postman cookies
+
 app.delete("/events/:eventId/remove-player", async (req, res) => {
   try {
     const eventId = req.params.eventId;

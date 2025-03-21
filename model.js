@@ -122,7 +122,18 @@ const eventSchema = new mongoose.Schema(
     },
 
     playerList: [{ type: mongoose.Schema.Types.ObjectId, ref: "Player" }], // ✅ Store as ObjectId references
+    // playerList: await Promise.all(
+    //   (request.body.playerList || []).map(async (player) => {
+    //     let newPlayer = new model.Player(player);
+    //     let savedPlayer = await newPlayer.save();
+    //     return savedPlayer._id;
+    //   })
+    // ),
     matches: [{ type: mongoose.Schema.Types.ObjectId, ref: "Match" }], // ✅ Store as ObjectId references
+    isPublished: {
+      type: Boolean,
+      required: [true, "event publishing required"],
+    },
   },
   { _id: true }
 );
