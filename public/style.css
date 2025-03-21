@@ -16,6 +16,11 @@ body {
   height: 100vh;
 }
 
+.description {
+  width: 75%;
+  height: 200px;
+}
+
 #app {
 }
 /* ALL STYLING END */

@@ -89,6 +89,25 @@ Vue.createApp({
   },
 
   methods: {
+    convertToStandardTime(militaryTime) {
+      if (!militaryTime) return ""; // Handle null or empty time
+
+      const [hours, minutes] = militaryTime.split(":");
+      let standardHours = parseInt(hours, 10);
+      const standardMinutes = minutes;
+      let period = "AM";
+
+      if (standardHours >= 12) {
+        period = "PM";
+        if (standardHours > 12) {
+          standardHours -= 12;
+        }
+      } else if (standardHours === 0) {
+        standardHours = 12; // Midnight is 12 AM
+      }
+
+      return `${standardHours}:${standardMinutes} ${period}`;
+    },
     //get cookie
     getCookie(name) {
       const cookies = document.cookie.split("; ");
@@ -220,10 +239,22 @@ Vue.createApp({
     },
 
     viewEvent(eventId) {
-      // this.loading = true;
+      this.loading = true;
+      console.log("i am clicked");
       fetch(`https://gamehavenstg.com/events/${eventId}`)
         .then((response) => response.json())
         .then((eventFromServer) => {
+          let formattedDate = eventFromServer.eventDate;
+
+          let formattedTime = this.convertToStandardTime(
+            eventFromServer.eventTime
+          ); // Convert time
+
+          if (formattedDate) {
+            formattedDate = formattedDate.split("T")[0]; // Split at "T" and take the date part
+          } else {
+            formattedDate = ""; // Or some other default value
+          }
           console.log("Fetched Event:", eventFromServer); // Debugging log
 
           // Normalize the event data (if needed)
@@ -241,9 +272,11 @@ Vue.createApp({
               _id: player._id,
             })),
             eventDay: eventFromServer.eventDay,
-            eventDate: eventFromServer.eventDate,
-            eventTime: eventFromServer.eventTime,
+            eventDate: formattedDate,
+            // eventDate: eventFromServer.eventDate,
+            eventTime: formattedTime,
             matches: eventFromServer.matches, // Matches array will be populated
+            isPublished: eventFromServer.isPublished,
           };
           console.log("activeEvent:", this.activeEvent); // Log the activeEvent
 
@@ -275,7 +308,7 @@ Vue.createApp({
         })
         .catch((error) => console.error("Error fetching single event:", error))
         .finally(() => {
-          // this.loading = false;
+          this.loading = false;
           console.log("viewed event: ", this.activeEvent.id);
         });
 
@@ -288,11 +321,97 @@ Vue.createApp({
       this.showCheckInForm = false;
     },
 
+    // submitCheckIn(eventId) {
+    //   this.loading = true;
+
+    //   if (!eventId || typeof eventId !== "string") {
+    //     console.error("Invalid event ID:", eventId);
+    //     return;
+    //   }
+
+    //   if (this.checkedInEvents.includes(eventId)) {
+    //     alert("You are already checked in to this event.");
+    //     this.loading = false;
+    //     return;
+    //   }
+
+    //   console.log("first name and discord id:", this.firstName, this.discordId);
+
+    //   if (this.firstName && this.discordId) {
+    //     Cookies.set("firstName", this.firstName, { expires: 999 });
+    //     Cookies.set("discordId", this.discordId, { expires: 999 });
+
+    //     fetch(`https://gamehavenstg.com/events/${eventId}/add-player`, {
+    //       method: "PUT",
+    //       credentials: "include",
+    //       headers: { "Content-Type": "application/json" },
+    //       body: JSON.stringify({
+    //         playerName: this.firstName,
+    //         playerDiscordID: this.discordId,
+    //       }),
+    //     })
+    //       .then((response) => {
+    //         if (!response.ok) throw new Error("Failed to check in.");
+    //         return response.json();
+    //       })
+    //       .then((data) => {
+    //         console.log("Check-in successful:", data);
+
+    //         // Ensure `checkedInEvents` is initialized as an array
+    //         if (!Array.isArray(this.checkedInEvents)) {
+    //           this.checkedInEvents = [];
+    //         }
+
+    //         // Immediately update checked-in events and store in cookies
+    //         this.checkedInEvents = [...this.checkedInEvents, eventId];
+    //         Cookies.set(
+    //           "checkedInEvents",
+    //           JSON.stringify(this.checkedInEvents),
+    //           {
+    //             expires: 999,
+    //           }
+    //         );
+
+    //         this.isCheckedIn = true;
+    //         this.showCheckInForm = false;
+
+    //         if (
+    //           this.activeEvent &&
+    //           Array.isArray(this.activeEvent.playerList)
+    //         ) {
+    //           this.activeEvent.playerList.push({
+    //             player_name: this.firstName,
+    //             discord_id: this.discordId,
+    //           });
+    //         } else {
+    //           console.warn(
+    //             "activeEvent or playerList is not properly initialized."
+    //           );
+    //         }
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error during check-in:", error);
+    //         alert("Failed to check in. Please try again.");
+    //       })
+    //       .finally(() => {
+    //         // this.loading = false;
+
+    //         // Refresh event list and view event
+    //         this.getEvents().then(() => {
+    //           this.viewEvent(eventId);
+    //         });
+    //       });
+    //   } else {
+    //     alert("Please enter both your name and Discord ID.");
+    //     this.loading = false;
+    //   }
+    // },
     submitCheckIn(eventId) {
-      this.loading = true;
+      this.loading = true; // Keep loading active
 
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
+        this.loading = false;
         return;
       }
 
@@ -324,19 +443,15 @@ Vue.createApp({
           .then((data) => {
             console.log("Check-in successful:", data);
 
-            // Ensure `checkedInEvents` is initialized as an array
             if (!Array.isArray(this.checkedInEvents)) {
               this.checkedInEvents = [];
             }
 
-            // Immediately update checked-in events and store in cookies
             this.checkedInEvents = [...this.checkedInEvents, eventId];
             Cookies.set(
               "checkedInEvents",
               JSON.stringify(this.checkedInEvents),
-              {
-                expires: 999,
-              }
+              { expires: 999 }
             );
 
             this.isCheckedIn = true;
@@ -355,18 +470,16 @@ Vue.createApp({
                 "activeEvent or playerList is not properly initialized."
               );
             }
+
+            return this.getEvents(); // Fetch updated event list
+          })
+          .then(() => {
+            return this.viewEvent(eventId); // Load the event view while keeping loading active
           })
           .catch((error) => {
             console.error("Error during check-in:", error);
             alert("Failed to check in. Please try again.");
-          })
-          .finally(() => {
             this.loading = false;
-
-            // Refresh event list and view event
-            this.getEvents().then(() => {
-              this.viewEvent(eventId);
-            });
           });
       } else {
         alert("Please enter both your name and Discord ID.");
@@ -494,45 +607,88 @@ Vue.createApp({
     },
 
     getEvents() {
-      return fetch("https://gamehavenstg.com/events") // Return the fetch promise
+      return fetch("https://gamehavenstg.com/events")
         .then((response) => response.json())
         .then((eventsFromServer) => {
-          // Normalize each event to match your template's properties
-          this.events = eventsFromServer.map((event) => ({
-            id: event._id, // assuming _id from MongoDB
-            eventTitle: event.eventTitle,
-            eventGame: event.eventGame,
-            eventType: event.eventType,
-            eventDescription: event.eventDescription,
-            eventOrganizer: event.eventOrganizer,
-            organizerContactInfo: event.organizerContactInfo,
-            playerList:
-              event.playerList.map((player) => ({
-                player_name: player.playerName,
-                discord_id: player.playerDiscordID,
-                _id: player._id, // Include the player's _id
-              })) || [],
-            eventDay: event.eventDay,
-            eventDate: event.eventDate,
-            eventTime: event.eventTime,
-            matches: event.matches,
-          }));
+          this.events = eventsFromServer.map((event) => {
+            let formattedDate = event.eventDate;
+            let formattedTime = this.convertToStandardTime(event.eventTime);
 
-          console.log("Normalized events:", this.events);
+            if (formattedDate) {
+              formattedDate = formattedDate.split("T")[0]; // Split at "T" and take the date part
+            }
+
+            return {
+              id: event._id,
+              eventTitle: event.eventTitle,
+              eventGame: event.eventGame,
+              eventType: event.eventType,
+              eventDescription: event.eventDescription,
+              eventOrganizer: event.eventOrganizer,
+              organizerContactInfo: event.organizerContactInfo,
+              playerList:
+                event.playerList.map((player) => ({
+                  player_name: player.playerName,
+                  discord_id: player.playerDiscordID,
+                  _id: player._id,
+                })) || [],
+              eventDay: event.eventDay,
+              eventDate: formattedDate, // Use the formatted date
+              eventTime: formattedTime,
+              matches: event.matches,
+              isPublished: event.isPublished,
+            };
+          });
+
           this.$nextTick(() => {
             this.updateCheckedInEvents();
           });
         })
         .catch((error) => console.error("Error fetching events:", error));
     },
+
+    // getEvents() {
+    //   return fetch("https://gamehavenstg.com/events") // Return the fetch promise
+    //     .then((response) => response.json())
+    //     .then((eventsFromServer) => {
+    //       // Normalize each event to match your template's properties
+    //       this.events = eventsFromServer.map((event) => ({
+
+    //         id: event._id, // assuming _id from MongoDB
+    //         eventTitle: event.eventTitle,
+    //         eventGame: event.eventGame,
+    //         eventType: event.eventType,
+    //         eventDescription: event.eventDescription,
+    //         eventOrganizer: event.eventOrganizer,
+    //         organizerContactInfo: event.organizerContactInfo,
+    //         playerList:
+    //           event.playerList.map((player) => ({
+    //             player_name: player.playerName,
+    //             discord_id: player.playerDiscordID,
+    //             _id: player._id, // Include the player's _id
+    //           })) || [],
+    //         eventDay: event.eventDay,
+    //         eventDate: event.eventDate,
+    //         eventTime: event.eventTime,
+    //         matches: event.matches,
+    //         isPublished: event.isPublished,
+    //       }));
+
+    //       console.log("Normalized events:", this.events);
+    //       this.$nextTick(() => {
+    //         this.updateCheckedInEvents();
+    //       });
+    //     })
+    //     .catch((error) => console.error("Error fetching events:", error));
+    // },
     createEvent() {
       this.activeEvent = null;
       this.navigatePage("creation");
     },
 
     pushEvent() {
-      const dateString = this.newEvent.date;
-      // const formattedDate = new Date(dateString).split("T")[0];
+      // const formatEventDate = this.newEvent.eventDate;
+      // formateeventDate.toISOString().split("T")[0];
 
       const newEvent = {
         eventTitle: this.newEvent.eventTitle,
@@ -618,8 +774,18 @@ Vue.createApp({
         })
         .catch((error) => console.error("Error deleting event:", error));
     },
+    togglePublish(eventId) {
+      console.log("togglePublish called with eventId:", eventId);
+
+      // Toggle the isPublished state
+      this.activeEvent.isPublished = !this.activeEvent.isPublished;
+      this.modifiedFields.isPublished = this.activeEvent.isPublished;
+
+      console.log("modifiedFields before saveEvent:", this.modifiedFields);
+      this.saveEvent(eventId);
+    },
     saveEvent(eventId) {
-      console.log("Modified fields:", this.modifiedFields); // Add this line
+      console.log("Modified fields:", this.modifiedFields);
 
       fetch(`https://gamehavenstg.com/events/${eventId}`, {
         method: "PUT",
@@ -634,7 +800,7 @@ Vue.createApp({
           return response.json();
         })
         .then((data) => {
-          console.log("Event updated:", data); // Add this line
+          console.log("Event updated:", data);
         })
         .catch((error) => console.error("Error updating event:", error));
     },

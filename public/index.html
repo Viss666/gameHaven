@@ -131,14 +131,14 @@
             <div class="event-card" v-for="event in events" :key="event._id">
               <div class="event-header">
                 <div class="event-title">{{ event.eventTitle }}</div>
-                <!-- <div class="event-published">{{ event.isPublished }}</div> -->
+                <div class="event-published">{{ event.isPublished }}</div>
                 <div class="event-day">{{ event.eventDate }}</div>
               </div>
               <div class="event-main-info">
                 <div class="event-side-info">
                   <div class="event-game">{{event.eventGame}}</div>
                   <div class="event-players-signed">
-                    Current Player Count: {{ event.playerList.length}}/16
+                    Current Player Count: {{ event.playerList.length}}/4
                   </div>
                   <div class="event-time">
                     {{event.eventDay}} - {{ event.eventTime }}
@@ -170,7 +170,7 @@
               < Back to All Events
             </p>
             <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
-            <!-- <div class="event-published">{{ event.isPublished }}</div> -->
+            <div class="event-published">{{ activeEvent.isPublished }}</div>
 
             <p class="event-day">
               {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
@@ -190,10 +190,10 @@
             </p>
             <p class="player-count">
               <strong>Current Player Count:</strong>
-              {{activeEvent.playerList.length}} / 16
+              {{activeEvent.playerList.length}} / 4
             </p>
             <div class="registered-players">
-              <h3>Registered Players</h3>
+              <h2>Registered Players</h2>
               <ul class="player-list">
                 <li
                   v-for="player in activeEvent.playerList ?? [] "
@@ -203,16 +203,29 @@
                 </li>
               </ul>
             </div>
+            <div id="paired-list" v-if="activeEvent.isPublished">
+              <h2>Paired Players</h2>
+              <ul>
+                <li v-for="(pair, index) in pairedPlayers" :key="index">
+                  {{ pair.player1.player_name }} vs {{ pair.player2.player_name
+                  }}
+                </li>
+              </ul>
+            </div>
           </div>
           <!-- Footer Section with Check-In Button -->
           <div class="event-footer" style="text-align: right; padding: 15px">
             <div>
-              <button v-if="!isCheckedIn" @click="openCheckIn" class="btn">
+              <button
+                v-if="!isCheckedIn && !activeEvent.isPublished"
+                @click="openCheckIn"
+                class="btn"
+              >
                 Check In
               </button>
 
               <button
-                v-if="isCheckedIn && activeEvent && activeEvent._id"
+                v-if="isCheckedIn && activeEvent && activeEvent._id && !activeEvent.isPublished"
                 @click="submitCheckOut(activeEvent._id)"
                 class="btn"
               >
@@ -263,30 +276,38 @@
         </div>
         <div v-if="currentPage == 'creation'" class="admin-event-content">
           <div>
+            <h2>Title</h2>
             <input v-model="newEvent.eventTitle" placeholder="Title" />
           </div>
           <div>
+            <h2>Game</h2>
             <input v-model="newEvent.eventGame" placeholder="Game" />
           </div>
           <div>
+            <h2>Type (ignore this for now Grant)</h2>
             <input v-model="newEvent.eventType" placeholder="Type" />
           </div>
           <div>
-            <input
+            <h2>Description</h2>
+            <textarea
               v-model="newEvent.eventDescription"
               placeholder="Description"
-            />
+              class="description"
+            ></textarea>
           </div>
           <div>
+            <h2>Organizer</h2>
             <input v-model="newEvent.eventOrganizer" placeholder="Organizer" />
           </div>
           <div>
+            <h2>Organizer Contact Info</h2>
             <input
               v-model="newEvent.organizerContactInfo"
               placeholder="Organizer Contact"
             />
           </div>
           <div>
+            <h2>Event Day</h2>
             <label for="event-day">Day:</label>
             <select id="event-day" v-model="newEvent.eventDay">
               <option value="Monday">Monday</option>
@@ -299,14 +320,17 @@
             </select>
           </div>
           <div>
+            <h2>Date</h2>
             <label for="event-date">Date:</label>
             <input type="date" id="event-date" v-model="newEvent.eventDate" />
           </div>
           <div>
+            <h2>Time</h2>
             <label for="event-time">Time:</label>
             <input type="time" id="event-time" v-model="newEvent.eventTime" />
           </div>
           <div>
+            <h2>don't worry about this</h2>
             <label for="templates">Template:</label>
             <select id="templates" name="templates">
               <option value="option1">Option 1</option>
@@ -325,8 +349,7 @@
               < Back to All Events
             </p>
             <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
-            <!-- <div class="event-published">{{ event.isPublished }}</div> -->
-            <button>Publish</button>
+            <div class="event-published">{{ activeEvent.isPublished }}</div>
 
             <input
               class="event-title"
@@ -374,6 +397,9 @@
               Delete
             </button>
             <button @click="saveEvent(activeEvent.id)" class="btn">Save</button>
+            <button @click="togglePublish(activeEvent.id)" class="btn">
+              {{ activeEvent.isPublished ? 'Unpublish' : 'Publish' }}
+            </button>
           </div>
           <div class="event-body">
             <p class="event-game">{{activeEvent.eventGame}}</p>
@@ -411,7 +437,7 @@
             />
             <p class="player-count" v-if="activeEvent">
               <strong>Current Player Count:</strong>
-              {{activeEvent.playerList.length}} / 16
+              {{activeEvent.playerList.length}} / 4
             </p>
             <div id="player-list">
               <h3>Registered Players</h3>
