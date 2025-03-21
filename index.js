@@ -76,7 +76,7 @@ app.get("/events", async function (request, response) {
         populate: { path: "player1 player2", model: "Player" },
       });
 
-    console.log("All events (populated):", events);
+    // console.log("All events (populated):", events);
 
     response.status(200).json(events);
   } catch (error) {
@@ -95,7 +95,7 @@ app.get("/events/:eventId", async function (request, response) {
         populate: { path: "player1 player2", model: "Player" }, // ✅ Populate player1 and player2 inside eventMatches
       });
 
-    console.log("** Fetched event:", event);
+    // console.log("** Fetched event:", event);
 
     if (!event) {
       return response.status(404).json({ message: "Event not found" });
@@ -218,7 +218,7 @@ app.put("/events/:eventId/add-player", async (req, res) => {
   try {
     const { playerName, playerDiscordID } = req.body;
 
-    console.log("Received request body:", req.body);
+    // console.log("Received request body:", req.body);
 
     // Check if player exists, or create new
     let player = await Player.findOne({ playerDiscordID });
@@ -323,7 +323,7 @@ app.put("/events/:eventId", async (req, res) => {
   try {
     const eventId = req.params.eventId;
     const { matches, ...otherFields } = req.body; // Separate matches from other fields
-    console.log("Received request body:", req.body);
+    // console.log("Received request body:", req.body);
 
     let matchIds = [];
 

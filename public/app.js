@@ -147,8 +147,8 @@ Vue.createApp({
         const player2 = this.activeEvent.playerList.find(
           (p) => p._id === this.selectedPlayers[1] // Use _id
         );
-        console.log(player1);
-        console.log(player2);
+        //console.log(player1);
+        // console.log(player2);
 
         if (player1 && player2) {
           this.pairedPlayers.push({
@@ -156,8 +156,8 @@ Vue.createApp({
             player2: player2, // Store player2's _id
           });
         }
-        console.log("paired players:", this.pairedPlayers);
-        console.log(this.selectedPlayers);
+        // console.log("paired players:", this.pairedPlayers);
+        // console.log(this.selectedPlayers);
         this.savePairsToEvent(); // Update the event with the new pairs
 
         this.selectedPlayers = [];
@@ -171,7 +171,7 @@ Vue.createApp({
     },
 
     savePairsToEvent() {
-      console.log("paired players:", this.pairedPlayers);
+      // console.log("paired players:", this.pairedPlayers);
 
       // Prepare the matches data with player _ids
       const matchesToSend = this.pairedPlayers.map((pair) => ({
@@ -240,7 +240,7 @@ Vue.createApp({
 
     viewEvent(eventId) {
       this.loading = true;
-      console.log("i am clicked");
+      // console.log("i am clicked");
       fetch(`https://gamehavenstg.com/events/${eventId}`)
         .then((response) => response.json())
         .then((eventFromServer) => {
@@ -255,7 +255,7 @@ Vue.createApp({
           } else {
             formattedDate = ""; // Or some other default value
           }
-          console.log("Fetched Event:", eventFromServer); // Debugging log
+          // console.log("Fetched Event:", eventFromServer); // Debugging log
 
           // Normalize the event data (if needed)
           this.activeEvent = {
@@ -278,7 +278,7 @@ Vue.createApp({
             matches: eventFromServer.matches, // Matches array will be populated
             isPublished: eventFromServer.isPublished,
           };
-          console.log("activeEvent:", this.activeEvent); // Log the activeEvent
+          //console.log("activeEvent:", this.activeEvent); // Log the activeEvent
 
           // console.log(this.activeEvent.registered_players);
           this.pairedPlayers = eventFromServer.matches.map((match) => ({
@@ -309,7 +309,7 @@ Vue.createApp({
         .catch((error) => console.error("Error fetching single event:", error))
         .finally(() => {
           this.loading = false;
-          console.log("viewed event: ", this.activeEvent.id);
+          // console.log("viewed event: ", this.activeEvent.id);
         });
 
       // this.currentPage = "viewEvent";
@@ -421,7 +421,7 @@ Vue.createApp({
         return;
       }
 
-      console.log("first name and discord id:", this.firstName, this.discordId);
+      // console.log("first name and discord id:", this.firstName, this.discordId);
 
       if (this.firstName && this.discordId) {
         Cookies.set("firstName", this.firstName, { expires: 999 });
@@ -441,7 +441,7 @@ Vue.createApp({
             return response.json();
           })
           .then((data) => {
-            console.log("Check-in successful:", data);
+            // console.log("Check-in successful:", data);
 
             if (!Array.isArray(this.checkedInEvents)) {
               this.checkedInEvents = [];
@@ -519,7 +519,7 @@ Vue.createApp({
           return response.json();
         })
         .then((data) => {
-          console.log("Check-out successful:", data);
+          // console.log("Check-out successful:", data);
 
           // Remove from checkedInEvents
           const index = this.checkedInEvents.indexOf(eventId);
@@ -585,11 +585,11 @@ Vue.createApp({
         expires: 999,
       });
 
-      console.log("Updated checked-in events:", this.checkedInEvents);
+      // console.log("Updated checked-in events:", this.checkedInEvents);
     },
 
     removePlayerFromEvent(eventId, playerId) {
-      console.log(eventId, playerId);
+      // console.log(eventId, playerId);
       fetch(`https://gamehavenstg.com/events/${eventId}/admin-remove-player`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -600,7 +600,7 @@ Vue.createApp({
           return response.json();
         })
         .then((data) => {
-          console.log("Successfully removed player", data);
+          // console.log("Successfully removed player", data);
           this.getEvents(); // Refresh the event list
         })
         .catch((error) => console.error("Error removing player:", error));
@@ -674,7 +674,7 @@ Vue.createApp({
     //         isPublished: event.isPublished,
     //       }));
 
-    //       console.log("Normalized events:", this.events);
+    // console.log("Normalized events:", this.events);
     //       this.$nextTick(() => {
     //         this.updateCheckedInEvents();
     //       });
@@ -718,7 +718,7 @@ Vue.createApp({
           return response.json();
         })
         .then((createdEvent) => {
-          console.log("Event created:", createdEvent);
+          // console.log("Event created:", createdEvent);
 
           // Add the created event to the local events array
           this.events.push({
@@ -768,24 +768,24 @@ Vue.createApp({
           return response.json();
         })
         .then((data) => {
-          console.log("Deleted event:", data);
+          // console.log("Deleted event:", data);
           this.events = this.events.filter((event) => event.id !== eventId);
           this.currentPage = "events";
         })
         .catch((error) => console.error("Error deleting event:", error));
     },
     togglePublish(eventId) {
-      console.log("togglePublish called with eventId:", eventId);
+      // console.log("togglePublish called with eventId:", eventId);
 
       // Toggle the isPublished state
       this.activeEvent.isPublished = !this.activeEvent.isPublished;
       this.modifiedFields.isPublished = this.activeEvent.isPublished;
 
-      console.log("modifiedFields before saveEvent:", this.modifiedFields);
+      // console.log("modifiedFields before saveEvent:", this.modifiedFields);
       this.saveEvent(eventId);
     },
     saveEvent(eventId) {
-      console.log("Modified fields:", this.modifiedFields);
+      // console.log("Modified fields:", this.modifiedFields);
 
       fetch(`https://gamehavenstg.com/events/${eventId}`, {
         method: "PUT",
