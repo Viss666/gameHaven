@@ -131,6 +131,7 @@
             <div class="event-card" v-for="event in events" :key="event._id">
               <div class="event-header">
                 <div class="event-title">{{ event.eventTitle }}</div>
+                <!-- <div class="event-published">{{ event.isPublished }}</div> -->
                 <div class="event-day">{{ event.eventDate }}</div>
               </div>
               <div class="event-main-info">
@@ -169,6 +170,8 @@
               < Back to All Events
             </p>
             <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
+            <!-- <div class="event-published">{{ event.isPublished }}</div> -->
+
             <p class="event-day">
               {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
               {{activeEvent.eventDate}}
@@ -322,6 +325,9 @@
               < Back to All Events
             </p>
             <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
+            <!-- <div class="event-published">{{ event.isPublished }}</div> -->
+            <button>Publish</button>
+
             <input
               class="event-title"
               v-model="activeEvent.eventTitle"

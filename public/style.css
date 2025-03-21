@@ -128,7 +128,8 @@ nav ul li a.active {
 /* Home page content */
 .home-content {
   height: 50vh;
-  background-color: #f3eff5;
+  /* background-color: #f3eff5; */
+  background-color: black;
 }
 
 .login-content {
@@ -612,6 +613,7 @@ nav ul li a.active {
     width: 100%;
     display: flex;
     align-items: center;
+
     /* height: calc(100dvh - 6dvh); */
   }
 

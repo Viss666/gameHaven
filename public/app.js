@@ -287,8 +287,10 @@ Vue.createApp({
     closeCheckIn() {
       this.showCheckInForm = false;
     },
+
     submitCheckIn(eventId) {
       this.loading = true;
+
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
         return;
@@ -296,6 +298,7 @@ Vue.createApp({
 
       if (this.checkedInEvents.includes(eventId)) {
         alert("You are already checked in to this event.");
+        this.loading = false;
         return;
       }
 
@@ -321,7 +324,13 @@ Vue.createApp({
           .then((data) => {
             console.log("Check-in successful:", data);
 
-            this.checkedInEvents.push(eventId);
+            // Ensure `checkedInEvents` is initialized as an array
+            if (!Array.isArray(this.checkedInEvents)) {
+              this.checkedInEvents = [];
+            }
+
+            // Immediately update checked-in events and store in cookies
+            this.checkedInEvents = [...this.checkedInEvents, eventId];
             Cookies.set(
               "checkedInEvents",
               JSON.stringify(this.checkedInEvents),
@@ -333,11 +342,19 @@ Vue.createApp({
             this.isCheckedIn = true;
             this.showCheckInForm = false;
 
-            this.activeEvent.playerList.push({
-              player_name: this.firstName,
-              discord_id: this.discordId,
-            });
-            // Wait for getEvents to finish before viewEvent
+            if (
+              this.activeEvent &&
+              Array.isArray(this.activeEvent.playerList)
+            ) {
+              this.activeEvent.playerList.push({
+                player_name: this.firstName,
+                discord_id: this.discordId,
+              });
+            } else {
+              console.warn(
+                "activeEvent or playerList is not properly initialized."
+              );
+            }
           })
           .catch((error) => {
             console.error("Error during check-in:", error);
@@ -345,12 +362,15 @@ Vue.createApp({
           })
           .finally(() => {
             this.loading = false;
+
+            // Refresh event list and view event
             this.getEvents().then(() => {
               this.viewEvent(eventId);
             });
           });
       } else {
         alert("Please enter both your name and Discord ID.");
+        this.loading = false;
       }
     },
 
@@ -411,36 +431,50 @@ Vue.createApp({
           this.viewEvent(eventId);
         });
     },
+
     updateCheckedInEvents() {
-      // Get the latest checked-in events from the cookie
       let storedEvents = Cookies.get("checkedInEvents");
       storedEvents = storedEvents ? JSON.parse(storedEvents) : [];
 
-      // Get the player's _id
-      const player = this.activeEvent?.playerList.find(
-        (p) => p.discord_id === this.discordId
-      );
+      if (!this.discordId) {
+        console.warn("Discord ID missing, cannot update checked-in events.");
+        return;
+      }
 
-      if (!player) {
-        // Player not found, clear checked-in events
+      // Find the player's _id across all events
+      let playerId = null;
+      for (const event of this.events) {
+        const player = event.playerList.find(
+          (p) => p.discord_id === this.discordId
+        );
+        if (player) {
+          playerId = player._id;
+          break;
+        }
+      }
+
+      if (!playerId) {
+        console.warn(
+          "Player not found in any event, clearing checked-in events."
+        );
         this.checkedInEvents = [];
         Cookies.set("checkedInEvents", JSON.stringify([]), { expires: 999 });
         return;
       }
 
-      // Filter out events where the user is no longer checked in
+      // Keep only the events where the user is still checked in
       this.checkedInEvents = storedEvents.filter((eventId) => {
         const event = this.events.find((e) => e.id === eventId);
-        if (!event) return false; // Event no longer exists
-
-        return event.playerList.some((p) => p._id === player._id);
+        return event?.playerList.some((p) => p._id === playerId);
       });
 
-      // Save the updated list back to the cookie
       Cookies.set("checkedInEvents", JSON.stringify(this.checkedInEvents), {
         expires: 999,
       });
+
+      console.log("Updated checked-in events:", this.checkedInEvents);
     },
+
     removePlayerFromEvent(eventId, playerId) {
       console.log(eventId, playerId);
       fetch(`https://gamehavenstg.com/events/${eventId}/admin-remove-player`, {
@@ -485,9 +519,9 @@ Vue.createApp({
           }));
 
           console.log("Normalized events:", this.events);
-          if (!this.isAdmin) {
+          this.$nextTick(() => {
             this.updateCheckedInEvents();
-          }
+          });
         })
         .catch((error) => console.error("Error fetching events:", error));
     },
