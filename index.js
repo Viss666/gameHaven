@@ -141,15 +141,26 @@ app.post("/events", async function (request, response) {
 // Tested and functional
 app.delete("/events/:eventId", async function (request, response) {
   try {
-    const deletedEvent = await model.Event.findByIdAndDelete(
-      request.params.eventId
-    );
+    const eventId = request.params.eventId;
 
-    if (!deletedEvent) {
+    // 1. Find the event
+    const event = await model.Event.findById(eventId).populate("playerList");
+
+    if (!event) {
       return response.status(404).json({ message: "Event not found" });
     }
 
-    response.status(200).json({ message: "Event deleted successfully" });
+    // 2. Delete associated players
+    for (const player of event.playerList) {
+      await model.Player.findByIdAndDelete(player._id);
+    }
+
+    // 3. Delete the event
+    await model.Event.findByIdAndDelete(eventId);
+
+    response
+      .status(200)
+      .json({ message: "Event and associated players deleted successfully" });
   } catch (error) {
     console.error("Error deleting event:", error);
     response.status(500).json({ message: "Internal Server Error" });
@@ -279,7 +290,7 @@ app.put("/events/:eventId/admin-remove-player", async (req, res) => {
 app.delete("/events/:eventId/remove-player", async (req, res) => {
   try {
     const eventId = req.params.eventId;
-    const playerId = req.body.playerId; // Get playerId from request body
+    const playerId = req.body.playerId;
 
     if (!playerId) {
       return res.status(400).json({ error: "Player ID not provided" });
@@ -290,15 +301,13 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    // Find the Player document using the playerId
-    const player = await model.Player.findById(playerId);
-
-    if (!player) {
-      return res.status(404).json({ error: "Player not found" });
-    }
+    // Convert playerId to ObjectId
+    const playerObjectId = new mongoose.Types.ObjectId(playerId);
 
     // Find the index of the player's ObjectId in the event's playerList
-    const playerIndex = event.playerList.indexOf(player._id);
+    const playerIndex = event.playerList.findIndex((player) =>
+      player.equals(playerObjectId)
+    );
 
     if (playerIndex === -1) {
       return res
@@ -310,12 +319,58 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
     event.playerList.splice(playerIndex, 1);
     await event.save();
 
-    res.status(200).json({ message: "Player successfully removed from event" });
+    // Delete the player document
+    await model.Player.findByIdAndDelete(playerId);
+
+    res
+      .status(200)
+      .json({ message: "Player successfully removed from event and deleted" });
   } catch (error) {
     console.error("Error removing player:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// app.delete("/events/:eventId/remove-player", async (req, res) => {
+//   try {
+//     const eventId = req.params.eventId;
+//     const playerId = req.body.playerId; // Get playerId from request body
+
+//     if (!playerId) {
+//       return res.status(400).json({ error: "Player ID not provided" });
+//     }
+
+//     const event = await model.Event.findById(eventId);
+//     if (!event) {
+//       return res.status(404).json({ error: "Event not found" });
+//     }
+
+//     // Find the Player document using the playerId
+//     const player = await model.Player.findById(playerId);
+
+//     if (!player) {
+//       return res.status(404).json({ error: "Player not found" });
+//     }
+
+//     // Find the index of the player's ObjectId in the event's playerList
+//     const playerIndex = event.playerList.indexOf(player._id);
+
+//     if (playerIndex === -1) {
+//       return res
+//         .status(404)
+//         .json({ error: "Player not registered for this event" });
+//     }
+
+//     // Remove the player's ObjectId from the playerList
+//     event.playerList.splice(playerIndex, 1);
+//     await event.save();
+
+//     res.status(200).json({ message: "Player successfully removed from event" });
+//   } catch (error) {
+//     console.error("Error removing player:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 // Update event information
 // Tested and functional (needs testing with matches)

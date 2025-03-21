@@ -414,6 +414,8 @@ Vue.createApp({
         this.loading = false;
         return;
       }
+      const now = new Date();
+      console.log(now);
 
       if (this.checkedInEvents.includes(eventId)) {
         alert("You are already checked in to this event.");

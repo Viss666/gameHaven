@@ -446,9 +446,14 @@
                   v-for="player in activeEvent.playerList ?? [] "
                   :key="player._id"
                   :class="{ selected: selectedPlayers.includes(player._id) }"
-                  @click="togglePlayerSelection(player._id)"
                 >
                   {{player.player_name}}
+                  <button
+                    @click="togglePlayerSelection(player._id)"
+                    class="btn"
+                  >
+                    Select player
+                  </button>
                   <button
                     @click="removePlayerFromEvent(activeEvent.id,player._id)"
                     class="btn"
