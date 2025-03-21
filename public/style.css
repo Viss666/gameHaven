@@ -167,7 +167,7 @@ nav ul li a.active {
   border-radius: 5px;
 }
 
-.login-container button {
+/* .login-container button {
   width: 100%;
   padding: 10px;
   background: #007bff;
@@ -176,10 +176,22 @@ nav ul li a.active {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+} */
+
+.login-container button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: 0.3s;
+  margin: 5px;
 }
 
 .login-container button:hover {
-  background: #0056b3;
+  background: #00861d;
 }
 
 /* The rest of these (blah)-content pages are for the other pages on the navigation. */

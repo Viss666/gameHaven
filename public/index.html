@@ -24,7 +24,7 @@
   </head>
   <body>
     <div id="app" v-cloak>
-      <div id="main" :style="backgroundStyle">
+      <div id="main">
         <!-- Mobile Menu Button -->
         <button class="menu-btn" @click="toggleMenu">
           <div></div>
@@ -471,13 +471,26 @@
               >
                 Pair Selected Players
               </button>
+              <button
+                @click="giveBye()"
+                id="pair-button"
+                :disabled="selectedPlayers.length !== 1"
+                ref="byeButton"
+              >
+                Give Player Bye
+              </button>
             </div>
             <div id="paired-list">
               <h2>Paired Players</h2>
               <ul>
                 <li v-for="(pair, index) in pairedPlayers" :key="index">
-                  {{ pair.player1.player_name }} vs {{ pair.player2.player_name
-                  }}
+                  <p>
+                    {{ pair.player1.player_name }}
+                    <span v-if="pair.player2">
+                      vs. {{ pair.player2.player_name }}</span
+                    >
+                    <span v-else> has a BYE </span>
+                  </p>
                   <button @click="removePair(index)" class="btn">Delete</button>
                 </li>
               </ul>
@@ -489,17 +502,7 @@
         </div>
         <div v-if="currentPage == 'rentals'" class="rental-content"></div>
 
-        <div v-if="currentPage == 'contact'" class="contact-content">
-          <div class="contact-bubbles">
-            <div class="circle left">
-              <p>Left Content</p>
-            </div>
-            <div class="circle center"></div>
-            <div class="circle right">
-              <p>Right Content</p>
-            </div>
-          </div>
-        </div>
+        <div v-if="currentPage == 'contact'" class="contact-content"></div>
         <div v-show="loading" class="loading-container">
           <div class="spinner-text"><p>Loading event details...</p></div>
           <div class="spinner"></div>

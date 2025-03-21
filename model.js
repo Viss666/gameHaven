@@ -37,6 +37,10 @@ const matchSchema = new mongoose.Schema({
     ref: "Player",
     required: false,
   },
+  isBye: {
+    type: Boolean,
+    default: false,
+  },
   assignedByOrganizer: { type: Boolean, default: false },
 });
 

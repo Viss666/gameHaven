@@ -167,6 +167,41 @@ app.delete("/events/:eventId", async function (request, response) {
   }
 });
 
+// app.js (or wherever your Express routes are)
+
+app.put("/events/:eventId/give-bye", async (req, res) => {
+  try {
+    const eventId = req.params.eventId;
+    const { playerId } = req.body;
+
+    if (!playerId) {
+      return res.status(400).json({ error: "Player ID is required" });
+    }
+
+    const event = await model.Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    // Create a new Match for the bye
+    const byeMatch = new model.Match({
+      player1: playerId,
+      player2: null, // or isBye: true
+      isBye: true,
+    });
+    await byeMatch.save();
+
+    // Update the Event's matches array
+    event.matches.push(byeMatch._id);
+    await event.save();
+
+    res.json({ message: "Bye given successfully", match: byeMatch });
+  } catch (error) {
+    console.error("Error giving bye:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // app.put("/events/:eventId/add-player", async (req, res) => {
 //   const eventId = req.params.eventId;
 //   const { playerName, playerDiscordID } = req.body;

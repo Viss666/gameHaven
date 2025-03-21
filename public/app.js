@@ -489,6 +489,45 @@ Vue.createApp({
       }
     },
 
+    giveBye() {
+      if (this.selectedPlayers.length === 1) {
+        const playerId = this.selectedPlayers[0];
+        fetch(
+          `https://gamehavenstg.com/events/${this.activeEvent.id}/give-bye`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ playerId }),
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to give bye");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            // Handle success (e.g., update pairedPlayers, clear selectedPlayers)
+            console.log("Bye given:", data);
+            this.pairedPlayers.push({
+              player1: {
+                player_name: this.activeEvent.playerList.find(
+                  (p) => p._id === playerId
+                ).player_name,
+                _id: playerId,
+              },
+              player2: null, // or isBye: true
+              isBye: true,
+            });
+            this.selectedPlayers = [];
+            this.getEvents(); // Refresh event data
+          })
+          .catch((error) => console.error("Error giving bye:", error));
+      }
+    },
+
     submitCheckOut(eventId) {
       this.loading = true;
       if (!eventId || typeof eventId !== "string") {
