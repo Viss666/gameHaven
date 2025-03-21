@@ -603,7 +603,15 @@ Vue.createApp({
         })
         .then((data) => {
           // console.log("Successfully removed player", data);
-          this.getEvents(); // Refresh the event list
+          this.getEvents().then(() => {
+            const updatedEvent = this.events.find(
+              (event) => event.id === eventId
+            );
+            if (updatedEvent) {
+              this.activeEvent = updatedEvent;
+            }
+          });
+          this.currentPage = "edit";
         })
         .catch((error) => console.error("Error removing player:", error));
     },
@@ -750,6 +758,9 @@ Vue.createApp({
             eventDate: "",
             eventTime: "",
           };
+        })
+        .finally(() => {
+          this.getEvents();
           this.currentPage = "events";
         })
         .catch((error) => console.error("Error creating event:", error));

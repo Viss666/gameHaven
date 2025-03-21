@@ -396,7 +396,6 @@
             <button @click="deleteEvent(activeEvent.id)" class="btn">
               Delete
             </button>
-            <button @click="saveEvent(activeEvent.id)" class="btn">Save</button>
             <button @click="togglePublish(activeEvent.id)" class="btn">
               {{ activeEvent.isPublished ? 'Unpublish' : 'Publish' }}
             </button>
@@ -479,10 +478,13 @@
                 <li v-for="(pair, index) in pairedPlayers" :key="index">
                   {{ pair.player1.player_name }} vs {{ pair.player2.player_name
                   }}
-                  <button @click="removePair(index)">Delete</button>
+                  <button @click="removePair(index)" class="btn">Delete</button>
                 </li>
               </ul>
             </div>
+            <button @click="saveEvent(activeEvent.id)" class="svbtn">
+              Save
+            </button>
           </div>
         </div>
         <div v-if="currentPage == 'rentals'" class="rental-content"></div>
