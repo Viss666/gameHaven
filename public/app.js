@@ -188,6 +188,8 @@ Vue.createApp({
     // Explanatory
     navigatePage(page) {
       if (page == "events") {
+        console.log(this.events);
+
         this.getEvents();
       }
       this.currentPage = page;

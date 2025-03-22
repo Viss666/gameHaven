@@ -131,17 +131,18 @@
             <div class="event-card" v-for="event in events" :key="event._id">
               <div class="event-header">
                 <div class="event-title">{{ event.eventTitle }}</div>
-                <div class="event-published">{{ event.isPublished }}</div>
-                <div class="event-day">{{ event.eventDate }}</div>
               </div>
               <div class="event-main-info">
                 <div class="event-side-info">
                   <div class="event-game">{{event.eventGame}}</div>
-                  <div class="event-players-signed">
-                    Current Player Count: {{ event.playerList.length}}/4
-                  </div>
+
+                  <div class="event-day">{{ event.eventDate }}</div>
+
                   <div class="event-time">
                     {{event.eventDay}} - {{ event.eventTime }}
+                  </div>
+                  <div class="event-players-signed">
+                    Current Player Count: {{ event.playerList.length}}/4
                   </div>
                 </div>
                 <button
@@ -192,7 +193,10 @@
               <strong>Current Player Count:</strong>
               {{activeEvent.playerList.length}} / 4
             </p>
-            <div class="registered-players">
+            <div
+              class="registered-players"
+              v-if="activeEvent.playerList.length > 0"
+            >
               <h2>Registered Players</h2>
               <ul class="player-list">
                 <li
@@ -203,12 +207,20 @@
                 </li>
               </ul>
             </div>
-            <div id="paired-list" v-if="activeEvent.isPublished">
+            <div
+              id="paired-list"
+              v-if="activeEvent.isPublished && activeEvent.matches.length > 0"
+            >
               <h2>Paired Players</h2>
               <ul>
                 <li v-for="(pair, index) in pairedPlayers" :key="index">
-                  {{ pair.player1.player_name }} vs {{ pair.player2.player_name
-                  }}
+                  <p>
+                    {{ pair.player1.player_name }}
+                    <span v-if="pair.player2">
+                      vs. {{ pair.player2.player_name }}</span
+                    >
+                    <span v-else> has a BYE </span>
+                  </p>
                 </li>
               </ul>
             </div>
@@ -283,10 +295,7 @@
             <h2>Game</h2>
             <input v-model="newEvent.eventGame" placeholder="Game" />
           </div>
-          <div>
-            <h2>Type (ignore this for now Grant)</h2>
-            <input v-model="newEvent.eventType" placeholder="Type" />
-          </div>
+
           <div>
             <h2>Description</h2>
             <textarea
@@ -295,6 +304,7 @@
               class="description"
             ></textarea>
           </div>
+          <button class="btn">Create as Template</button>
           <div>
             <h2>Organizer</h2>
             <input v-model="newEvent.eventOrganizer" placeholder="Organizer" />
@@ -339,7 +349,7 @@
             </select>
           </div>
           <div>
-            <button @click="pushEvent()">Submit</button>
+            <button class="btn" @click="pushEvent()">Submit</button>
           </div>
         </div>
 
