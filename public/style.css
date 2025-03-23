@@ -155,17 +155,78 @@ nav ul li a.active {
 .main-card {
   background-color: white;
   border-radius: 5px;
-  width: 30%;
+  width: 31%;
   box-shadow: rgba(51, 51, 51, 0.5) 2.5px 2.5px 10px 2.5px;
 }
-.main-card h3{
+.main-card h2{
   margin: 0 1%;
-  margin-top: 1%;
+  margin-top: 2%;
+  padding-left: 5%;
 }
 
 .main-card hr {
   margin-left: 1%;
   margin-right: 1%;
+}
+
+.main-card ul {
+  list-style-type: none;
+  padding: 5%;
+}
+
+.card-list-div li h3 {
+  margin-top: 0;
+}
+
+.card-list-div li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 5px;
+  border-radius: 5px;
+}
+
+.card-list-div li img {
+  width: 150px;
+  height: auto;
+  max-height: 200px;
+}
+
+.see-us-list-div li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 5px;
+  border-radius: 5px;
+}
+
+.see-us-list-div li img {
+ width: 60%;
+}
+
+.see-us-list-div li p {
+  margin-top: 0px;
+}
+
+#rentalHero {
+  width: 100%;
+}
+
+.rental-games-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.rental-game-container {
+  background-color:#2196f3;
+  width: 20%;
+  border-radius: 5px;
+  
 }
 
 .login-content {
@@ -558,9 +619,9 @@ nav ul li a.active {
   flex-wrap: nowrap;
   width: 100%;
   height: auto;
-  bottom: 0;
+  /* bottom: 0;
   left: 0;
-  position: absolute;
+  position: fixed; */
 }
 
 /* Footer columns, 3 in total */
@@ -603,6 +664,9 @@ nav ul li a.active {
 
 /* mobile display */
 @media only screen and (max-width: 960px) {
+  body{
+    margin: 0px;
+  }
   #main {
     flex-direction: column; /* Stack elements vertically */
     /* height: 100dvh; */

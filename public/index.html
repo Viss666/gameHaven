@@ -62,27 +62,6 @@
                 >Rentals</a
               >
             </li>
-            <li class="dropdown">
-              <a href="#" @click="toggleMobileSubmenu('tcg')">TCG</a>
-              <ul class="submenu" v-if="mobileSubmenuOpen === 'tcg'">
-                <li>
-                  <a
-                    href="#"
-                    @click="navigatePage('tcg-pokemon')"
-                    :class="{ active: currentPage === 'tcg-pokemon' }"
-                    >Pokémon</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    @click="navigatePage('tcg-mtg')"
-                    :class="{ active: currentPage === 'tcg-mtg' }"
-                    >Magic: The Gathering</a
-                  >
-                </li>
-              </ul>
-            </li>
             <li>
               <a
                 href="#"
@@ -92,6 +71,9 @@
               >
             </li>
 
+            <li class="dropdown">
+              <a href="#" @click="navigatePage('tcg')">TCG</a>
+            </li>
             <li>
               <a
                 href="#"
@@ -115,25 +97,80 @@
           <img id="gameWall" src="images/gameWall3.png">
           <div class="main-card-div">
             <div class="main-card" >
-              <h3>Games</h3>
+              <h2>Most Loved Games</h2>
               <hr>
+              <div class="card-list-div">
+                <ul>
+                  <li v-for="game in gamesToBuy.slice(0, 5)" :key="game.title">
+                    <div>
+                      <h3>{{ game.title }}<br>
+                        ({{ game.year }})
+                      </h3>
+                    </div>
+                    <img :src="game.imgURL" width="150">
+                  </li>
+                </ul>
+              </div>
             </div>
             <div class="main-card" >
-              <h3>Rentals</h3>
+              <h2>Hottest Rentals</h2>
               <hr>
+              <div class="card-list-div">
+                <div v-if="loading">Loading board games...</div>
+                <div v-else-if="error">{{ error }}</div>
+                <ul v-else>
+                  <li v-for="game in boardgames.slice(2, 7)" :key="game.id">
+                    <h3>{{ game.name }} <br>
+                      ({{ game.yearPublished }})
+                    </h3>
+                    <img v-if="game.thumbnail" :src="game.thumbnail" alt="Thumbnail" width="150">
+                  </li>
+                </ul>
+              </div>
             </div>
             <div class="main-card" >
-              <h3>Info</h3>
+              <h2>Come See Us</h2>
               <hr>
+              <div class="see-us-list-div">
+                <ul>
+                  <li>
+                    <p>At GameHaven, we bring players together with 
+                      board game rentals, exciting events, and a thriving 
+                      community for trading card games, tabletop RPGs, 
+                      and board games.</p>
+                  </li>
+                  <li>
+                    <p>
+                      <strong>Rent & Play</strong> <br>
+                      Explore our collection of games and take one home for game night!
+                    </p>
+                    <img src="images/playing.png">
+                  </li>
+
+                  <li>
+                    <img src="images/map.png">
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- CONTENT AFTER CURRENTPAGE SELECTION -->
+        
+        <div v-if="currentPage == 'games'" class="games-content">
+
+        </div>
+        <div v-if="currentPage == 'rentals'" class="rental-content">
+          <img id="rentalHero" src="images/rentalHero.png" >
+          <div class="rental-games-section">
+            <div class="rental-game-container" v-for="game in boardgames" :key="game.id">
+              <h3> {{ game.name }} </h3>
+              
+            </div>
+          </div>
+        </div>
         <div v-if="currentPage == 'tcg'" class="tcg-content"></div>
-        <div v-if="currentPage == 'tcg-mtg'" class="tcg-mtg"></div>
-        <div v-if="currentPage == 'tcg-pokemon'" class="tcg-pokemon"></div>
-        <div v-if="currentPage == 'games'" class="games-content"></div>
 
         <!-- My senior project -->
         <div v-if="currentPage == 'events'" class="events-content">
@@ -259,7 +296,7 @@
                 Check Out
               </button>
               <!-- Pop-up modal -->
-              <!-- <div v-if="showCheckInForm" class="modal-overlay">
+              <div v-if="showCheckInForm" class="modal-overlay">
                 <div class="modal">
                   <h2>Check In</h2>
                   <input
@@ -286,7 +323,7 @@
                     </button>
                   </div>
                 </div>
-              </div> -->
+              </div>
             </div>
           </div>
         </div>
@@ -524,13 +561,10 @@
             </button>
           </div>
         </div>
-        <div v-if="currentPage == 'rentals'" class="rental-content"></div>
-
-        <div v-if="currentPage == 'contact'" class="contact-content"></div>
-        <!-- <div v-show="loading" class="loading-container">
+        <div v-show="loading" class="loading-container">
           <div class="spinner-text"><p>Loading event details...</p></div>
           <div class="spinner"></div>
-        </div> -->
+        </div>
         <div class="footer">
           <div class="times">
             <div id="open">
