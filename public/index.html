@@ -23,7 +23,7 @@
   </head>
   <body>
     <div id="app">
-      <div id="main" >
+      <div id="main">
         <!-- Mobile Menu Button -->
         <button class="menu-btn" @click="toggleMenu">
           <div></div>
@@ -34,8 +34,10 @@
         <!-- ezra change -->
 
         <!-- Navigation -->
+
         <nav :class="{ 'mobile-nav': menuOpen }">
           <ul>
+            <img src="images/gameHavenStg.png" @click="navigatePage('home')">
             <li>
               <a
                 href="#"
@@ -95,8 +97,7 @@
                 href="#"
                 @click="navigatePage('login')"
                 :class="{ active: currentPage === 'login' }"
-                >Admin Login</a
-              >
+                >Admin</a>
             </li>
 
             <!-- <li>
@@ -110,7 +111,9 @@
           </ul>
         </nav>
 
-        <div v-if="currentPage == 'home'" class="home-content"></div>
+        <div v-if="currentPage == 'home'" class="home-content">
+          <h2>HELLO</h2>
+        </div>
 
         <!-- CONTENT AFTER CURRENTPAGE SELECTION -->
         <div v-if="currentPage == 'tcg'" class="tcg-content"></div>
@@ -242,7 +245,7 @@
                 Check Out
               </button>
               <!-- Pop-up modal -->
-              <div v-if="showCheckInForm" class="modal-overlay">
+              <!-- <div v-if="showCheckInForm" class="modal-overlay">
                 <div class="modal">
                   <h2>Check In</h2>
                   <input
@@ -269,7 +272,7 @@
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -510,10 +513,10 @@
         <div v-if="currentPage == 'rentals'" class="rental-content"></div>
 
         <div v-if="currentPage == 'contact'" class="contact-content"></div>
-        <div v-show="loading" class="loading-container">
+        <!-- <div v-show="loading" class="loading-container">
           <div class="spinner-text"><p>Loading event details...</p></div>
           <div class="spinner"></div>
-        </div>
+        </div> -->
         <div class="footer">
           <div class="times">
             <div id="open">
