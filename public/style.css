@@ -9,10 +9,10 @@ body {
   background-color: #fafafa;
   /* font-family: "Acme"; */
   font-family: "Poppins";
-
+  margin: 0;
   /* display: flex; */
   height: 100%;
-  margin: 0 3%;
+  /* margin: 0 3%; */
 
   /* display: flex; */
   /* height: 100vh; */
@@ -41,6 +41,7 @@ body {
 /* Left hand vertical navigation */
 nav {
   margin: 1% 0;
+  margin: 0 3%;
 }
 
 /* Navigation list */
@@ -140,9 +141,10 @@ nav ul li a.active {
   /* height: 50vh; */
   /* background-color: #f3eff5; */
   /* background-color: black; */
+  margin: 0 3%;
 }
 
-#gameWall{
+#gameWall {
   width: 100%;
   margin: 0;
 }
@@ -158,7 +160,7 @@ nav ul li a.active {
   width: 31%;
   box-shadow: rgba(51, 51, 51, 0.5) 2.5px 2.5px 10px 2.5px;
 }
-.main-card h2{
+.main-card h2 {
   margin: 0 1%;
   margin-top: 2%;
   padding-left: 5%;
@@ -203,7 +205,7 @@ nav ul li a.active {
 }
 
 .see-us-list-div li img {
- width: 60%;
+  width: 60%;
 }
 
 .see-us-list-div li p {
@@ -223,10 +225,9 @@ nav ul li a.active {
 }
 
 .rental-game-container {
-  background-color:#2196f3;
+  background-color: #2196f3;
   width: 20%;
   border-radius: 5px;
-  
 }
 
 .login-content {
@@ -304,7 +305,7 @@ nav ul li a.active {
   width: 100%;
   height: 100%;
   background-size: cover;
-  background-color: #f3eff5;
+  background-color: #fafafa;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -312,11 +313,11 @@ nav ul li a.active {
 }
 
 .edit-page-content {
-  background-color: #f3eff5;
+  background-color: #fafafa;
 }
 
 .admin-event-content {
-  background-color: #f3eff5;
+  background-color: #fafafa;
 }
 
 .events-wrapper {
@@ -324,22 +325,25 @@ nav ul li a.active {
   justify-content: center;
   align-items: center;
   padding: 20px;
-  padding-top: 0px;
   flex-direction: column;
 }
 .event-card {
   width: 60%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   /* max-width: 400px; */
   background: #fff;
-  padding: 0px 0px 0px 0px;
-  border-radius: 10px;
+  padding: 20px;
+  border-radius: 3px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 10px;
   text-align: center;
-  background-color: #00000099;
-  color: white;
+  /* background-color: #00000099; */
+}
+.date-box {
+  align-self: center;
+  justify-content: center;
+  width: 200px;
 }
 .event-title {
   /* font-size: 1.5em;
@@ -357,7 +361,19 @@ nav ul li a.active {
   background-color: black;
   border-radius: 10px; */
 }
+.event-header h2 {
+  color: #3f7d20;
+  margin: 0;
+  padding: 0;
+}
+.event-game h3 {
+  margin: 0;
+  padding: 0;
+}
 .event-main-info {
+  text-align: left;
+  width: 50%;
+  /* width: 100%; */
   /* font-size: 1.1rem;
   width: 100%;
   position: relative;
@@ -391,6 +407,11 @@ nav ul li a.active {
 }
 .event-time {
   /* padding: 2px; */
+}
+
+.event-buttons {
+  width: 40%;
+  align-self: center;
 }
 
 #player-list,
@@ -446,18 +467,23 @@ nav ul li a.active {
 
 .upcoming-events {
   text-align: center;
+  border-bottom: 2px solid black;
+  margin: 0 2% 0 2%;
   /* color: white; */
   font-size: 1.2rem;
-  padding-top: 15px;
+  padding-top: 0;
   -webkit-text-stroke-width: 0.25px;
   -webkit-text-stroke-color: black;
+}
+.upcoming-events h1 {
+  margin: 0;
 }
 
 .view-event-content {
   width: 100%;
   height: 100%;
   position: relative;
-  background-color: #f3eff5;
+  background-color: #fafafa;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   min-height: 600px;
 }
@@ -603,6 +629,7 @@ nav ul li a.active {
 }
 
 .rental-content {
+  margin: 0 3%;
 }
 
 /* Footer wrapper */
@@ -619,6 +646,8 @@ nav ul li a.active {
   flex-wrap: nowrap;
   width: 100%;
   height: auto;
+  padding: 0px;
+
   /* bottom: 0;
   left: 0;
   position: fixed; */
@@ -664,7 +693,7 @@ nav ul li a.active {
 
 /* mobile display */
 @media only screen and (max-width: 960px) {
-  body{
+  body {
     margin: 0px;
   }
   #main {
@@ -758,7 +787,7 @@ nav ul li a.active {
     width: 100%;
     display: flex;
     align-items: center;
-
+    display: none;
     /* height: calc(100dvh - 6dvh); */
   }
 
@@ -772,7 +801,6 @@ nav ul li a.active {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    padding-top: 0px;
     flex-direction: column;
   }
 
@@ -787,7 +815,7 @@ nav ul li a.active {
 
   .footer {
     justify-content: space-around;
-    background-color: black;
+    /* background-color: black; */
     color: white;
     text-align: center;
     margin-top: auto;
@@ -795,8 +823,8 @@ nav ul li a.active {
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-    height: 8dvh;
-    position: absolute;
+    /* height: 8dvh; */
+    /* position: absolute; */
   }
 
   .social-icon {

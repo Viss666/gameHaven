@@ -18,7 +18,7 @@
       href="https://fonts.googleapis.com/css2?family=Acme&family=Jost:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Playfair+Display&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
-    
+
     <title>Game Haven St. George</title>
   </head>
   <body>
@@ -37,7 +37,7 @@
 
         <nav :class="{ 'mobile-nav': menuOpen }">
           <ul>
-            <img src="images/gameHavenStg.png" @click="navigatePage('home')">
+            <img src="images/gameHavenStg.png" @click="navigatePage('home')" />
             <li>
               <a
                 href="#"
@@ -79,7 +79,8 @@
                 href="#"
                 @click="navigatePage('login')"
                 :class="{ active: currentPage === 'login' }"
-                >Admin</a>
+                >Admin</a
+              >
             </li>
 
             <!-- <li>
@@ -94,61 +95,70 @@
         </nav>
 
         <div v-if="currentPage == 'home'" class="home-content">
-          <img id="gameWall" src="images/gameWall3.png">
+          <img id="gameWall" src="images/gameWall3.png" />
           <div class="main-card-div">
-            <div class="main-card" >
+            <div class="main-card">
               <h2>Most Loved Games</h2>
-              <hr>
+              <hr />
               <div class="card-list-div">
                 <ul>
                   <li v-for="game in gamesToBuy.slice(0, 5)" :key="game.title">
                     <div>
-                      <h3>{{ game.title }}<br>
+                      <h3>
+                        {{ game.title }}<br />
                         ({{ game.year }})
                       </h3>
                     </div>
-                    <img :src="game.imgURL" width="150">
+                    <img :src="game.imgURL" width="150" />
                   </li>
                 </ul>
               </div>
             </div>
-            <div class="main-card" >
+            <div class="main-card">
               <h2>Hottest Rentals</h2>
-              <hr>
+              <hr />
               <div class="card-list-div">
                 <div v-if="loading">Loading board games...</div>
                 <div v-else-if="error">{{ error }}</div>
                 <ul v-else>
                   <li v-for="game in boardgames.slice(2, 7)" :key="game.id">
-                    <h3>{{ game.name }} <br>
+                    <h3>
+                      {{ game.name }} <br />
                       ({{ game.yearPublished }})
                     </h3>
-                    <img v-if="game.thumbnail" :src="game.thumbnail" alt="Thumbnail" width="150">
+                    <img
+                      v-if="game.thumbnail"
+                      :src="game.thumbnail"
+                      alt="Thumbnail"
+                      width="150"
+                    />
                   </li>
                 </ul>
               </div>
             </div>
-            <div class="main-card" >
+            <div class="main-card">
               <h2>Come See Us</h2>
-              <hr>
+              <hr />
               <div class="see-us-list-div">
                 <ul>
                   <li>
-                    <p>At GameHaven, we bring players together with 
-                      board game rentals, exciting events, and a thriving 
-                      community for trading card games, tabletop RPGs, 
-                      and board games.</p>
+                    <p>
+                      At GameHaven, we bring players together with board game
+                      rentals, exciting events, and a thriving community for
+                      trading card games, tabletop RPGs, and board games.
+                    </p>
                   </li>
                   <li>
                     <p>
-                      <strong>Rent & Play</strong> <br>
-                      Explore our collection of games and take one home for game night!
+                      <strong>Rent & Play</strong> <br />
+                      Explore our collection of games and take one home for game
+                      night!
                     </p>
-                    <img src="images/playing.png">
+                    <img src="images/playing.png" />
                   </li>
 
                   <li>
-                    <img src="images/map.png">
+                    <img src="images/map.png" />
                   </li>
                 </ul>
               </div>
@@ -157,16 +167,17 @@
         </div>
 
         <!-- CONTENT AFTER CURRENTPAGE SELECTION -->
-        
-        <div v-if="currentPage == 'games'" class="games-content">
 
-        </div>
+        <div v-if="currentPage == 'games'" class="games-content"></div>
         <div v-if="currentPage == 'rentals'" class="rental-content">
-          <img id="rentalHero" src="images/rentalHero.png" >
+          <img id="rentalHero" src="images/rentalHero.png" />
           <div class="rental-games-section">
-            <div class="rental-game-container" v-for="game in boardgames" :key="game.id">
-              <h3> {{ game.name }} </h3>
-              
+            <div
+              class="rental-game-container"
+              v-for="game in boardgames"
+              :key="game.id"
+            >
+              <h3>{{ game.name }}</h3>
             </div>
           </div>
         </div>
@@ -182,14 +193,14 @@
           </div>
           <div class="events-wrapper">
             <div class="event-card" v-for="event in events" :key="event._id">
-              <div class="event-header">
-                <div class="event-title">{{ event.eventTitle }}</div>
-              </div>
-              <div class="event-main-info">
-                <div class="event-side-info">
-                  <div class="event-game">{{event.eventGame}}</div>
+              <div class="date-box">{{ event.eventDate }}</div>
 
-                  <div class="event-day">{{ event.eventDate }}</div>
+              <div class="event-main-info">
+                <div class="event-header">
+                  <div class="event-title"><h2>{{ event.eventTitle }}</h2></div>
+                </div>
+                <div class="event-side-info">
+                  <div class="event-game"><h3>{{event.eventGame}}</h3></div>
 
                   <div class="event-time">
                     {{event.eventDay}} - {{ event.eventTime }}
@@ -198,6 +209,8 @@
                     Current Player Count: {{ event.playerList.length}}/4
                   </div>
                 </div>
+              </div>
+              <div class="event-buttons">
                 <button
                   v-if="isAdmin == true"
                   class="btn"
@@ -220,9 +233,9 @@
         <div v-if="currentPage == 'viewEvent'" class="view-event-content">
           <!-- Header Section -->
           <div class="event-header">
-            <p class="back-link" @click="navigatePage('events')">
+            <button class="btn" @click="navigatePage('events')">
               < Back to All Events
-            </p>
+            </button>
             <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
 
             <p class="event-day">
@@ -460,6 +473,9 @@
             <button @click="togglePublish(activeEvent.id)" class="btn">
               {{ activeEvent.isPublished ? 'Unpublish' : 'Publish' }}
             </button>
+            <button @click="saveEvent(activeEvent.id)" class="svbtn">
+              Save
+            </button>
           </div>
           <div class="event-body">
             <p class="event-game">{{activeEvent.eventGame}}</p>
@@ -556,9 +572,6 @@
                 </li>
               </ul>
             </div>
-            <button @click="saveEvent(activeEvent.id)" class="svbtn">
-              Save
-            </button>
           </div>
         </div>
         <div v-show="loading" class="loading-container">
