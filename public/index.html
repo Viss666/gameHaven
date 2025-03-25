@@ -210,7 +210,7 @@
                   </div>
                 </div>
               </div>
-              <div class="event-buttons">
+              <div class="event-buttons1">
                 <button
                   v-if="isAdmin == true"
                   class="btn"
@@ -231,83 +231,89 @@
         </div>
 
         <div v-if="currentPage == 'viewEvent'" class="view-event-content">
-          <!-- Header Section -->
           <div class="event-header">
             <button class="btn" @click="navigatePage('events')">
               < Back to All Events
             </button>
-            <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
-
-            <p class="event-day">
-              {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
-              {{activeEvent.eventDate}}
-            </p>
           </div>
-          <!-- Body Section -->
-          <div class="event-body">
-            <div class="event-game">{{activeEvent.eventGame}}</div>
-            <p class="event-description">{{activeEvent.eventDescription}}</p>
-            <p class="event-organizer">
-              <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
-            </p>
-            <p class="organizer-contact">
-              <strong>Organizer Contact Info:</strong>
-              {{activeEvent.organizerContactInfo}}
-            </p>
-            <p class="player-count">
-              <strong>Current Player Count:</strong>
-              {{activeEvent.playerList.length}} / 4
-            </p>
-            <div
-              class="registered-players"
-              v-if="activeEvent.playerList.length > 0"
-            >
-              <h2>Registered Players</h2>
-              <ul class="player-list">
-                <li
-                  v-for="player in activeEvent.playerList ?? [] "
-                  :key="player.discord_id"
-                >
-                  {{player.player_name}}
-                </li>
-              </ul>
+          <div class="event-container">
+            <!-- Body Section -->
+            <div class="event-body">
+              <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
+              <div class="event-game"><h3>{{activeEvent.eventGame}}</h3></div>
+
+              <p class="event-day">
+                {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
+                {{activeEvent.eventDate}}
+              </p>
+              <p class="event-organizer">
+                <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
+              </p>
+              <p class="organizer-contact">
+                <strong>Contact Info:</strong>
+                {{activeEvent.organizerContactInfo}}
+              </p>
+              <p class="player-count">
+                <strong>Current Player Count:</strong>
+                {{activeEvent.playerList.length}} / 4
+              </p>
+              <p class="event-description">{{activeEvent.eventDescription}}</p>
             </div>
-            <div
-              id="paired-list"
-              v-if="activeEvent.isPublished && activeEvent.matches.length > 0"
-            >
-              <h2>Paired Players</h2>
-              <ul>
-                <li v-for="(pair, index) in pairedPlayers" :key="index">
-                  <p>
-                    {{ pair.player1.player_name }}
-                    <span v-if="pair.player2">
-                      vs. {{ pair.player2.player_name }}</span
-                    >
-                    <span v-else> has a BYE </span>
-                  </p>
-                </li>
-              </ul>
+            <div class="players-on-page">
+              <div
+                class="registered-players"
+                v-if="activeEvent.playerList.length > 0"
+              >
+                <h2 class="reg-player">Registered Players</h2>
+                <ul class="player-list">
+                  <li
+                    v-for="player in activeEvent.playerList ?? [] "
+                    :key="player.discord_id"
+                    class="player"
+                  >
+                    <p class="player-names">{{player.player_name}}</p>
+                  </li>
+                </ul>
+              </div>
+              <div
+                id="paired-list"
+                v-if="activeEvent.isPublished && activeEvent.matches.length > 0"
+              >
+                <h2>Paired Players</h2>
+                <ul>
+                  <li v-for="(pair, index) in pairedPlayers" :key="index">
+                    <p>
+                      {{ pair.player1.player_name }}
+                      <span v-if="pair.player2">
+                        vs. {{ pair.player2.player_name }}</span
+                      >
+                      <span v-else> has a BYE </span>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+              <div class="event-buttons2">
+                <button
+                  v-if="!isCheckedIn && !activeEvent.isPublished"
+                  @click="openCheckIn"
+                  class="btn"
+                >
+                  Check In
+                </button>
+
+                <button
+                  v-if="isCheckedIn && activeEvent && activeEvent._id && !activeEvent.isPublished"
+                  @click="submitCheckOut(activeEvent._id)"
+                  class="btn"
+                >
+                  Check Out
+                </button>
+              </div>
             </div>
           </div>
           <!-- Footer Section with Check-In Button -->
           <div class="event-footer" style="text-align: right; padding: 15px">
             <div>
-              <button
-                v-if="!isCheckedIn && !activeEvent.isPublished"
-                @click="openCheckIn"
-                class="btn"
-              >
-                Check In
-              </button>
-
-              <button
-                v-if="isCheckedIn && activeEvent && activeEvent._id && !activeEvent.isPublished"
-                @click="submitCheckOut(activeEvent._id)"
-                class="btn"
-              >
-                Check Out
-              </button>
               <!-- Pop-up modal -->
               <div v-if="showCheckInForm" class="modal-overlay">
                 <div class="modal">
