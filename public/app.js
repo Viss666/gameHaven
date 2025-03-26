@@ -63,77 +63,77 @@ Vue.createApp({
       loading: true,
       error: null,
       gamesToBuy: [
-          {
-            title: "Settlers of Catan",
-            price: "$49.99",
-            recommended_players: "3-4",
-            imgURL: "images/catan.png",
-            year: "1995"
-          },
-          {
-            title: "Klask",
-            price: "$59.99",
-            recommended_players: "2",
-            imgURL: "images/klask.png",
-            year: "2014"
-          },
-          {
-            title: "Ticket to Ride",
-            price: "$49.99",
-            recommended_players: "2-5",
-            imgURL: "images/ticketToRide.png",
-            year: "2004"
-          },
-          {
-            title: "Zombicide: Black Plague",
-            price: "$87.99",
-            recommended_players: "1-6",
-            imgURL: "images/zombicide.png",
-            year: "2015"
-          },
-          {
-            title: "Twilight Imperium",
-            price: "$129.99",
-            recommended_players: "3-6",
-            imgURL: "images/twilightImperium.png",
-            year: "2017"
-          },
-          {
-            title: "Scythe",
-            price: "$79.99",
-            recommended_players: "1-7",
-            imgURL: "images/scythe.png",
-            year: "2016"
-          },
-          {
-            title: "Azul",
-            price: "$29.99",
-            recommended_players: "2-4",
-            imgURL: "images/azul.png",
-            year: "2017"
-          },
-          {
-            title: "Dungeons and Dragons: Player's Handbook",
-            price: "$59.99",
-            recommended_players: "2-4",
-            imgURL: "images/dndHandbook.png",
-            year: "2024"
-          },
-          {
-            title: "Dungeons and Dragons: Monster Manual",
-            price: "$59.99",
-            recommended_players: "2-4",
-            imgURL: "images/dndMonster.png",
-            year: "2024"
-          },
-          {
-            title: "Dungeons and Dragons: Dungeon Master's Guide",
-            price: "$59.99",
-            recommended_players: "2-4",
-            imgURL: "images/dndMaster.png",
-            year: "2024"
-          }
-      ]
+        {
+          title: "Settlers of Catan",
+          price: "$49.99",
+          recommended_players: "3-4",
+          imgURL: "images/catan.png",
+          year: "1995",
+        },
+        {
+          title: "Klask",
+          price: "$59.99",
+          recommended_players: "2",
+          imgURL: "images/klask.png",
+          year: "2014",
+        },
+        {
+          title: "Ticket to Ride",
+          price: "$49.99",
+          recommended_players: "2-5",
+          imgURL: "images/ticketToRide.png",
+          year: "2004",
+        },
+        {
+          title: "Zombicide: Black Plague",
+          price: "$87.99",
+          recommended_players: "1-6",
+          imgURL: "images/zombicide.png",
+          year: "2015",
+        },
+        {
+          title: "Twilight Imperium",
+          price: "$129.99",
+          recommended_players: "3-6",
+          imgURL: "images/twilightImperium.png",
+          year: "2017",
+        },
+        {
+          title: "Scythe",
+          price: "$79.99",
+          recommended_players: "1-7",
+          imgURL: "images/scythe.png",
+          year: "2016",
+        },
+        {
+          title: "Azul",
+          price: "$29.99",
+          recommended_players: "2-4",
+          imgURL: "images/azul.png",
+          year: "2017",
+        },
+        {
+          title: "Dungeons and Dragons: Player's Handbook",
+          price: "$59.99",
+          recommended_players: "2-4",
+          imgURL: "images/dndHandbook.png",
+          year: "2024",
+        },
+        {
+          title: "Dungeons and Dragons: Monster Manual",
+          price: "$59.99",
+          recommended_players: "2-4",
+          imgURL: "images/dndMonster.png",
+          year: "2024",
+        },
+        {
+          title: "Dungeons and Dragons: Dungeon Master's Guide",
+          price: "$59.99",
+          recommended_players: "2-4",
+          imgURL: "images/dndMaster.png",
+          year: "2024",
+        },
+      ],
     };
   },
   computed: {
@@ -166,44 +166,49 @@ Vue.createApp({
 
   methods: {
     fetchBoardGames() {
-      fetch('https://boardgamegeek.com/xmlapi2/hot?type=boardgame')
-        .then(response => {
+      fetch("https://boardgamegeek.com/xmlapi2/hot?type=boardgame")
+        .then((response) => {
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error("Network response was not ok");
           }
           return response.text(); // BGG API returns XML
         })
-        .then(str => {
+        .then((str) => {
           const parser = new DOMParser();
           const xml = parser.parseFromString(str, "application/xml");
-          const items = xml.querySelectorAll('item');
+          const items = xml.querySelectorAll("item");
 
           // Map each item with thumbnail, name, yearPublished
-          this.boardgames = Array.from(items).map(item => ({
-            id: item.getAttribute('id'),
-            rank: item.getAttribute('rank'),
-            name: item.querySelector('name')?.getAttribute('value') || 'Unknown',
-            yearPublished: item.querySelector('yearpublished')?.getAttribute('value') || 'Unknown',
-            thumbnail: item.querySelector('thumbnail')?.getAttribute('value') || ''
+          this.boardgames = Array.from(items).map((item) => ({
+            id: item.getAttribute("id"),
+            rank: item.getAttribute("rank"),
+            name:
+              item.querySelector("name")?.getAttribute("value") || "Unknown",
+            yearPublished:
+              item.querySelector("yearpublished")?.getAttribute("value") ||
+              "Unknown",
+            thumbnail:
+              item.querySelector("thumbnail")?.getAttribute("value") || "",
           }));
 
           this.loading = false;
         })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-          this.error = 'Failed to fetch board games';
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          this.error = "Failed to fetch board games";
           this.loading = false;
         });
     },
-    fetchBoardGameInfo(){
-      for(game in this.boardgames){
-        fetch('https://boardgamegeek.com/xmlapi2/thing?id={game.id}'
-        ).then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
+    fetchBoardGameInfo() {
+      for (game in this.boardgames) {
+        fetch("https://boardgamegeek.com/xmlapi2/thing?id={game.id}").then(
+          (response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.text();
           }
-          return response.text();
-        })
+        );
       }
     },
     convertToStandardTime(militaryTime) {
@@ -245,6 +250,9 @@ Vue.createApp({
         this.selectedPlayers.splice(playerIndex, 1);
       }
       this.updatePairButtonState();
+    },
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "auto" });
     },
 
     updatePairButtonState() {
@@ -309,7 +317,7 @@ Vue.createApp({
 
         this.getEvents();
       }
-      if (page == 'rentals'){
+      if (page == "rentals") {
         this.fetchBoardGameInfo();
       }
       this.currentPage = page;
@@ -362,6 +370,7 @@ Vue.createApp({
 
     viewEvent(eventId) {
       this.loading = true;
+      this.scrollToTop();
       // console.log("i am clicked");
       fetch(`https://gamehavenstg.com/events/${eventId}`)
         .then((response) => response.json())

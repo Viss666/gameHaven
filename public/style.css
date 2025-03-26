@@ -327,6 +327,10 @@ nav ul li a.active {
   padding: 20px;
   flex-direction: column;
 }
+.mobile-events-logo {
+  display: none;
+}
+
 .event-card {
   width: 60%;
   display: flex;
@@ -415,7 +419,7 @@ nav ul li a.active {
 }
 
 .event-buttons1 {
-  width: 40%;
+  /* width: 40%; */
   align-self: center;
 }
 
@@ -500,12 +504,9 @@ nav ul li a.active {
   -webkit-text-stroke-color: black;
 }
 
-
 .upcoming-events h1 {
   margin: 0;
 }
-
-
 
 .view-event-content {
   /* position: relative; */
@@ -861,11 +862,89 @@ nav ul li a.active {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
     flex-direction: column;
+  }
+
+  .event-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .upcoming-events {
+    text-align: center;
+    border-bottom: 2px solid black;
+    /* color: white; */
+    /* font-size: 1.2rem; */
+    padding-left: 3%;
+    padding-right: 3%;
+    display: flex;
+    justify-content: center;
+    -webkit-text-stroke-width: 0.25px;
+    -webkit-text-stroke-color: black;
   }
 
   .event-card {
     width: 100%;
+    flex-direction: column;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .event-body {
+    width: fit-content;
+    text-align: center;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .players-on-page {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+  }
+
+  .reg-player {
+    margin: 0;
+  }
+
+  .registered-players {
+    margin-bottom: 10%;
+  }
+
+  .player {
+    text-align: center;
+  }
+
+  .event-title {
+    font-size: 4vw;
+    min-width: 50px; /* Prevents text from getting too small */
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .event-title2 {
+    font-size: 7vw;
+    min-width: 50px; /* Prevents text from getting too small */
+    max-width: 100%;
+    text-align: center;
+  }
+  .event-main-info {
+    text-align: center;
+    width: 100%;
+  }
+
+  .mobile-events-logo-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .mobile-events-logo {
+    width: 20%;
+    display: block;
   }
 
   .view-event-content {
@@ -874,6 +953,15 @@ nav ul li a.active {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     min-height: 600px;
     margin: 0;
+  }
+
+  .event-container {
+    flex-direction: column;
+  }
+
+  .event-buttons1 button {
+    margin: 5px;
+    width: 100%;
   }
 
   .contact-content {

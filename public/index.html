@@ -185,6 +185,9 @@
 
         <!-- My senior project -->
         <div v-if="currentPage == 'events'" class="events-content">
+          <div class="mobile-events-logo-wrapper">
+            <img src="images/Logo.png" class="mobile-events-logo" />
+          </div>
           <div class="upcoming-events">
             <h1>Upcoming Events</h1>
             <button v-if="isAdmin == true" @click="createEvent()" class="btn">
@@ -231,15 +234,20 @@
         </div>
 
         <div v-if="currentPage == 'viewEvent'" class="view-event-content">
+          <div class="mobile-events-logo-wrapper">
+            <img src="images/Logo.png" class="mobile-events-logo" />
+          </div>
           <div class="event-header">
             <button class="btn" @click="navigatePage('events')">
               < Back to All Events
             </button>
           </div>
+
           <div class="event-container">
             <!-- Body Section -->
+
             <div class="event-body">
-              <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
+              <h1 class="event-title2">{{activeEvent.eventTitle}}</h1>
               <div class="event-game"><h3>{{activeEvent.eventGame}}</h3></div>
 
               <p class="event-day">
