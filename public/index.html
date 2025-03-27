@@ -269,6 +269,27 @@
             </div>
             <div class="players-on-page">
               <div
+              class="registered-players"
+              v-if="activeEvent.isPublished && activeEvent.matches.length > 0"
+            >
+              <h2 class="reg-player">Paired Players</h2>
+              <ul class="player-list">
+                <li
+                  v-for="(pair, index) in pairedPlayers"
+                  :key="index"
+                  class="player"
+                >
+                  <p class="player-names">
+                    {{ pair.player1.player_name }}
+                    <span v-if="pair.player2">
+                      vs. {{ pair.player2.player_name }}</span
+                    >
+                    <span v-else> has a BYE </span>
+                  </p>
+                </li>
+              </ul>
+            </div>
+              <div
                 class="registered-players"
                 v-if="activeEvent.playerList.length > 0"
               >
@@ -283,27 +304,7 @@
                   </li>
                 </ul>
               </div>
-              <div
-                class="registered-players"
-                v-if="activeEvent.isPublished && activeEvent.matches.length > 0"
-              >
-                <h2 class="reg-player">Paired Players</h2>
-                <ul class="player-list">
-                  <li
-                    v-for="(pair, index) in pairedPlayers"
-                    :key="index"
-                    class="player"
-                  >
-                    <p class="player-names">
-                      {{ pair.player1.player_name }}
-                      <span v-if="pair.player2">
-                        vs. {{ pair.player2.player_name }}</span
-                      >
-                      <span v-else> has a BYE </span>
-                    </p>
-                  </li>
-                </ul>
-              </div>
+
               <div class="event-buttons2">
                 <button
                   v-if="!isCheckedIn && !activeEvent.isPublished"

@@ -992,6 +992,7 @@ label {
   .events-content {
     width: 100%; /* Full width on mobile */
     height: auto;
+    min-height: 80dvh;
     background-size: cover;
   }
   .events-wrapper {
