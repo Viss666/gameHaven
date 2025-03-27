@@ -9,22 +9,7 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// const matchSchema = new mongoose.Schema({
-//   player1: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "Player",
-//     required: true,
-//   },
-//   player2: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "Player",
-//     required: false, // Optional for unassigned matches
-//   },
-//   assignedByOrganizer: {
-//     type: Boolean,
-//     default: false, // True if manually assigned by an organizer
-//   },
-// });
+
 
 const matchSchema = new mongoose.Schema({
   player1: {
@@ -58,54 +43,7 @@ const playerSchema = new mongoose.Schema(
   { _id: true }
 );
 
-// const eventSchema = new mongoose.Schema(
-//   {
-//     eventTitle: {
-//       type: String,
-//       required: [true, "event title is required"],
-//     },
-//     eventGame: {
-//       type: String,
-//       required: [true, "game is required"],
-//     },
-//     eventType: {
-//       type: String,
-//       // required: [true, "event type is required"],
-//     },
-//     eventDescription: {
-//       type: String,
-//       required: [true, "add a description"],
-//     },
-//     eventOrganizer: {
-//       type: String,
-//       required: [true, "add an organizer"],
-//     },
-//     organizerContactInfo: {
-//       type: String,
-//       required: [true, "add contact info"],
-//     },
-//     eventDate: {
-//       type: Date,
-//       required: [true, "date is required"],
-//     },
-//     eventDay: {
-//       type: String,
-//       required: [true, "day is required"],
-//     },
-//     eventTime: {
-//       type: String,
-//       required: [true, "time is required"],
-//       match: [/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:MM)"], // Regex for 24-hour format
-//     },
 
-//     playerList: {
-//       type: [playerSchema],
-//       default: [],
-//     },
-//     eventMatches: { type: [matchSchema], default: [] }, // Stores player pairings
-//   },
-//   { _id: true }
-// );
 const eventSchema = new mongoose.Schema(
   {
     eventTitle: { type: String, required: [true, "event title is required"] },
@@ -126,13 +64,7 @@ const eventSchema = new mongoose.Schema(
     },
 
     playerList: [{ type: mongoose.Schema.Types.ObjectId, ref: "Player" }], // ✅ Store as ObjectId references
-    // playerList: await Promise.all(
-    //   (request.body.playerList || []).map(async (player) => {
-    //     let newPlayer = new model.Player(player);
-    //     let savedPlayer = await newPlayer.save();
-    //     return savedPlayer._id;
-    //   })
-    // ),
+
     matches: [{ type: mongoose.Schema.Types.ObjectId, ref: "Match" }], // ✅ Store as ObjectId references
     isPublished: {
       type: Boolean,

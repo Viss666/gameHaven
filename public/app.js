@@ -139,18 +139,6 @@ Vue.createApp({
     };
   },
   computed: {
-    // I wanted to have it so that selecting a tab could give you a different background image, this is how I implemented that
-    // backgroundStyle() {
-    //   const images = {
-    //     home: "url('images/hex2.png')",
-    //     tcg: "url('images/tcg.png')",
-    //     games: "url('images/games.png')",
-    //     events: "url('images/hex2.png')",
-    //     rentals: "url('images/rentals.png')",
-    //     contact: "url('images/contact.png')",
-    //   };
-    //   return { backgroundImage: images[this.currentPage] || "none" };
-    // },
     saveButtonDisabled() {
       return (
         Object.keys(this.modifiedFields).length === 0 && !this.pairingsChanged
@@ -273,33 +261,6 @@ Vue.createApp({
       });
     },
 
-    // pairSelectedPlayers() {
-    //   if (this.selectedPlayers.length === 2) {
-    //     // Assuming your players are in activeEvent.registered_players
-    //     const player1 = this.activeEvent.playerList.find(
-    //       (p) => p._id === this.selectedPlayers[0] // Use _id
-    //     );
-    //     const player2 = this.activeEvent.playerList.find(
-    //       (p) => p._id === this.selectedPlayers[1] // Use _id
-    //     );
-    //     //console.log(player1);
-    //     // console.log(player2);
-
-    //     if (player1 && player2) {
-    //       this.pairedPlayers.push({
-    //         player1: player1, // Store player1's _id
-    //         player2: player2, // Store player2's _id
-    //       });
-    //     }
-    //     // console.log("paired players:", this.pairedPlayers);
-    //     // console.log(this.selectedPlayers);
-    //     this.savePairsToEvent(); // Update the event with the new pairs
-
-    //     this.selectedPlayers = [];
-    //     this.updatePairButtonState();
-    //   }
-    // },
-
     pairSelectedPlayers() {
       if (this.selectedPlayers.length === 2) {
         const player1 = this.activeEvent.playerList.find(
@@ -331,46 +292,6 @@ Vue.createApp({
       this.pairedPlayers.splice(index, 1);
       this.pairingsChanged = true; // Set flag to true
     },
-
-    // saveAllPairings() {
-    //   const matchesToSend = this.pairedPlayers.map((pair) => ({
-    //     player1: pair.player1 ? { _id: pair.player1._id } : null,
-    //     player2: pair.player2 ? { _id: pair.player2._id } : null,
-    //   }));
-
-    //   this.modifiedFields.matches = matchesToSend;
-
-    //   this.saveEvent(this.activeEvent.id); // Save all pairings
-
-    //   this.pairingsChanged = false; // Reset flag
-    // },
-
-    // savePairsToEvent() {
-    //   // console.log("paired players:", this.pairedPlayers);
-
-    //   // Prepare the matches data with player _ids
-    //   const matchesToSend = this.pairedPlayers.map((pair) => ({
-    //     player1: { _id: pair.player1._id },
-    //     player2: { _id: pair.player2._id },
-    //   }));
-
-    //   this.modifiedFields.matches = matchesToSend;
-
-    //   // Send updated pairs to the backend
-    //   this.saveEvent(this.activeEvent.id);
-    // },
-
-    // savePairsToEvent() {
-    //   console.log("paired players:", this.pairedPlayers); // Debugging log
-
-    //   const matchesToSend = this.pairedPlayers.map((pair) => ({
-    //     player1: pair.player1 ? { _id: pair.player1._id } : null,
-    //     player2: pair.player2 ? { _id: pair.player2._id } : null,
-    //   }));
-
-    //   this.modifiedFields.matches = matchesToSend;
-    //   this.saveEvent(this.activeEvent.id);
-    // },
 
     // Explanatory
     navigatePage(page) {
@@ -514,91 +435,6 @@ Vue.createApp({
       this.showCheckInForm = false;
     },
 
-    // submitCheckIn(eventId) {
-    //   this.loading = true;
-
-    //   if (!eventId || typeof eventId !== "string") {
-    //     console.error("Invalid event ID:", eventId);
-    //     return;
-    //   }
-
-    //   if (this.checkedInEvents.includes(eventId)) {
-    //     alert("You are already checked in to this event.");
-    //     this.loading = false;
-    //     return;
-    //   }
-
-    //   console.log("first name and discord id:", this.firstName, this.discordId);
-
-    //   if (this.firstName && this.discordId) {
-    //     Cookies.set("firstName", this.firstName, { expires: 999 });
-    //     Cookies.set("discordId", this.discordId, { expires: 999 });
-
-    //     fetch(`https://gamehavenstg.com/events/${eventId}/add-player`, {
-    //       method: "PUT",
-    //       credentials: "include",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify({
-    //         playerName: this.firstName,
-    //         playerDiscordID: this.discordId,
-    //       }),
-    //     })
-    //       .then((response) => {
-    //         if (!response.ok) throw new Error("Failed to check in.");
-    //         return response.json();
-    //       })
-    //       .then((data) => {
-    //         console.log("Check-in successful:", data);
-
-    //         // Ensure `checkedInEvents` is initialized as an array
-    //         if (!Array.isArray(this.checkedInEvents)) {
-    //           this.checkedInEvents = [];
-    //         }
-
-    //         // Immediately update checked-in events and store in cookies
-    //         this.checkedInEvents = [...this.checkedInEvents, eventId];
-    //         Cookies.set(
-    //           "checkedInEvents",
-    //           JSON.stringify(this.checkedInEvents),
-    //           {
-    //             expires: 999,
-    //           }
-    //         );
-
-    //         this.isCheckedIn = true;
-    //         this.showCheckInForm = false;
-
-    //         if (
-    //           this.activeEvent &&
-    //           Array.isArray(this.activeEvent.playerList)
-    //         ) {
-    //           this.activeEvent.playerList.push({
-    //             player_name: this.firstName,
-    //             discord_id: this.discordId,
-    //           });
-    //         } else {
-    //           console.warn(
-    //             "activeEvent or playerList is not properly initialized."
-    //           );
-    //         }
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error during check-in:", error);
-    //         alert("Failed to check in. Please try again.");
-    //       })
-    //       .finally(() => {
-    //         // this.loading = false;
-
-    //         // Refresh event list and view event
-    //         this.getEvents().then(() => {
-    //           this.viewEvent(eventId);
-    //         });
-    //       });
-    //   } else {
-    //     alert("Please enter both your name and Discord ID.");
-    //     this.loading = false;
-    //   }
-    // },
     submitCheckIn(eventId) {
       this.loading = true; // Keep loading active
 
@@ -682,6 +518,25 @@ Vue.createApp({
       }
     },
 
+    // giveBye() {
+    //   if (this.selectedPlayers.length === 1) {
+    //     const playerId = this.selectedPlayers[0];
+    //     const player1 = this.activeEvent.playerList.find(
+    //       (p) => p._id === playerId
+    //     );
+
+    //     if (player1) {
+    //       this.pairedPlayers.push({
+    //         player1: player1,
+    //         player2: null,
+    //       });
+    //       this.pairingsChanged = true;
+    //     }
+
+    //     this.selectedPlayers = [];
+    //   }
+    // },
+
     giveBye() {
       if (this.selectedPlayers.length === 1) {
         const playerId = this.selectedPlayers[0];
@@ -693,6 +548,7 @@ Vue.createApp({
           this.pairedPlayers.push({
             player1: player1,
             player2: null,
+            isBye: true, // Set isBye to true
           });
           this.pairingsChanged = true;
         }
@@ -700,44 +556,6 @@ Vue.createApp({
         this.selectedPlayers = [];
       }
     },
-    // giveBye() {
-    //   if (this.selectedPlayers.length === 1) {
-    //     const playerId = this.selectedPlayers[0];
-    //     fetch(
-    //       `https://gamehavenstg.com/events/${this.activeEvent.id}/give-bye`,
-    //       {
-    //         method: "PUT",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify({ playerId }),
-    //       }
-    //     )
-    //       .then((response) => {
-    //         if (!response.ok) {
-    //           throw new Error("Failed to give bye");
-    //         }
-    //         return response.json();
-    //       })
-    //       .then((data) => {
-    //         // Handle success (e.g., update pairedPlayers, clear selectedPlayers)
-    //         console.log("Bye given:", data);
-    //         this.pairedPlayers.push({
-    //           player1: {
-    //             player_name: this.activeEvent.playerList.find(
-    //               (p) => p._id === playerId
-    //             ).player_name,
-    //             _id: playerId,
-    //           },
-    //           player2: null, // or isBye: true
-    //           isBye: true,
-    //         });
-    //         this.selectedPlayers = [];
-    //         this.getEvents(); // Refresh event data
-    //       })
-    //       .catch((error) => console.error("Error giving bye:", error));
-    //   }
-    // },
 
     submitCheckOut(eventId) {
       this.loading = true;
@@ -907,40 +725,6 @@ Vue.createApp({
         .catch((error) => console.error("Error fetching events:", error));
     },
 
-    // getEvents() {
-    //   return fetch("https://gamehavenstg.com/events") // Return the fetch promise
-    //     .then((response) => response.json())
-    //     .then((eventsFromServer) => {
-    //       // Normalize each event to match your template's properties
-    //       this.events = eventsFromServer.map((event) => ({
-
-    //         id: event._id, // assuming _id from MongoDB
-    //         eventTitle: event.eventTitle,
-    //         eventGame: event.eventGame,
-    //         eventType: event.eventType,
-    //         eventDescription: event.eventDescription,
-    //         eventOrganizer: event.eventOrganizer,
-    //         organizerContactInfo: event.organizerContactInfo,
-    //         playerList:
-    //           event.playerList.map((player) => ({
-    //             player_name: player.playerName,
-    //             discord_id: player.playerDiscordID,
-    //             _id: player._id, // Include the player's _id
-    //           })) || [],
-    //         eventDay: event.eventDay,
-    //         eventDate: event.eventDate,
-    //         eventTime: event.eventTime,
-    //         matches: event.matches,
-    //         isPublished: event.isPublished,
-    //       }));
-
-    // console.log("Normalized events:", this.events);
-    //       this.$nextTick(() => {
-    //         this.updateCheckedInEvents();
-    //       });
-    //     })
-    //     .catch((error) => console.error("Error fetching events:", error));
-    // },
     createEvent() {
       this.activeEvent = null;
       this.navigatePage("creation");
@@ -1047,35 +831,7 @@ Vue.createApp({
       // console.log("modifiedFields before saveEvent:", this.modifiedFields);
       //this.saveEvent(eventId);
     },
-    // saveEvent(eventId) {
-    //   // console.log("Modified fields:", this.modifiedFields);
 
-    //   if (this.pairingsChanged) {
-    //     const matchesToSend = this.pairedPlayers.map((pair) => ({
-    //       player1: pair.player1 ? { _id: pair.player1._id } : null,
-    //       player2: pair.player2 ? { _id: pair.player2._id } : null,
-    //     }));
-
-    //     this.modifiedFields.matches = matchesToSend;
-    //   }
-
-    //   fetch(`https://gamehavenstg.com/events/${eventId}`, {
-    //     method: "PUT",
-    //     credentials: "include",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(this.modifiedFields),
-    //   })
-    //     .then((response) => {
-    //       if (!response.ok) {
-    //         throw new Error("Failed to update event");
-    //       }
-    //       return response.json();
-    //     })
-    //     .then((data) => {
-    //       console.log("Event updated:", data);
-    //     })
-    //     .catch((error) => console.error("Error updating event:", error));
-    // },
     saveEvent(eventId) {
       // console.log("Modified fields:", this.modifiedFields);
       console.log("hello");
