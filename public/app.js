@@ -7,7 +7,7 @@ Vue.createApp({
         tcg: false,
         games: false,
       },
-      isAdmin: false,
+      isAdmin: true,
       adminPassword: "",
       mobileSubmenuOpen: null,
       showCheckInForm: false,
@@ -834,7 +834,6 @@ Vue.createApp({
 
     saveEvent(eventId) {
       // console.log("Modified fields:", this.modifiedFields);
-      console.log("hello");
       this.loading = true;
       console.log("Pairings changed:", this.pairingsChanged);
       if (this.pairingsChanged) {

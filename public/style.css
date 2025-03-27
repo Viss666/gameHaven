@@ -316,10 +316,6 @@ nav ul li a.active {
   background-color: #fafafa;
 }
 
-.admin-event-content {
-  background-color: #fafafa;
-}
-
 .events-wrapper {
   display: flex;
   justify-content: center;
@@ -652,6 +648,66 @@ nav ul li a.active {
   background-color: #d32f2f;
 }
 
+.admin-event-content {
+  background-color: #fafafa;
+  margin-left: 3%;
+  margin-right: 3%;
+}
+
+.admin-event-content-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  text-align: center;
+}
+
+.template-area-creation {
+  width: 50%;
+  padding: 0 3%;
+}
+.follow-up-creation {
+  width: 50%;
+  padding: 0 3%;
+}
+
+.edit-buttons {
+  display: flex;
+  justify-content: center;
+  padding: 3%;
+}
+
+.edit-buttons button {
+  margin: 2%;
+}
+
+#edit-player-list .edit-players li {
+  display: flex; /* Enable flexbox for the list item */
+  justify-content: space-between; /* Distribute space evenly between elements */
+  align-items: center; /* Vertically align items in the center */
+  padding: 10px; /* Add some padding for spacing */
+  border-bottom: 1px solid #eee; /* Add a light border between list items */
+}
+
+#edit-player-list .edit-players li:last-child {
+  border-bottom: none; /* Remove border from the last list item */
+}
+
+#edit-player-list .btn {
+  /* Basic button styling (adjust as needed) */
+  padding: 8px 12px;
+  border: 1px solid black;
+  border-radius: 4px;
+  background-color: #4caf50;
+  cursor: pointer;
+}
+
+#edit-player-list .btn:hover {
+  background-color: #388e3c;
+}
+
+#edit-player-list .selected {
+  background-color: #ffce3c; /* a light blue color */
+}
 .loading-container {
   position: absolute; /* Covers the full screen */
   top: 0;
@@ -750,6 +806,71 @@ nav ul li a.active {
   font-weight: 700;
   text-transform: uppercase;
   border-bottom: 2px solid #72b01d;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+textarea {
+  width: 100%; /* Make the input take up the full width of its container */
+  padding: 10px; /* Add some padding for spacing */
+  margin: 8px 0; /* Add margin for spacing between elements */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  border: 1px solid #ccc; /* Add a light gray border */
+  border-radius: 4px; /* Add rounded corners */
+  font-size: 16px; /* Set a readable font size */
+  font-family: sans-serif; /* Use a basic sans-serif font */
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+textarea:focus {
+  outline: none; /* Remove the default focus outline */
+  border-color: #4caf50; /* Change the border color on focus */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Add a subtle box shadow on focus */
+}
+
+label {
+  display: block; /* Make labels block elements for better spacing */
+  margin-bottom: 5px; /* Add some margin below the label */
+  font-weight: bold; /* Make the label text bold */
+}
+
+textarea {
+  resize: vertical; /* Allow vertical resizing of the textarea */
+  min-height: 100px; /* Set a minimum height for the textarea */
+}
+
+select {
+  width: 100%; /* Make the dropdown take up the full width of its container */
+  padding: 10px; /* Add some padding for spacing */
+  margin: 8px 0; /* Add margin for spacing between elements */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  border: 1px solid #ccc; /* Add a light gray border */
+  border-radius: 4px; /* Add rounded corners */
+  font-size: 16px; /* Set a readable font size */
+  font-family: sans-serif; /* Use a basic sans-serif font */
+  background-color: white; /* Ensure a white background */
+  appearance: none; /* Remove default OS styling */
+  -webkit-appearance: none; /* For Safari */
+  -moz-appearance: none; /* For Firefox */
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Add a custom arrow icon */
+  background-repeat: no-repeat;
+  background-position-x: 98%;
+  background-position-y: 50%;
+}
+
+select:focus {
+  outline: none; /* Remove the default focus outline */
+  border-color: #4caf50; /* Change the border color on focus */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Add a subtle box shadow on focus */
+}
+
+label {
+  display: block; /* Make labels block elements for better spacing */
+  margin-bottom: 5px; /* Add some margin below the label */
+  font-weight: bold; /* Make the label text bold */
 }
 
 /* mobile display */
@@ -955,6 +1076,10 @@ nav ul li a.active {
     margin: 0;
   }
 
+  .registered-players {
+    text-align: center;
+  }
+
   .event-container {
     flex-direction: column;
   }
@@ -989,5 +1114,9 @@ nav ul li a.active {
   }
   .times {
     display: none;
+  }
+
+  .description {
+    width: 100%;
   }
 }

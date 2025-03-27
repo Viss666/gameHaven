@@ -284,13 +284,17 @@
                 </ul>
               </div>
               <div
-                id="paired-list"
+                class="registered-players"
                 v-if="activeEvent.isPublished && activeEvent.matches.length > 0"
               >
-                <h2>Paired Players</h2>
-                <ul>
-                  <li v-for="(pair, index) in pairedPlayers" :key="index">
-                    <p>
+                <h2 class="reg-player">Paired Players</h2>
+                <ul class="player-list">
+                  <li
+                    v-for="(pair, index) in pairedPlayers"
+                    :key="index"
+                    class="player"
+                  >
+                    <p class="player-names">
                       {{ pair.player1.player_name }}
                       <span v-if="pair.player2">
                         vs. {{ pair.player2.player_name }}</span
@@ -366,179 +370,219 @@
           </div>
         </div>
         <div v-if="currentPage == 'creation'" class="admin-event-content">
-          <div>
-            <h2>Title</h2>
-            <input v-model="newEvent.eventTitle" placeholder="Title" />
+          <div class="mobile-events-logo-wrapper">
+            <img src="images/Logo.png" class="mobile-events-logo" />
           </div>
-          <div>
-            <h2>Game</h2>
-            <input v-model="newEvent.eventGame" placeholder="Game" />
+          <div class="upcoming-events">
+            <h1>Event Creation</h1>
           </div>
+          <div class="admin-event-content-wrapper">
+            <div class="template-area-creation">
+              <div>
+                <h1 class="event-title2">Title</h1>
+                <input
+                  v-model="newEvent.eventTitle"
+                  placeholder="Title"
+                  class="create-input"
+                  type="text"
+                />
+              </div>
+              <div>
+                <h2>Game</h2>
+                <input
+                  v-model="newEvent.eventGame"
+                  placeholder="Game"
+                  type="text"
+                />
+              </div>
 
-          <div>
-            <h2>Description</h2>
-            <textarea
-              v-model="newEvent.eventDescription"
-              placeholder="Description"
-              class="description"
-            ></textarea>
-          </div>
-          <button class="btn">Create as Template</button>
-          <div>
-            <h2>Organizer</h2>
-            <input v-model="newEvent.eventOrganizer" placeholder="Organizer" />
-          </div>
-          <div>
-            <h2>Organizer Contact Info</h2>
-            <input
-              v-model="newEvent.organizerContactInfo"
-              placeholder="Organizer Contact"
-            />
-          </div>
-          <div>
-            <h2>Event Day</h2>
-            <label for="event-day">Day:</label>
-            <select id="event-day" v-model="newEvent.eventDay">
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
-              <option value="Sunday">Sunday</option>
-            </select>
-          </div>
-          <div>
-            <h2>Date</h2>
-            <label for="event-date">Date:</label>
-            <input type="date" id="event-date" v-model="newEvent.eventDate" />
-          </div>
-          <div>
-            <h2>Time</h2>
-            <label for="event-time">Time:</label>
-            <input type="time" id="event-time" v-model="newEvent.eventTime" />
-          </div>
-          <div>
-            <h2>don't worry about this</h2>
-            <label for="templates">Template:</label>
-            <select id="templates" name="templates">
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </select>
-          </div>
-          <div>
-            <button class="btn" @click="pushEvent()">Submit</button>
+              <div>
+                <h2>Description</h2>
+                <textarea
+                  v-model="newEvent.eventDescription"
+                  placeholder="Description"
+                  class="description"
+                  type="text"
+                ></textarea>
+              </div>
+
+              <button class="btn">Create as Template</button>
+              <div>
+                <label for="templates">Select a Template:</label>
+                <select id="templates" name="templates">
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </select>
+              </div>
+            </div>
+            <div class="follow-up-creation">
+              <div>
+                <h2>Organizer</h2>
+                <input
+                  v-model="newEvent.eventOrganizer"
+                  placeholder="Organizer"
+                  type="text"
+                />
+              </div>
+              <div>
+                <h2>Organizer Contact Info</h2>
+                <input
+                  v-model="newEvent.organizerContactInfo"
+                  placeholder="Organizer Contact"
+                  type="text"
+                />
+              </div>
+              <div>
+                <h2>Event Day</h2>
+                <label for="event-day">Day:</label>
+                <select id="event-day" v-model="newEvent.eventDay">
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+                  <option value="Sunday">Sunday</option>
+                </select>
+              </div>
+              <div>
+                <label for="event-date">Date:</label>
+                <input
+                  type="date"
+                  id="event-date"
+                  v-model="newEvent.eventDate"
+                  type="date"
+                />
+              </div>
+              <div>
+                <label for="event-time">Time:</label>
+                <input
+                  type="time"
+                  id="event-time"
+                  v-model="newEvent.eventTime"
+                  type="time"
+                />
+              </div>
+
+              <div>
+                <button class="btn" @click="pushEvent()">Create Event</button>
+              </div>
+            </div>
           </div>
         </div>
-
         <div v-if="currentPage == 'edit'" class="edit-page-content">
-          <div class="event-header">
-            <p class="back-link" @click="navigatePage('events')">
-              < Back to All Events
-            </p>
-            <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
+          <div class="admin-event-content-wrapper">
+            <div class="template-area-creation">
+              <p class="back-link" @click="navigatePage('events')">
+                < Back to All Events
+              </p>
+              <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
 
-            <input
-              class="event-title"
-              v-model="activeEvent.eventTitle"
-              placeholder="activeEvent.eventTitle"
-              @input="updateActiveEvent('eventTitle', $event.target.value)"
-            />
-            <p class="event-day">
-              {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
-              {{activeEvent.eventDate}}
-            </p>
+              <input
+                class="event-title"
+                v-model="activeEvent.eventTitle"
+                placeholder="activeEvent.eventTitle"
+                type="text"
+                @input="updateActiveEvent('eventTitle', $event.target.value)"
+              />
 
-            <label for="event-day">Day:</label>
-            <select
-              id="event-day"
-              v-model="activeEvent.eventDay"
-              @change="updateActiveEvent('eventDay', $event.target.value)"
-            >
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
-              <option value="Sunday">Sunday</option>
-            </select>
+              <p class="event-game">{{activeEvent.eventGame}}</p>
+              <input
+                v-model="activeEvent.eventGame"
+                placeholder="activeEvent.eventGame"
+                class="event-game"
+                type="text"
+                @input="updateActiveEvent('eventGame', $event.target.value)"
+              />
+              <p class="event-description">{{activeEvent.eventDescription}}</p>
+              <textarea
+                v-model="activeEvent.eventDescription"
+                placeholder="activeEvent.eventDescription"
+                class="event-description"
+                type="text"
+                @input="updateActiveEvent('eventDescription', $event.target.value)"
+              ></textarea>
 
-            <label for="event-date">Date:</label>
-            <input
-              type="date"
-              id="event-date"
-              v-model="activeEvent.date"
-              @change="updateActiveEvent('eventDate', $event.target.value)"
-            />
 
-            <label for="event-time">Time:</label>
-            <input
-              type="time"
-              id="event-time"
-              v-model="activeEvent.time"
-              @change="updateActiveEvent('eventTime', $event.target.value)"
-            />
+            </div>
+            <div class="follow-up-creation">
+              <p class="event-organizer">
+                <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
+              </p>
+              <input
+                class="event-organizer"
+                type="text"
+                v-model="activeEvent.eventOrganizer"
+                placeholder="activeEvent.eventOrganizer"
+                @input="updateActiveEvent('eventOrganizer', $event.target.value)"
+              />
+              <p class="organizer-contact">
+                <strong>Organizer Contact Info:</strong>
+                {{activeEvent.organizerContactInfo}}
+              </p>
+              <input
+                class="organizer-contact"
+                type="text"
+                v-model="activeEvent.organizerContactInfo"
+                placeholder="activeEvent.organizerContactInfo"
+                @input="updateActiveEvent('organizerContactInfo', $event.target.value)"
+              />
+              <p class="event-day">
+                {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
+                {{activeEvent.eventDate}}
+              </p>
 
-            <button @click="deleteEvent(activeEvent.id)" class="btn">
-              Delete
-            </button>
-            <button @click="togglePublish(activeEvent.id)" class="btn">
-              {{ activeEvent.isPublished ? 'Unpublish' : 'Publish' }}
-            </button>
-            <button @click="saveEvent(activeEvent.id)" class="svbtn">
-              Save
-              <!-- :disabled="saveButtonDisabled" -->
-            </button>
-          </div>
-          <div class="event-body">
-            <p class="event-game">{{activeEvent.eventGame}}</p>
-            <input
-              v-model="activeEvent.eventGame"
-              placeholder="activeEvent.eventGame"
-              class="event-game"
-              @input="updateActiveEvent('eventGame', $event.target.value)"
-            />
-            <p class="event-description">{{activeEvent.eventDescription}}</p>
-            <input
-              v-model="activeEvent.eventDescription"
-              placeholder="activeEvent.eventDescription"
-              class="event-description"
-              @input="updateActiveEvent('eventDescription', $event.target.value)"
-            />
-            <p class="event-organizer">
-              <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
-            </p>
-            <input
-              class="event-organizer"
-              v-model="activeEvent.eventOrganizer"
-              placeholder="activeEvent.eventOrganizer"
-              @input="updateActiveEvent('eventOrganizer', $event.target.value)"
-            />
-            <p class="organizer-contact">
-              <strong>Organizer Contact Info:</strong>
-              {{activeEvent.organizerContactInfo}}
-            </p>
-            <input
-              class="organizer-contact"
-              v-model="activeEvent.organizerContactInfo"
-              placeholder="activeEvent.organizerContactInfo"
-              @input="updateActiveEvent('organizerContactInfo', $event.target.value)"
-            />
-            <p class="player-count" v-if="activeEvent">
-              <strong>Current Player Count:</strong>
-              {{activeEvent.playerList.length}} / 4
-            </p>
-            <div id="player-list">
+              <label for="event-day">Day:</label>
+              <select
+                id="event-day"
+                v-model="activeEvent.eventDay"
+                @change="updateActiveEvent('eventDay', $event.target.value)"
+              >
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+              </select>
+
+              <label for="event-date">Date:</label>
+              <input
+                type="date"
+                id="event-date"
+                v-model="activeEvent.date"
+                @change="updateActiveEvent('eventDate', $event.target.value)"
+              />
+
+              <label for="event-time">Time:</label>
+              <input
+                type="time"
+                id="event-time"
+                v-model="activeEvent.time"
+                @change="updateActiveEvent('eventTime', $event.target.value)"
+              />
+
+            </div>
+            </div>
+            <div class="admin-event-content-wrapper">
+              
+              <div class="template-area-creation">
+                <p class="player-count" v-if="activeEvent">
+                  <strong>Current Player Count:</strong>
+                  {{activeEvent.playerList.length}} / 4
+                </p>
+            <div id="edit-player-list">
               <h3>Registered Players</h3>
-              <ul id="players">
+              <ul class="edit-players">
                 <li
                   v-for="player in activeEvent.playerList ?? [] "
                   :key="player._id"
                   :class="{ selected: selectedPlayers.includes(player._id) }"
                 >
                   {{player.player_name}}
+                  {{player.discord_id}}
                   <button
                     @click="togglePlayerSelection(player._id)"
                     class="btn"
@@ -572,9 +616,11 @@
                 Give Player Bye
               </button>
             </div>
-            <div id="paired-list">
+          </div>
+          <div class="follow-up-creation">
+            <div id="edit-player-list">
               <h2>Paired Players</h2>
-              <ul>
+              <ul class="edit-players">
                 <li v-for="(pair, index) in pairedPlayers" :key="index">
                   <p>
                     {{ pair.player1.player_name }}
@@ -587,6 +633,20 @@
                 </li>
               </ul>
             </div>
+          </div>
+        </div>
+        <div class="edit-buttons">
+            <button @click="deleteEvent(activeEvent.id)" class="btn">
+              Delete
+            </button>
+            <button @click="togglePublish(activeEvent.id)" class="btn">
+              {{ activeEvent.isPublished ? 'Unpublish' : 'Publish' }}
+            </button>
+            <button @click="saveEvent(activeEvent.id)" class="svbtn">
+              Save
+              <!-- :disabled="saveButtonDisabled" -->
+            </button>
+          </div>
           </div>
         </div>
         <div v-show="loading" class="loading-container">
