@@ -57,6 +57,8 @@ Vue.createApp({
       checkedInEvents: [],
       selectedPlayers: [],
       pairedPlayers: [],
+      pairingsChanged: false, // Flag to track changes
+
       modifiedFields: {},
       loading: false,
       boardgames: [],
@@ -149,6 +151,14 @@ Vue.createApp({
     //   };
     //   return { backgroundImage: images[this.currentPage] || "none" };
     // },
+    saveButtonDisabled() {
+      return (
+        Object.keys(this.modifiedFields).length === 0 && !this.pairingsChanged
+      );
+    },
+    saveButtonDisabled() {
+      return !this.pairingsChanged;
+    },
   },
 
   // Mounted/unmounted, this is so that a user on mobile can tap off the navigation to make it disappear
@@ -263,52 +273,104 @@ Vue.createApp({
       });
     },
 
+    // pairSelectedPlayers() {
+    //   if (this.selectedPlayers.length === 2) {
+    //     // Assuming your players are in activeEvent.registered_players
+    //     const player1 = this.activeEvent.playerList.find(
+    //       (p) => p._id === this.selectedPlayers[0] // Use _id
+    //     );
+    //     const player2 = this.activeEvent.playerList.find(
+    //       (p) => p._id === this.selectedPlayers[1] // Use _id
+    //     );
+    //     //console.log(player1);
+    //     // console.log(player2);
+
+    //     if (player1 && player2) {
+    //       this.pairedPlayers.push({
+    //         player1: player1, // Store player1's _id
+    //         player2: player2, // Store player2's _id
+    //       });
+    //     }
+    //     // console.log("paired players:", this.pairedPlayers);
+    //     // console.log(this.selectedPlayers);
+    //     this.savePairsToEvent(); // Update the event with the new pairs
+
+    //     this.selectedPlayers = [];
+    //     this.updatePairButtonState();
+    //   }
+    // },
+
     pairSelectedPlayers() {
       if (this.selectedPlayers.length === 2) {
-        // Assuming your players are in activeEvent.registered_players
         const player1 = this.activeEvent.playerList.find(
-          (p) => p._id === this.selectedPlayers[0] // Use _id
+          (p) => p._id === this.selectedPlayers[0]
         );
         const player2 = this.activeEvent.playerList.find(
-          (p) => p._id === this.selectedPlayers[1] // Use _id
+          (p) => p._id === this.selectedPlayers[1]
         );
-        //console.log(player1);
-        // console.log(player2);
 
         if (player1 && player2) {
           this.pairedPlayers.push({
-            player1: player1, // Store player1's _id
-            player2: player2, // Store player2's _id
+            player1: player1,
+            player2: player2,
           });
+          this.pairingsChanged = true; // Set flag to true
         }
-        // console.log("paired players:", this.pairedPlayers);
-        // console.log(this.selectedPlayers);
-        this.savePairsToEvent(); // Update the event with the new pairs
 
         this.selectedPlayers = [];
         this.updatePairButtonState();
       }
     },
 
+    // removePair(index) {
+    //   this.pairedPlayers.splice(index, 1);
+    //   this.savePairsToEvent(); // Update the event after removing a pair
+    // },
+
     removePair(index) {
       this.pairedPlayers.splice(index, 1);
-      this.savePairsToEvent(); // Update the event after removing a pair
+      this.pairingsChanged = true; // Set flag to true
     },
 
-    savePairsToEvent() {
-      // console.log("paired players:", this.pairedPlayers);
+    // saveAllPairings() {
+    //   const matchesToSend = this.pairedPlayers.map((pair) => ({
+    //     player1: pair.player1 ? { _id: pair.player1._id } : null,
+    //     player2: pair.player2 ? { _id: pair.player2._id } : null,
+    //   }));
 
-      // Prepare the matches data with player _ids
-      const matchesToSend = this.pairedPlayers.map((pair) => ({
-        player1: { _id: pair.player1._id },
-        player2: { _id: pair.player2._id },
-      }));
+    //   this.modifiedFields.matches = matchesToSend;
 
-      this.modifiedFields.matches = matchesToSend;
+    //   this.saveEvent(this.activeEvent.id); // Save all pairings
 
-      // Send updated pairs to the backend
-      this.saveEvent(this.activeEvent.id);
-    },
+    //   this.pairingsChanged = false; // Reset flag
+    // },
+
+    // savePairsToEvent() {
+    //   // console.log("paired players:", this.pairedPlayers);
+
+    //   // Prepare the matches data with player _ids
+    //   const matchesToSend = this.pairedPlayers.map((pair) => ({
+    //     player1: { _id: pair.player1._id },
+    //     player2: { _id: pair.player2._id },
+    //   }));
+
+    //   this.modifiedFields.matches = matchesToSend;
+
+    //   // Send updated pairs to the backend
+    //   this.saveEvent(this.activeEvent.id);
+    // },
+
+    // savePairsToEvent() {
+    //   console.log("paired players:", this.pairedPlayers); // Debugging log
+
+    //   const matchesToSend = this.pairedPlayers.map((pair) => ({
+    //     player1: pair.player1 ? { _id: pair.player1._id } : null,
+    //     player2: pair.player2 ? { _id: pair.player2._id } : null,
+    //   }));
+
+    //   this.modifiedFields.matches = matchesToSend;
+    //   this.saveEvent(this.activeEvent.id);
+    // },
 
     // Explanatory
     navigatePage(page) {
@@ -623,41 +685,59 @@ Vue.createApp({
     giveBye() {
       if (this.selectedPlayers.length === 1) {
         const playerId = this.selectedPlayers[0];
-        fetch(
-          `https://gamehavenstg.com/events/${this.activeEvent.id}/give-bye`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ playerId }),
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Failed to give bye");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            // Handle success (e.g., update pairedPlayers, clear selectedPlayers)
-            console.log("Bye given:", data);
-            this.pairedPlayers.push({
-              player1: {
-                player_name: this.activeEvent.playerList.find(
-                  (p) => p._id === playerId
-                ).player_name,
-                _id: playerId,
-              },
-              player2: null, // or isBye: true
-              isBye: true,
-            });
-            this.selectedPlayers = [];
-            this.getEvents(); // Refresh event data
-          })
-          .catch((error) => console.error("Error giving bye:", error));
+        const player1 = this.activeEvent.playerList.find(
+          (p) => p._id === playerId
+        );
+
+        if (player1) {
+          this.pairedPlayers.push({
+            player1: player1,
+            player2: null,
+          });
+          this.pairingsChanged = true;
+        }
+
+        this.selectedPlayers = [];
       }
     },
+    // giveBye() {
+    //   if (this.selectedPlayers.length === 1) {
+    //     const playerId = this.selectedPlayers[0];
+    //     fetch(
+    //       `https://gamehavenstg.com/events/${this.activeEvent.id}/give-bye`,
+    //       {
+    //         method: "PUT",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({ playerId }),
+    //       }
+    //     )
+    //       .then((response) => {
+    //         if (!response.ok) {
+    //           throw new Error("Failed to give bye");
+    //         }
+    //         return response.json();
+    //       })
+    //       .then((data) => {
+    //         // Handle success (e.g., update pairedPlayers, clear selectedPlayers)
+    //         console.log("Bye given:", data);
+    //         this.pairedPlayers.push({
+    //           player1: {
+    //             player_name: this.activeEvent.playerList.find(
+    //               (p) => p._id === playerId
+    //             ).player_name,
+    //             _id: playerId,
+    //           },
+    //           player2: null, // or isBye: true
+    //           isBye: true,
+    //         });
+    //         this.selectedPlayers = [];
+    //         this.getEvents(); // Refresh event data
+    //       })
+    //       .catch((error) => console.error("Error giving bye:", error));
+    //   }
+    // },
 
     submitCheckOut(eventId) {
       this.loading = true;
@@ -965,10 +1045,50 @@ Vue.createApp({
       this.modifiedFields.isPublished = this.activeEvent.isPublished;
 
       // console.log("modifiedFields before saveEvent:", this.modifiedFields);
-      this.saveEvent(eventId);
+      //this.saveEvent(eventId);
     },
+    // saveEvent(eventId) {
+    //   // console.log("Modified fields:", this.modifiedFields);
+
+    //   if (this.pairingsChanged) {
+    //     const matchesToSend = this.pairedPlayers.map((pair) => ({
+    //       player1: pair.player1 ? { _id: pair.player1._id } : null,
+    //       player2: pair.player2 ? { _id: pair.player2._id } : null,
+    //     }));
+
+    //     this.modifiedFields.matches = matchesToSend;
+    //   }
+
+    //   fetch(`https://gamehavenstg.com/events/${eventId}`, {
+    //     method: "PUT",
+    //     credentials: "include",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(this.modifiedFields),
+    //   })
+    //     .then((response) => {
+    //       if (!response.ok) {
+    //         throw new Error("Failed to update event");
+    //       }
+    //       return response.json();
+    //     })
+    //     .then((data) => {
+    //       console.log("Event updated:", data);
+    //     })
+    //     .catch((error) => console.error("Error updating event:", error));
+    // },
     saveEvent(eventId) {
       // console.log("Modified fields:", this.modifiedFields);
+      console.log("hello");
+      this.loading = true;
+      console.log("Pairings changed:", this.pairingsChanged);
+      if (this.pairingsChanged) {
+        const matchesToSend = this.pairedPlayers.map((pair) => ({
+          player1: pair.player1 ? { _id: pair.player1._id } : null,
+          player2: pair.player2 ? { _id: pair.player2._id } : null,
+        }));
+        console.log("matches to send:", matchesToSend);
+        this.modifiedFields.matches = matchesToSend;
+      }
 
       fetch(`https://gamehavenstg.com/events/${eventId}`, {
         method: "PUT",
@@ -980,12 +1100,34 @@ Vue.createApp({
           if (!response.ok) {
             throw new Error("Failed to update event");
           }
+          console.log(response);
           return response.json();
         })
         .then((data) => {
           console.log("Event updated:", data);
+          // Update local event data
+          const index = this.events.findIndex((event) => event.id === eventId);
+          if (index !== -1) {
+            this.events[index] = {
+              ...this.events[index],
+              ...data,
+            };
+          }
+
+          this.activeEvent = {
+            ...this.activeEvent,
+            ...data,
+          };
+
+          this.modifiedFields = {}; // Reset modified fields
+          this.pairingsChanged = false; // Reset pairings changed flag
+          this.getEvents();
+          this.loading = false;
         })
-        .catch((error) => console.error("Error updating event:", error));
+        .catch((error) => console.error("Error updating event:", error))
+        .finally(() => {
+          this.loading = false; // Set loading to false after promise resolves
+        });
     },
   },
   created: function () {

@@ -409,36 +409,70 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
 
 // Update event information
 // Tested and functional (needs testing with matches)
+// app.put("/events/:eventId", async (req, res) => {
+//   try {
+//     const eventId = req.params.eventId;
+//     const { matches, ...otherFields } = req.body; // Separate matches from other fields
+//     // console.log("Received request body:", req.body);
+
+//     let matchIds = [];
+
+//     if (matches && matches.length > 0) {
+//       for (const matchData of matches) {
+//         // Create Match document
+//         const match = new model.Match({
+//           player1: matchData.player1._id, // Use player1's _id
+//           player2: matchData.player2._id, // Use player2's _id
+//         });
+//         await match.save();
+//         matchIds.push(match._id); // Push the match's _id
+//       }
+//     }
+
+//     // Update the event with other fields and matchIds
+//     const updatedEvent = await model.Event.findByIdAndUpdate(
+//       eventId,
+//       { ...otherFields, matches: matchIds }, // Save the matchIds array
+//       { new: true }
+//     );
+
+//     // ...
+//   } catch (error) {
+//     // ...
+//   }
+// });
 app.put("/events/:eventId", async (req, res) => {
   try {
     const eventId = req.params.eventId;
-    const { matches, ...otherFields } = req.body; // Separate matches from other fields
-    // console.log("Received request body:", req.body);
+    const { matches, ...otherFields } = req.body;
 
     let matchIds = [];
 
     if (matches && matches.length > 0) {
       for (const matchData of matches) {
-        // Create Match document
         const match = new model.Match({
-          player1: matchData.player1._id, // Use player1's _id
-          player2: matchData.player2._id, // Use player2's _id
+          player1: matchData.player1._id,
+          player2: matchData.player2._id,
         });
         await match.save();
-        matchIds.push(match._id); // Push the match's _id
+        matchIds.push(match._id);
       }
     }
 
-    // Update the event with other fields and matchIds
     const updatedEvent = await model.Event.findByIdAndUpdate(
       eventId,
-      { ...otherFields, matches: matchIds }, // Save the matchIds array
+      { ...otherFields, matches: matchIds },
       { new: true }
     );
 
-    // ...
+    if (!updatedEvent) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    res.status(200).json(updatedEvent); // Send the updated event as JSON
   } catch (error) {
-    // ...
+    console.error("Error updating event:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
