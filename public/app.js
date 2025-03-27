@@ -834,6 +834,7 @@ Vue.createApp({
 
     saveEvent(eventId) {
       // console.log("Modified fields:", this.modifiedFields);
+      this.scrollToTop();
       this.loading = true;
       console.log("Pairings changed:", this.pairingsChanged);
       if (this.pairingsChanged) {
