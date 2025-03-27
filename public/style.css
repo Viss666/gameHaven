@@ -495,6 +495,7 @@ nav ul li a.active {
   /* font-size: 1.2rem; */
   padding-top: 0;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   -webkit-text-stroke-width: 0.25px;
   -webkit-text-stroke-color: black;
@@ -502,6 +503,12 @@ nav ul li a.active {
 
 .upcoming-events h1 {
   margin: 0;
+}
+
+.upcoming-events button {
+  width: fit-content;
+  align-self: center;
+  margin: 5px;
 }
 
 .view-event-content {
@@ -707,6 +714,15 @@ nav ul li a.active {
 
 #edit-player-list .selected {
   background-color: #ffce3c; /* a light blue color */
+}
+
+.edit-players {
+  padding: 0;
+}
+
+.edit-page-content {
+  margin-left: 3%;
+  margin-right: 3%;
 }
 .loading-container {
   position: absolute; /* Covers the full screen */
@@ -1021,6 +1037,18 @@ label {
     margin-right: 15px;
   }
 
+  .edit-players {
+  }
+
+  .edit-player-buttons {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .edit-player-buttons button {
+    margin: 5px;
+  }
+
   .players-on-page {
     width: fit-content;
     display: flex;
@@ -1056,6 +1084,26 @@ label {
   .event-main-info {
     text-align: center;
     width: 100%;
+  }
+
+  .admin-event-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    text-align: center;
+  }
+
+  .event-game {
+    text-align: center;
+  }
+
+  .template-area-creation {
+    width: 100%;
+    padding: 0;
+  }
+  .follow-up-creation {
+    width: 100%;
+    padding: 0;
   }
 
   .mobile-events-logo-wrapper {

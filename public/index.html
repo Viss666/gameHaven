@@ -373,6 +373,11 @@
           <div class="mobile-events-logo-wrapper">
             <img src="images/Logo.png" class="mobile-events-logo" />
           </div>
+          <div class="event-header">
+            <button class="btn" @click="navigatePage('events')">
+              < Back to All Events
+            </button>
+          </div>
           <div class="upcoming-events">
             <h1>Event Creation</h1>
           </div>
@@ -472,11 +477,16 @@
           </div>
         </div>
         <div v-if="currentPage == 'edit'" class="edit-page-content">
+          <div class="mobile-events-logo-wrapper">
+            <img src="images/Logo.png" class="mobile-events-logo" />
+          </div>
           <div class="admin-event-content-wrapper">
             <div class="template-area-creation">
-              <p class="back-link" @click="navigatePage('events')">
-                < Back to All Events
-              </p>
+              <div class="event-header">
+                <button class="btn" @click="navigatePage('events')">
+                  < Back to All Events
+                </button>
+              </div>
               <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
 
               <input
@@ -499,7 +509,7 @@
               <textarea
                 v-model="activeEvent.eventDescription"
                 placeholder="activeEvent.eventDescription"
-                class="event-description"
+                class="description"
                 type="text"
                 @input="updateActiveEvent('eventDescription', $event.target.value)"
               ></textarea>
@@ -581,8 +591,13 @@
                   :key="player._id"
                   :class="{ selected: selectedPlayers.includes(player._id) }"
                 >
+                  <div class="edit-player-names">
                   {{player.player_name}}
                   {{player.discord_id}}
+                </div>
+                <div class="edit-player-buttons">
+
+                
                   <button
                     @click="togglePlayerSelection(player._id)"
                     class="btn"
@@ -595,6 +610,7 @@
                   >
                     Remove player
                   </button>
+                </div>
                 </li>
               </ul>
             </div>
