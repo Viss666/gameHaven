@@ -212,23 +212,7 @@ nav ul li a.active {
   margin-top: 0px;
 }
 
-#rentalHero {
-  width: 100%;
-}
 
-.rental-games-section {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 30px;
-}
-
-.rental-game-container {
-  background-color: #2196f3;
-  width: 20%;
-  border-radius: 5px;
-}
 
 .login-content {
   height: 50vh;
@@ -297,6 +281,37 @@ nav ul li a.active {
 
 .games-content {
 }
+
+.rental-content {
+  margin: 0 3%;
+  text-align: center;
+}
+.rental-content h1 {
+  margin: 0;
+  border-bottom: 2px solid black;
+}
+#rentalHero {
+  width: 100%;
+}
+
+.rental-games-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.rental-game-container {
+  width: 20%;
+  border-radius: 5px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+
 
 /* Events content for senior project */
 .events-content {
@@ -490,7 +505,7 @@ nav ul li a.active {
 .upcoming-events {
   text-align: center;
   border-bottom: 2px solid black;
-  margin: 0 2% 0 2%;
+  margin: 0 3% 0 3%;
   /* color: white; */
   /* font-size: 1.2rem; */
   padding-top: 0;
@@ -759,10 +774,6 @@ nav ul li a.active {
   100% {
     transform: rotate(360deg);
   }
-}
-
-.rental-content {
-  margin: 0 3%;
 }
 
 /* Footer wrapper */

@@ -102,7 +102,7 @@
               <hr />
               <div class="card-list-div">
                 <ul>
-                  <li v-for="game in gamesToBuy.slice(0, 5)" :key="game.title">
+                  <li v-for="game in gamesToBuy.slice(0, 4)" :key="game.title">
                     <div>
                       <h3>
                         {{ game.title }}<br />
@@ -121,7 +121,7 @@
                 <div v-if="loading">Loading board games...</div>
                 <div v-else-if="error">{{ error }}</div>
                 <ul v-else>
-                  <li v-for="game in boardgames.slice(2, 7)" :key="game.id">
+                  <li v-for="game in boardgames.slice(2, 6)" :key="game.id">
                     <h3>
                       {{ game.name }} <br />
                       ({{ game.yearPublished }})
@@ -170,14 +170,21 @@
 
         <div v-if="currentPage == 'games'" class="games-content"></div>
         <div v-if="currentPage == 'rentals'" class="rental-content">
-          <img id="rentalHero" src="images/rentalHero.png" />
+          <h1>Rental Games</h1>
           <div class="rental-games-section">
             <div
               class="rental-game-container"
               v-for="game in boardgames"
-              :key="game.id"
-            >
+              :key="game.id" >
+              <img
+                v-if="game.thumbnail"
+                :src="game.thumbnail"
+                alt="Thumbnail"
+                width="150"
+              />
               <h3>{{ game.name }}</h3>
+              <p>Copies in stock: {{ getRandomCopiesAmount() }}</p>
+              <button>Rent Now!</button>
             </div>
           </div>
         </div>

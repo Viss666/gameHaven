@@ -163,6 +163,12 @@ Vue.createApp({
   },
 
   methods: {
+    getRandomCopiesAmount() {
+      min = Math.ceil(0);
+      max = Math.floor(9);
+
+      return Math.floor(Math.random() * (max - min)) + min;
+    },
     fetchBoardGames() {
       fetch("https://boardgamegeek.com/xmlapi2/hot?type=boardgame")
         .then((response) => {
