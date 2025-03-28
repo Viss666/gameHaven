@@ -304,6 +304,7 @@ nav ul li a.active {
   flex-wrap: wrap;
   width: 100%;
   height: 100%;
+  min-height: 60dvh;
   background-size: cover;
   background-color: #fafafa;
   flex-direction: column;
@@ -767,16 +768,13 @@ nav ul li a.active {
 
 /* Footer wrapper */
 .footer {
-  justify-content: space-around;
   background-color: #454955;
   font-family: "Poppins";
   font-size: 0.8rem;
   margin-top: 25px;
   color: white;
   text-align: center;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+
   width: 100%;
   height: auto;
   padding: 0px;
@@ -786,32 +784,70 @@ nav ul li a.active {
   position: fixed; */
 }
 
+.social p {
+  align-items: center;
+  display: flex;
+}
+
+.about-us p {
+  align-items: center;
+  display: flex;
+}
+.store-footer-text p {
+  align-items: center;
+  display: flex;
+}
+
+.top-footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  text-align: left;
+  padding-top: 10px;
+}
+
 /* Footer columns, 3 in total */
 .about-us {
+  /* text-align: left; */
 }
 
 .social {
-  padding-right: 5px;
-  padding-left: 5px;
-}
-
-.icon-link {
 }
 
 .copyright {
   align-content: center;
+  font-size: 20px;
+  padding: 2%;
+  color: white;
 }
 
 .social-icon {
-  height: 35px;
-  padding: 3px;
+  height: 25px;
+  /* padding: 5px; */
+}
+
+.icon-link {
+  height: 25px;
+  padding: 5px;
+}
+
+.footer-map {
+  height: 125px;
+}
+
+.about-us img {
+  padding: 5px;
+}
+
+.store-footer-wrapper {
+  /* display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap; */
 }
 
 /* Store hours in footer */
 .times {
-  text-align: left;
-  align-content: center;
-  padding-left: 5px;
 }
 
 /* Titles of footer columns */
@@ -1157,12 +1193,36 @@ label {
     /* position: absolute; */
   }
 
+  .top-footer {
+    flex-direction: column;
+  }
+
   .social-icon {
-    height: 40px;
-    padding: 3px;
+    height: 35px;
+    /* padding: 10px; */
+  }
+
+  .icon-link {
+    height: 35px;
+    padding: 5px;
+  }
+
+  .social-icon {
+    /* height: 40px;
+    padding: 3px; */
   }
   .times {
-    display: none;
+  }
+
+  .open {
+    margin-top: 25px;
+  }
+
+  .about-us {
+    margin-top: 25px;
+  }
+  .social {
+    margin-top: 25px;
   }
 
   .description {
