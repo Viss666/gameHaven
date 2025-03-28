@@ -518,24 +518,6 @@ Vue.createApp({
       }
     },
 
-    // giveBye() {
-    //   if (this.selectedPlayers.length === 1) {
-    //     const playerId = this.selectedPlayers[0];
-    //     const player1 = this.activeEvent.playerList.find(
-    //       (p) => p._id === playerId
-    //     );
-
-    //     if (player1) {
-    //       this.pairedPlayers.push({
-    //         player1: player1,
-    //         player2: null,
-    //       });
-    //       this.pairingsChanged = true;
-    //     }
-
-    //     this.selectedPlayers = [];
-    //   }
-    // },
 
     giveBye() {
       if (this.selectedPlayers.length === 1) {
