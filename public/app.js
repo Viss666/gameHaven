@@ -1076,7 +1076,9 @@ Vue.createApp({
           return response.json();
         })
         .then((data) => {
+          console.log("data: ", data);
           this.activeEvent = data;
+
           const index = this.events.findIndex((event) => event.id === eventId);
           if (index !== -1) {
             this.events[index] = data;
@@ -1087,6 +1089,7 @@ Vue.createApp({
         .catch((error) => console.error("Error updating event:", error))
         .finally(() => {
           this.loading = false;
+          console.log(this.events);
           // this.viewEvent(eventId);
         });
     },
