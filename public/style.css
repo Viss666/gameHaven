@@ -163,7 +163,7 @@ nav ul li a.active {
   justify-content: space-between; */
   display: flex; /* Arrange cards in a row */
   justify-content: space-between; /* Center the cards horizontally */
-  margin-top: -150px; /* Adjust this negative margin to control the overlap */
+  margin-top: -9%; /* Adjust this negative margin to control the overlap */
   position: relative; /* Needed to control z index if you want to add other elements */
   z-index: 10; /* Ensures the cards are on top of the hero image */
   width: 100%; /* Ensure the container is full width */
