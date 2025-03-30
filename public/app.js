@@ -136,6 +136,8 @@ Vue.createApp({
           year: "2024",
         },
       ],
+      showRentalDetail: false,
+      selectedGame: null,
     };
   },
   computed: {
@@ -163,6 +165,34 @@ Vue.createApp({
   },
 
   methods: {
+    closeRentalDetail() {
+      let rentalDetail = document.querySelector('.rental-detail-container');//this.$refs.rentalDetailContainer;
+      
+      //console.log("rental detail ref: ", rentalDetail);
+      rentalDetail.style.animation = 'slideDownAnimation 1.5s';
+      // rentalDetail.classList.add("slide");
+        setTimeout(() => {
+          //rentalDetail.style.animation = 'slideDownAnimation 1.5s';
+          this.selectedGame = null;
+      }, 1400);
+      // this.selectedGame = null;
+      return;
+    },
+    getRentalDetail(game){
+      this.showRentalDetail = true;
+    },
+    toggleRentalDetail(game) {
+      this.selectedGame = this.selectedGame && this.selectedGame.id === game.id ? null : game;
+      if (this.selectedGame == null){
+        return;
+      }
+      this.fetchBoardGameInfo(game);
+    },
+    getRandomCopiesAmount() {
+      min = Math.ceil(0);
+      max = Math.floor(9);
+      return Math.floor(Math.random() * (max - min)) + min;
+    },
     fetchBoardGames() {
       fetch("https://boardgamegeek.com/xmlapi2/hot?type=boardgame")
         .then((response) => {
@@ -187,6 +217,8 @@ Vue.createApp({
               "Unknown",
             thumbnail:
               item.querySelector("thumbnail")?.getAttribute("value") || "",
+            copies: this.getRandomCopiesAmount(),
+            detailShow: false
           }));
 
           this.loading = false;
@@ -197,17 +229,86 @@ Vue.createApp({
           this.loading = false;
         });
     },
-    fetchBoardGameInfo() {
-      for (game in this.boardgames) {
-        fetch("https://boardgamegeek.com/xmlapi2/thing?id={game.id}").then(
-          (response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.text();
+    parseBoardGameXML(xmlDoc) {
+      const item = xmlDoc.querySelector("item");
+      this.selectedGame.minPlayers = item.querySelector("minplayers")?.getAttribute("value") || "";
+      this.selectedGame.maxPlayers = item.querySelector("maxplayers")?.getAttribute("value") || "";
+      this.selectedGame.minPlaytime = item.querySelector("minplaytime")?.getAttribute("value") || "";
+      this.selectedGame.maxPlaytime = item.querySelector("maxplaytime")?.getAttribute("value") || "";
+      this.selectedGame.minAge = item.querySelector("minage")?.getAttribute("value") || "";
+
+      const gameData = {
+          id: item.getAttribute("id"),
+          thumbnail: item.querySelector("thumbnail")?.textContent || "",
+          image: item.querySelector("image")?.textContent || "",
+          description: item.querySelector("description")?.textContent || "",
+          yearPublished: item.querySelector("yearpublished")?.getAttribute("value") || "",
+          minPlayers: item.querySelector("minplayers")?.getAttribute("value") || "",
+          maxPlayers: item.querySelector("maxplayers")?.getAttribute("value") || "",
+          minPlaytime: item.querySelector("minplaytime")?.getAttribute("value") || "",
+          maxPlaytime: item.querySelector("maxplaytime")?.getAttribute("value") || "",
+          playingTime: item.querySelector("playingtime")?.getAttribute("value") || "",
+          minAge: item.querySelector("minage")?.getAttribute("value") || "",
+          pollResults: {
+              suggestedPlayers: {},
+              suggestedPlayerAge: {}
           }
-        );
+      };
+      const suggestedPlayersPoll = item.querySelector("poll[name='suggested_numplayers']");
+      if (suggestedPlayersPoll) {
+          suggestedPlayersPoll.querySelectorAll("results").forEach(resultsNode => {
+              const numPlayers = resultsNode.getAttribute("numplayers");
+              const bestVotes = resultsNode.querySelector("result[value='Best']")?.getAttribute("numvotes") || "0";
+              const recommendedVotes = resultsNode.querySelector("result[value='Recommended']")?.getAttribute("numvotes") || "0";
+              const notRecommendedVotes = resultsNode.querySelector("result[value='Not Recommended']")?.getAttribute("numvotes") || "0";
+              gameData.pollResults.suggestedPlayers[numPlayers] = {
+                  best: bestVotes,
+                  recommended: recommendedVotes,
+                  notRecommended: notRecommendedVotes
+              };
+          });
       }
+      const suggestedAgePoll = item.querySelector("poll[name='suggested_playerage']");
+      if (suggestedAgePoll) {
+          suggestedAgePoll.querySelectorAll("result").forEach(resultNode => {
+              const age = resultNode.getAttribute("value");
+              const votes = resultNode.getAttribute("numvotes") || "0";
+              gameData.pollResults.suggestedPlayerAge[age] = votes;
+          });
+      }
+      let maxVotes = 0;
+      let bestAge = null;
+      for (const [age, votes] of Object.entries(gameData.pollResults.suggestedPlayerAge)) {
+          const voteCount = parseInt(votes, 10);
+          if (voteCount > maxVotes) {
+              maxVotes = voteCount;
+              bestAge = age;
+          }
+      }
+      this.selectedGame.bestPlayerAge = bestAge;
+      return gameData;
+    },
+    fetchBoardGameInfo(game) {
+      //for (game in this.boardgames) {
+      fetch("https://boardgamegeek.com/xmlapi2/thing?id=" + game.id) 
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          //console.log(response.text());
+          return response.text();
+        }).then(xmlText => {
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(xmlText,'text/xml');
+          const gameInfo = this.parseBoardGameXML(xmlDoc);
+          console.log(gameInfo);
+          console.log(this.selectedGame);
+          //console.log(xmlDoc);
+          //this.selectedGame.description = xmlDoc.querySelector('description').textContent;
+      })
+      .catch(error => {
+          console.error(`There was a problem with the fetch operation:`, error);
+      });
     },
     convertToStandardTime(militaryTime) {
       if (!militaryTime) return ""; // Handle null or empty time
@@ -301,7 +402,7 @@ Vue.createApp({
         this.getEvents();
       }
       if (page == "rentals") {
-        this.fetchBoardGameInfo();
+        //this.fetchBoardGameInfo();
       }
       this.currentPage = page;
       // Close all dropdowns on navigation

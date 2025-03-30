@@ -105,7 +105,7 @@
               <hr />
               <div class="card-list-div">
                 <ul>
-                  <li v-for="game in gamesToBuy.slice(0, 5)" :key="game.title">
+                  <li v-for="game in gamesToBuy.slice(0, 4)" :key="game.title">
                     <div>
                       <h3>
                         {{ game.title }}<br />
@@ -124,7 +124,7 @@
                 <div v-if="loading">Loading board games...</div>
                 <div v-else-if="error">{{ error }}</div>
                 <ul v-else>
-                  <li v-for="game in boardgames.slice(2, 7)" :key="game.id">
+                  <li v-for="game in boardgames.slice(2, 6)" :key="game.id">
                     <h3>
                       {{ game.name }}</h3>
                       <h4>({{ game.yearPublished }})</h4>
@@ -173,15 +173,36 @@
 
         <div v-if="currentPage == 'games'" class="games-content"></div>
         <div v-if="currentPage == 'rentals'" class="rental-content">
-          <img id="rentalHero" src="images/rentalHero.png" />
+          <h1>Rental Games</h1>
           <div class="rental-games-section">
-            <div
-              class="rental-game-container"
+            <div class="rental-game-container"
               v-for="game in boardgames"
-              :key="game.id"
-            >
+              :key="game.id" >
+              <img
+                v-if="game.thumbnail"
+                :src="game.thumbnail"
+                alt="Thumbnail"
+                class="rental-game-img"
+              />
               <h3>{{ game.name }}</h3>
+              <p>Copies in stock: {{ game.copies }}</p>
+              <button class="rental-game-btn" v-if="game.copies == 0" @click="toggleRentalDetail(game)" >Waitlist</button>
+              <button class="rental-game-btn" v-if="game.copies > 0" @click="toggleRentalDetail(game)" >Reserve</button>
+            
+              <div ref="rentalDetailContainer" v-if="selectedGame && selectedGame.id === game.id" class="rental-detail-container">
+                <!-- <button @click="selectedGame = null">Close</button> -->
+                <span @click="closeRentalDetail">x</span>
+                <h3 style="margin:0;" >{{ selectedGame.name }}</h3>
+                <!-- <p>{{ selectedGame.description }}</p> -->
+                 <p>Players: {{ selectedGame.minPlayers }} - {{ selectedGame.maxPlayers }}</p>
+                 <p>Play Time: {{ selectedGame.minPlaytime }} - {{ selectedGame.maxPlaytime }} Minutes</p>
+                 <p v-if="this.selectedGame.bestPlayerAge > 0" >Best Player Age: {{ selectedGame.bestPlayerAge - 2 }} - {{ selectedGame.bestPlayerAge }}</p>
+                 <p v-if="this.selectedGame.bestPlayerAge <= 0">Best Player Age: {{ selectedGame.minAge }} - {{ parseInt(selectedGame.minAge) + 2 }}</p>
+              </div>
             </div>
+            <!-- <div v-if="showRentalDetail" class="retail-detail-container">
+
+            </div> -->
           </div>
         </div>
         <div v-if="currentPage == 'tcg'" class="tcg-content"></div>
