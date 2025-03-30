@@ -7,41 +7,19 @@ Vue.createApp({
         tcg: false,
         games: false,
       },
-      isAdmin: false,
+      isAdmin: true,
       adminPassword: "",
       mobileSubmenuOpen: null,
       showCheckInForm: false,
       firstName: "",
       discordId: "",
       isCheckedIn: false,
+      searchInput: "",
       firstName: "",
       discordId: "",
       templates: null,
-      events: [
-        {
-          id: "1234",
-          title: "Thursday Night Firefight",
-          game: "Warhammer 40,000",
-          type: "example",
-          description:
-            "Here is a description Here is a descriptionHere is a descriptionHere is a descriptionHere is a descriptionHere is a descriptionHere is a description",
-          organizer: "Ezra",
-          organizer_contact: "vistral9546@gmail.com",
-          registered_players: [
-            {
-              player_name: "Grant",
-              discord_id: "hammerhammer",
-            },
-            {
-              player_name: "Adrian",
-              discord_id: "GWOTH",
-            },
-          ],
-          day: "Thursday",
-          date: "03/26/25",
-          time: "6:00PM",
-        },
-      ],
+      events: [],
+
       newEvent: {
         eventTitle: "",
         eventGame: "",
@@ -63,6 +41,8 @@ Vue.createApp({
       loading: false,
       boardgames: [],
       loading: true,
+      selectedGame: "All Games",
+
       error: null,
       gamesToBuy: [
         {
@@ -137,7 +117,7 @@ Vue.createApp({
         },
       ],
       showRentalDetail: false,
-      selectedGame: null,
+      selectedGame: "All Games",
     };
   },
   computed: {
@@ -149,6 +129,31 @@ Vue.createApp({
     saveButtonDisabled() {
       return !this.pairingsChanged;
     },
+    gameOptions() {
+      const uniqueGames = new Set();
+      this.events.forEach((event) => {
+        uniqueGames.add(event.eventGame);
+      });
+      return ["All Games", ...uniqueGames]; // Add 'all' option
+    },
+    filteredEvents() {
+      let filtered = this.events;
+
+      if (this.selectedGame !== "All Games") {
+        filtered = filtered.filter(
+          (event) => event.eventGame === this.selectedGame
+        );
+      }
+
+      if (this.searchInput) {
+        const searchTerm = this.searchInput.toLowerCase();
+        filtered = filtered.filter((event) =>
+          event.eventTitle.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      return filtered;
+    },
   },
 
   // Mounted/unmounted, this is so that a user on mobile can tap off the navigation to make it disappear
@@ -157,6 +162,7 @@ Vue.createApp({
     mainContent.addEventListener("touchstart", this.closeMenuOnClickOutside); // Mobile
     mainContent.addEventListener("click", this.closeMenuOnClickOutside); //Desktop
     this.fetchBoardGames();
+    console.log(this.events);
   },
   beforeUnmount() {
     const mainContent = document.getElementById("main");
@@ -166,24 +172,25 @@ Vue.createApp({
 
   methods: {
     closeRentalDetail() {
-      let rentalDetail = document.querySelector('.rental-detail-container');//this.$refs.rentalDetailContainer;
-      
+      let rentalDetail = document.querySelector(".rental-detail-container"); //this.$refs.rentalDetailContainer;
+
       //console.log("rental detail ref: ", rentalDetail);
-      rentalDetail.style.animation = 'slideDownAnimation 1.5s';
+      rentalDetail.style.animation = "slideDownAnimation 1.5s";
       // rentalDetail.classList.add("slide");
-        setTimeout(() => {
-          //rentalDetail.style.animation = 'slideDownAnimation 1.5s';
-          this.selectedGame = null;
+      setTimeout(() => {
+        //rentalDetail.style.animation = 'slideDownAnimation 1.5s';
+        this.selectedGame = null;
       }, 1400);
       // this.selectedGame = null;
       return;
     },
-    getRentalDetail(game){
+    getRentalDetail(game) {
       this.showRentalDetail = true;
     },
     toggleRentalDetail(game) {
-      this.selectedGame = this.selectedGame && this.selectedGame.id === game.id ? null : game;
-      if (this.selectedGame == null){
+      this.selectedGame =
+        this.selectedGame && this.selectedGame.id === game.id ? null : game;
+      if (this.selectedGame == null) {
         return;
       }
       this.fetchBoardGameInfo(game);
@@ -218,7 +225,7 @@ Vue.createApp({
             thumbnail:
               item.querySelector("thumbnail")?.getAttribute("value") || "",
             copies: this.getRandomCopiesAmount(),
-            detailShow: false
+            detailShow: false,
           }));
 
           this.loading = false;
@@ -231,84 +238,117 @@ Vue.createApp({
     },
     parseBoardGameXML(xmlDoc) {
       const item = xmlDoc.querySelector("item");
-      this.selectedGame.minPlayers = item.querySelector("minplayers")?.getAttribute("value") || "";
-      this.selectedGame.maxPlayers = item.querySelector("maxplayers")?.getAttribute("value") || "";
-      this.selectedGame.minPlaytime = item.querySelector("minplaytime")?.getAttribute("value") || "";
-      this.selectedGame.maxPlaytime = item.querySelector("maxplaytime")?.getAttribute("value") || "";
-      this.selectedGame.minAge = item.querySelector("minage")?.getAttribute("value") || "";
+      this.selectedGame.minPlayers =
+        item.querySelector("minplayers")?.getAttribute("value") || "";
+      this.selectedGame.maxPlayers =
+        item.querySelector("maxplayers")?.getAttribute("value") || "";
+      this.selectedGame.minPlaytime =
+        item.querySelector("minplaytime")?.getAttribute("value") || "";
+      this.selectedGame.maxPlaytime =
+        item.querySelector("maxplaytime")?.getAttribute("value") || "";
+      this.selectedGame.minAge =
+        item.querySelector("minage")?.getAttribute("value") || "";
 
       const gameData = {
-          id: item.getAttribute("id"),
-          thumbnail: item.querySelector("thumbnail")?.textContent || "",
-          image: item.querySelector("image")?.textContent || "",
-          description: item.querySelector("description")?.textContent || "",
-          yearPublished: item.querySelector("yearpublished")?.getAttribute("value") || "",
-          minPlayers: item.querySelector("minplayers")?.getAttribute("value") || "",
-          maxPlayers: item.querySelector("maxplayers")?.getAttribute("value") || "",
-          minPlaytime: item.querySelector("minplaytime")?.getAttribute("value") || "",
-          maxPlaytime: item.querySelector("maxplaytime")?.getAttribute("value") || "",
-          playingTime: item.querySelector("playingtime")?.getAttribute("value") || "",
-          minAge: item.querySelector("minage")?.getAttribute("value") || "",
-          pollResults: {
-              suggestedPlayers: {},
-              suggestedPlayerAge: {}
-          }
+        id: item.getAttribute("id"),
+        thumbnail: item.querySelector("thumbnail")?.textContent || "",
+        image: item.querySelector("image")?.textContent || "",
+        description: item.querySelector("description")?.textContent || "",
+        yearPublished:
+          item.querySelector("yearpublished")?.getAttribute("value") || "",
+        minPlayers:
+          item.querySelector("minplayers")?.getAttribute("value") || "",
+        maxPlayers:
+          item.querySelector("maxplayers")?.getAttribute("value") || "",
+        minPlaytime:
+          item.querySelector("minplaytime")?.getAttribute("value") || "",
+        maxPlaytime:
+          item.querySelector("maxplaytime")?.getAttribute("value") || "",
+        playingTime:
+          item.querySelector("playingtime")?.getAttribute("value") || "",
+        minAge: item.querySelector("minage")?.getAttribute("value") || "",
+        pollResults: {
+          suggestedPlayers: {},
+          suggestedPlayerAge: {},
+        },
       };
-      const suggestedPlayersPoll = item.querySelector("poll[name='suggested_numplayers']");
+      const suggestedPlayersPoll = item.querySelector(
+        "poll[name='suggested_numplayers']"
+      );
       if (suggestedPlayersPoll) {
-          suggestedPlayersPoll.querySelectorAll("results").forEach(resultsNode => {
-              const numPlayers = resultsNode.getAttribute("numplayers");
-              const bestVotes = resultsNode.querySelector("result[value='Best']")?.getAttribute("numvotes") || "0";
-              const recommendedVotes = resultsNode.querySelector("result[value='Recommended']")?.getAttribute("numvotes") || "0";
-              const notRecommendedVotes = resultsNode.querySelector("result[value='Not Recommended']")?.getAttribute("numvotes") || "0";
-              gameData.pollResults.suggestedPlayers[numPlayers] = {
-                  best: bestVotes,
-                  recommended: recommendedVotes,
-                  notRecommended: notRecommendedVotes
-              };
+        suggestedPlayersPoll
+          .querySelectorAll("results")
+          .forEach((resultsNode) => {
+            const numPlayers = resultsNode.getAttribute("numplayers");
+            const bestVotes =
+              resultsNode
+                .querySelector("result[value='Best']")
+                ?.getAttribute("numvotes") || "0";
+            const recommendedVotes =
+              resultsNode
+                .querySelector("result[value='Recommended']")
+                ?.getAttribute("numvotes") || "0";
+            const notRecommendedVotes =
+              resultsNode
+                .querySelector("result[value='Not Recommended']")
+                ?.getAttribute("numvotes") || "0";
+            gameData.pollResults.suggestedPlayers[numPlayers] = {
+              best: bestVotes,
+              recommended: recommendedVotes,
+              notRecommended: notRecommendedVotes,
+            };
           });
       }
-      const suggestedAgePoll = item.querySelector("poll[name='suggested_playerage']");
+      const suggestedAgePoll = item.querySelector(
+        "poll[name='suggested_playerage']"
+      );
       if (suggestedAgePoll) {
-          suggestedAgePoll.querySelectorAll("result").forEach(resultNode => {
-              const age = resultNode.getAttribute("value");
-              const votes = resultNode.getAttribute("numvotes") || "0";
-              gameData.pollResults.suggestedPlayerAge[age] = votes;
-          });
+        suggestedAgePoll.querySelectorAll("result").forEach((resultNode) => {
+          const age = resultNode.getAttribute("value");
+          const votes = resultNode.getAttribute("numvotes") || "0";
+          gameData.pollResults.suggestedPlayerAge[age] = votes;
+        });
       }
       let maxVotes = 0;
       let bestAge = null;
-      for (const [age, votes] of Object.entries(gameData.pollResults.suggestedPlayerAge)) {
-          const voteCount = parseInt(votes, 10);
-          if (voteCount > maxVotes) {
-              maxVotes = voteCount;
-              bestAge = age;
-          }
+      for (const [age, votes] of Object.entries(
+        gameData.pollResults.suggestedPlayerAge
+      )) {
+        const voteCount = parseInt(votes, 10);
+        if (voteCount > maxVotes) {
+          maxVotes = voteCount;
+          bestAge = age;
+        }
       }
       this.selectedGame.bestPlayerAge = bestAge;
       return gameData;
     },
     fetchBoardGameInfo(game) {
       //for (game in this.boardgames) {
-      fetch("https://boardgamegeek.com/xmlapi2/thing?id=" + game.id) 
+      fetch("https://boardgamegeek.com/xmlapi2/thing?id=" + game.id)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
           //console.log(response.text());
           return response.text();
-        }).then(xmlText => {
+        })
+        .then((xmlText) => {
           const parser = new DOMParser();
-          const xmlDoc = parser.parseFromString(xmlText,'text/xml');
+          const xmlDoc = parser.parseFromString(xmlText, "text/xml");
           const gameInfo = this.parseBoardGameXML(xmlDoc);
           console.log(gameInfo);
           console.log(this.selectedGame);
           //console.log(xmlDoc);
           //this.selectedGame.description = xmlDoc.querySelector('description').textContent;
-      })
-      .catch(error => {
+        })
+        .catch((error) => {
           console.error(`There was a problem with the fetch operation:`, error);
-      });
+        });
+    },
+    clearInput() {
+      this.searchInput = "";
+      this.selectedGame = "All Games";
     },
     convertToStandardTime(militaryTime) {
       if (!militaryTime) return ""; // Handle null or empty time
@@ -618,7 +658,6 @@ Vue.createApp({
         this.loading = false;
       }
     },
-
 
     giveBye() {
       if (this.selectedPlayers.length === 1) {
