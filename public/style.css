@@ -399,8 +399,10 @@ h4 {
   width: 94%;
   text-align: center;
   position: absolute;
-  top: 50%;
-  height: 42%;
+  top: -3%;
+  height: 100%;
+  /* top: 50%;
+  height: 42%; */
   left: 0;
   z-index: 2;
   animation: riseUp 1.5s;
@@ -414,8 +416,8 @@ h4 {
     opacity: 0;
   }
   to {
-    height: 42%;
-    top: 50%;
+    height: 100%;
+    top: -3%;
     opacity: 1;
   }
 }
@@ -426,8 +428,8 @@ h4 {
 
 @keyframes slideDownAnimation {
   from {
-    height: 42%;
-    top: 50%;
+    height: 100%;
+    top: -3%;
     opacity: 1;
   }
   to {

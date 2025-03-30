@@ -194,7 +194,11 @@
                 <!-- <button @click="selectedGame = null">Close</button> -->
                 <span @click="closeRentalDetail">x</span>
                 <h3 style="margin:0;" >{{ selectedGame.name }}</h3>
-                <p>{{ selectedGame.description }}</p>
+                <!-- <p>{{ selectedGame.description }}</p> -->
+                 <p>Players: {{ selectedGame.minPlayers }} - {{ selectedGame.maxPlayers }}</p>
+                 <p>Play Time: {{ selectedGame.minPlaytime }} - {{ selectedGame.maxPlaytime }} Minutes</p>
+                 <p v-if="this.selectedGame.bestPlayerAge > 0" >Best Player Age: {{ selectedGame.bestPlayerAge - 2 }} - {{ selectedGame.bestPlayerAge }}</p>
+                 <p v-if="this.selectedGame.bestPlayerAge <= 0">Best Player Age: {{ selectedGame.minAge }} - {{ parseInt(selectedGame.minAge) + 2 }}</p>
               </div>
             </div>
             <!-- <div v-if="showRentalDetail" class="retail-detail-container">

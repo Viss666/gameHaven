@@ -229,6 +229,65 @@ Vue.createApp({
           this.loading = false;
         });
     },
+    parseBoardGameXML(xmlDoc) {
+      const item = xmlDoc.querySelector("item");
+      this.selectedGame.minPlayers = item.querySelector("minplayers")?.getAttribute("value") || "";
+      this.selectedGame.maxPlayers = item.querySelector("maxplayers")?.getAttribute("value") || "";
+      this.selectedGame.minPlaytime = item.querySelector("minplaytime")?.getAttribute("value") || "";
+      this.selectedGame.maxPlaytime = item.querySelector("maxplaytime")?.getAttribute("value") || "";
+      this.selectedGame.minAge = item.querySelector("minage")?.getAttribute("value") || "";
+
+      const gameData = {
+          id: item.getAttribute("id"),
+          thumbnail: item.querySelector("thumbnail")?.textContent || "",
+          image: item.querySelector("image")?.textContent || "",
+          description: item.querySelector("description")?.textContent || "",
+          yearPublished: item.querySelector("yearpublished")?.getAttribute("value") || "",
+          minPlayers: item.querySelector("minplayers")?.getAttribute("value") || "",
+          maxPlayers: item.querySelector("maxplayers")?.getAttribute("value") || "",
+          minPlaytime: item.querySelector("minplaytime")?.getAttribute("value") || "",
+          maxPlaytime: item.querySelector("maxplaytime")?.getAttribute("value") || "",
+          playingTime: item.querySelector("playingtime")?.getAttribute("value") || "",
+          minAge: item.querySelector("minage")?.getAttribute("value") || "",
+          pollResults: {
+              suggestedPlayers: {},
+              suggestedPlayerAge: {}
+          }
+      };
+      const suggestedPlayersPoll = item.querySelector("poll[name='suggested_numplayers']");
+      if (suggestedPlayersPoll) {
+          suggestedPlayersPoll.querySelectorAll("results").forEach(resultsNode => {
+              const numPlayers = resultsNode.getAttribute("numplayers");
+              const bestVotes = resultsNode.querySelector("result[value='Best']")?.getAttribute("numvotes") || "0";
+              const recommendedVotes = resultsNode.querySelector("result[value='Recommended']")?.getAttribute("numvotes") || "0";
+              const notRecommendedVotes = resultsNode.querySelector("result[value='Not Recommended']")?.getAttribute("numvotes") || "0";
+              gameData.pollResults.suggestedPlayers[numPlayers] = {
+                  best: bestVotes,
+                  recommended: recommendedVotes,
+                  notRecommended: notRecommendedVotes
+              };
+          });
+      }
+      const suggestedAgePoll = item.querySelector("poll[name='suggested_playerage']");
+      if (suggestedAgePoll) {
+          suggestedAgePoll.querySelectorAll("result").forEach(resultNode => {
+              const age = resultNode.getAttribute("value");
+              const votes = resultNode.getAttribute("numvotes") || "0";
+              gameData.pollResults.suggestedPlayerAge[age] = votes;
+          });
+      }
+      let maxVotes = 0;
+      let bestAge = null;
+      for (const [age, votes] of Object.entries(gameData.pollResults.suggestedPlayerAge)) {
+          const voteCount = parseInt(votes, 10);
+          if (voteCount > maxVotes) {
+              maxVotes = voteCount;
+              bestAge = age;
+          }
+      }
+      this.selectedGame.bestPlayerAge = bestAge;
+      return gameData;
+    },
     fetchBoardGameInfo(game) {
       //for (game in this.boardgames) {
       fetch("https://boardgamegeek.com/xmlapi2/thing?id=" + game.id) 
@@ -241,20 +300,11 @@ Vue.createApp({
         }).then(xmlText => {
           const parser = new DOMParser();
           const xmlDoc = parser.parseFromString(xmlText,'text/xml');
-          console.log(xmlDoc);
-          this.selectedGame.description = xmlDoc.querySelector('description').textContent;
-          // var pollSummary = xmlDoc.querySelector('poll-summary');
-          // var results = pollSummary.querySelectorAll('result');
-          // console.log("results: ", results);
-          // for (result in results){
-          //   if (result.Attributes["name"].nodeValue == "bestwith"){
-          //     console.log("best with: ", result.Attributes["bestwith"].nodeValue);
-          //   }
-          // }
-
-          // <poll-summary name="suggested_numplayers"  title="User Suggested Number of Players">
-          //   <result name="bestwith" value="Best with 1, 3 players" />
-          //   <result name="recommmendedwith" value="Recommended with 1–4 players" />
+          const gameInfo = this.parseBoardGameXML(xmlDoc);
+          console.log(gameInfo);
+          console.log(this.selectedGame);
+          //console.log(xmlDoc);
+          //this.selectedGame.description = xmlDoc.querySelector('description').textContent;
       })
       .catch(error => {
           console.error(`There was a problem with the fetch operation:`, error);
