@@ -175,20 +175,30 @@
         <div v-if="currentPage == 'rentals'" class="rental-content">
           <h1>Rental Games</h1>
           <div class="rental-games-section">
-            <div
-              class="rental-game-container"
+            <div class="rental-game-container"
               v-for="game in boardgames"
               :key="game.id" >
               <img
                 v-if="game.thumbnail"
                 :src="game.thumbnail"
                 alt="Thumbnail"
-                width="150"
+                class="rental-game-img"
               />
               <h3>{{ game.name }}</h3>
-              <p>Copies in stock: {{ getRandomCopiesAmount() }}</p>
-              <button>Rent Now!</button>
+              <p>Copies in stock: {{ game.copies }}</p>
+              <button class="rental-game-btn" v-if="game.copies == 0" @click="toggleRentalDetail(game)" >Waitlist</button>
+              <button class="rental-game-btn" v-if="game.copies > 0" @click="toggleRentalDetail(game)" >Reserve</button>
+            
+              <div ref="rentalDetailContainer" v-if="selectedGame && selectedGame.id === game.id" class="rental-detail-container">
+                <!-- <button @click="selectedGame = null">Close</button> -->
+                <span @click="closeRentalDetail">x</span>
+                <h3 style="margin:0;" >{{ selectedGame.name }}</h3>
+                <p>{{ selectedGame.description }}</p>
+              </div>
             </div>
+            <!-- <div v-if="showRentalDetail" class="retail-detail-container">
+
+            </div> -->
           </div>
         </div>
         <div v-if="currentPage == 'tcg'" class="tcg-content"></div>

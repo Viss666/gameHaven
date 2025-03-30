@@ -136,6 +136,8 @@ Vue.createApp({
           year: "2024",
         },
       ],
+      showRentalDetail: false,
+      selectedGame: null,
     };
   },
   computed: {
@@ -163,10 +165,32 @@ Vue.createApp({
   },
 
   methods: {
+    closeRentalDetail() {
+      let rentalDetail = document.querySelector('.rental-detail-container');//this.$refs.rentalDetailContainer;
+      
+      //console.log("rental detail ref: ", rentalDetail);
+      rentalDetail.style.animation = 'slideDownAnimation 1.5s';
+      // rentalDetail.classList.add("slide");
+        setTimeout(() => {
+          //rentalDetail.style.animation = 'slideDownAnimation 1.5s';
+          this.selectedGame = null;
+      }, 1400);
+      // this.selectedGame = null;
+      return;
+    },
+    getRentalDetail(game){
+      this.showRentalDetail = true;
+    },
+    toggleRentalDetail(game) {
+      this.selectedGame = this.selectedGame && this.selectedGame.id === game.id ? null : game;
+      if (this.selectedGame == null){
+        return;
+      }
+      this.fetchBoardGameInfo(game);
+    },
     getRandomCopiesAmount() {
       min = Math.ceil(0);
       max = Math.floor(9);
-
       return Math.floor(Math.random() * (max - min)) + min;
     },
     fetchBoardGames() {
@@ -193,6 +217,8 @@ Vue.createApp({
               "Unknown",
             thumbnail:
               item.querySelector("thumbnail")?.getAttribute("value") || "",
+            copies: this.getRandomCopiesAmount(),
+            detailShow: false
           }));
 
           this.loading = false;
@@ -203,17 +229,36 @@ Vue.createApp({
           this.loading = false;
         });
     },
-    fetchBoardGameInfo() {
-      for (game in this.boardgames) {
-        fetch("https://boardgamegeek.com/xmlapi2/thing?id={game.id}").then(
-          (response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.text();
+    fetchBoardGameInfo(game) {
+      //for (game in this.boardgames) {
+      fetch("https://boardgamegeek.com/xmlapi2/thing?id=" + game.id) 
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
           }
-        );
-      }
+          //console.log(response.text());
+          return response.text();
+        }).then(xmlText => {
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(xmlText,'text/xml');
+          console.log(xmlDoc);
+          this.selectedGame.description = xmlDoc.querySelector('description').textContent;
+          // var pollSummary = xmlDoc.querySelector('poll-summary');
+          // var results = pollSummary.querySelectorAll('result');
+          // console.log("results: ", results);
+          // for (result in results){
+          //   if (result.Attributes["name"].nodeValue == "bestwith"){
+          //     console.log("best with: ", result.Attributes["bestwith"].nodeValue);
+          //   }
+          // }
+
+          // <poll-summary name="suggested_numplayers"  title="User Suggested Number of Players">
+          //   <result name="bestwith" value="Best with 1, 3 players" />
+          //   <result name="recommmendedwith" value="Recommended with 1–4 players" />
+      })
+      .catch(error => {
+          console.error(`There was a problem with the fetch operation:`, error);
+      });
     },
     convertToStandardTime(militaryTime) {
       if (!militaryTime) return ""; // Handle null or empty time
@@ -307,7 +352,7 @@ Vue.createApp({
         this.getEvents();
       }
       if (page == "rentals") {
-        this.fetchBoardGameInfo();
+        //this.fetchBoardGameInfo();
       }
       this.currentPage = page;
       // Close all dropdowns on navigation
