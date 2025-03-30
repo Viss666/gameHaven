@@ -96,8 +96,7 @@
 
         <div v-if="currentPage == 'home'" class="home-content">
           <div class="hero">
-            <img  src="images/gameWall3.png" />
-
+            <img src="images/gameWall3.png" />
           </div>
           <div class="main-card-div">
             <div class="main-card">
@@ -125,19 +124,16 @@
                 <div v-else-if="error">{{ error }}</div>
                 <ul v-else>
                   <li v-for="game in boardgames.slice(2, 6)" :key="game.id">
-                    <h3>
-                      {{ game.name }}</h3>
-                      <h4>({{ game.yearPublished }})</h4>
-                    
+                    <h3>{{ game.name }}</h3>
+                    <h4>({{ game.yearPublished }})</h4>
+
                     <img
                       v-if="game.thumbnail"
                       :src="game.thumbnail"
                       alt="Thumbnail"
                       width="150"
                     />
-                    <button class="btn">
-                      Reserve Now
-                    </button>
+                    <button class="btn">Reserve Now</button>
                   </li>
                 </ul>
               </div>
@@ -162,7 +158,6 @@
                     </p>
                     <img src="images/playing.png" />
                   </li>
-
                 </ul>
               </div>
             </div>
@@ -175,9 +170,11 @@
         <div v-if="currentPage == 'rentals'" class="rental-content">
           <h1>Rental Games</h1>
           <div class="rental-games-section">
-            <div class="rental-game-container"
+            <div
+              class="rental-game-container"
               v-for="game in boardgames"
-              :key="game.id" >
+              :key="game.id"
+            >
               <img
                 v-if="game.thumbnail"
                 :src="game.thumbnail"
@@ -186,18 +183,46 @@
               />
               <h3>{{ game.name }}</h3>
               <p>Copies in stock: {{ game.copies }}</p>
-              <button class="rental-game-btn" v-if="game.copies == 0" @click="toggleRentalDetail(game)" >Waitlist</button>
-              <button class="rental-game-btn" v-if="game.copies > 0" @click="toggleRentalDetail(game)" >Reserve</button>
-            
-              <div ref="rentalDetailContainer" v-if="selectedGame && selectedGame.id === game.id" class="rental-detail-container">
+              <button
+                class="rental-game-btn"
+                v-if="game.copies == 0"
+                @click="toggleRentalDetail(game)"
+              >
+                Waitlist
+              </button>
+              <button
+                class="rental-game-btn"
+                v-if="game.copies > 0"
+                @click="toggleRentalDetail(game)"
+              >
+                Reserve
+              </button>
+
+              <div
+                ref="rentalDetailContainer"
+                v-if="selectedGame && selectedGame.id === game.id"
+                class="rental-detail-container"
+              >
                 <!-- <button @click="selectedGame = null">Close</button> -->
                 <span @click="closeRentalDetail">x</span>
-                <h3 style="margin:0;" >{{ selectedGame.name }}</h3>
+                <h3 style="margin: 0">{{ selectedGame.name }}</h3>
                 <!-- <p>{{ selectedGame.description }}</p> -->
-                 <p>Players: {{ selectedGame.minPlayers }} - {{ selectedGame.maxPlayers }}</p>
-                 <p>Play Time: {{ selectedGame.minPlaytime }} - {{ selectedGame.maxPlaytime }} Minutes</p>
-                 <p v-if="this.selectedGame.bestPlayerAge > 0" >Best Player Age: {{ selectedGame.bestPlayerAge - 2 }} - {{ selectedGame.bestPlayerAge }}</p>
-                 <p v-if="this.selectedGame.bestPlayerAge <= 0">Best Player Age: {{ selectedGame.minAge }} - {{ parseInt(selectedGame.minAge) + 2 }}</p>
+                <p>
+                  Players: {{ selectedGame.minPlayers }} - {{
+                  selectedGame.maxPlayers }}
+                </p>
+                <p>
+                  Play Time: {{ selectedGame.minPlaytime }} - {{
+                  selectedGame.maxPlaytime }} Minutes
+                </p>
+                <p v-if="this.selectedGame.bestPlayerAge > 0">
+                  Best Player Age: {{ selectedGame.bestPlayerAge - 2 }} - {{
+                  selectedGame.bestPlayerAge }}
+                </p>
+                <p v-if="this.selectedGame.bestPlayerAge <= 0">
+                  Best Player Age: {{ selectedGame.minAge }} - {{
+                  parseInt(selectedGame.minAge) + 2 }}
+                </p>
               </div>
             </div>
             <!-- <div v-if="showRentalDetail" class="retail-detail-container">
@@ -218,255 +243,399 @@
               Create Event
             </button>
           </div>
-          <div class="events-wrapper">
-            <div class="event-card" v-for="event in events" :key="event._id">
-              <div class="date-box">{{ event.eventDate }}</div>
-
-              <div class="event-main-info">
-                <div class="event-header">
-                  <div class="event-title"><h2>{{ event.eventTitle }}</h2></div>
-                </div>
-                <div class="event-side-info">
-                  <div class="event-game"><h3>{{event.eventGame}}</h3></div>
-
-                  <div class="event-time">
-                    {{event.eventDay}} - {{ event.eventTime }}
-                  </div>
-                  <div class="event-players-signed">
-                    Current Player Count: {{ event.playerList.length}}/4
-                  </div>
-                </div>
-              </div>
-              <div class="event-buttons1">
-                <button
-                  v-if="isAdmin == true"
-                  class="btn"
-                  @click="editEvent(event.id)"
-                >
-                  Edit Event
-                </button>
-                <button
-                  href="#"
-                  class="btn"
-                  @click.prevent="viewEvent(event.id)"
-                >
-                  Event Info &amp; Sign-Up
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="currentPage == 'viewEvent'" class="view-event-content">
-          <div class="mobile-events-logo-wrapper">
-            <img src="images/Logo.png" class="mobile-events-logo" />
-          </div>
-          <div class="event-header">
-            <button class="btn" @click="navigatePage('events')">
-              < Back to All Events
-            </button>
-          </div>
-
-          <div class="event-container">
-            <!-- Body Section -->
-
-            <div class="event-body">
-              <h1 class="event-title2">{{activeEvent.eventTitle}}</h1>
-              <div class="event-game"><h3>{{activeEvent.eventGame}}</h3></div>
-
-              <p class="event-day">
-                {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
-                {{activeEvent.eventDate}}
-              </p>
-              <p class="event-organizer">
-                <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
-              </p>
-              <p class="organizer-contact">
-                <strong>Contact Info:</strong>
-                {{activeEvent.organizerContactInfo}}
-              </p>
-              <p class="player-count">
-                <strong>Current Player Count:</strong>
-                {{activeEvent.playerList.length}} / 4
-              </p>
-              <p class="event-description">{{activeEvent.eventDescription}}</p>
-            </div>
-            <div class="players-on-page">
-              <div
-              class="registered-players"
-              v-if="activeEvent.isPublished && activeEvent.matches.length > 0"
-            >
-              <h2 class="reg-player">Paired Players</h2>
-              <ul class="player-list">
-                <li
-                  v-for="(pair, index) in pairedPlayers"
-                  :key="index"
-                  class="player"
-                >
-                  <p class="player-names">
-                    {{ pair.player1.player_name }}
-                    <span v-if="pair.player2">
-                      vs. {{ pair.player2.player_name }}</span
-                    >
-                    <span v-else> has a BYE </span>
-                  </p>
-                </li>
-              </ul>
-            </div>
-              <div
-                class="registered-players"
-                v-if="activeEvent.playerList.length > 0"
+          <div class="search-filter">
+            <div class="input-search">
+              <form id="search-form">
+                <input
+                  type="text"
+                  id="search-input"
+                  placeholder="Enter event..."
+                  v-model="searchInput"
+                />
+              </form>
+              <button
+                type="button"
+                id="clear-button"
+                class="btn"
+                @click="clearInput()"
               >
-                <h2 class="reg-player">Registered Players</h2>
-                <ul class="player-list">
-                  <li
-                    v-for="player in activeEvent.playerList ?? [] "
-                    :key="player.discord_id"
-                    class="player"
+                Clear
+              </button>
+            </div>
+
+            <div class="dropdown-filter">
+
+              <select v-model="selectedGame">
+                <option v-for="game in gameOptions" :key="game" :value="game">
+                  {{ game }}
+                </option>
+              </select>
+            </div>
+            </div>
+            <div class="events-wrapper" v-if="events.length > 0">
+              <div
+                class="event-card"
+                v-for="event in filteredEvents"
+                :key="event._id"
+              >
+                <div class="date-box">{{ event.eventDate }}</div>
+
+                <div class="event-main-info">
+                  <div class="event-header">
+                    <div class="event-title">
+                      <h2>{{ event.eventTitle }}</h2>
+                    </div>
+                  </div>
+                  <div class="event-side-info">
+                    <div class="event-game"><h3>{{event.eventGame}}</h3></div>
+
+                    <div class="event-time">
+                      {{event.eventDay}} - {{ event.eventTime }}
+                    </div>
+                    <div class="event-players-signed">
+                      Current Player Count: {{ event.playerList.length}}/4
+                    </div>
+                  </div>
+                </div>
+                <div class="event-buttons1">
+                  <button
+                    v-if="isAdmin == true"
+                    class="btn"
+                    @click="editEvent(event.id)"
                   >
-                    <p class="player-names">{{player.player_name}}</p>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="event-buttons2">
-                <button
-                  v-if="!isCheckedIn && !activeEvent.isPublished"
-                  @click="openCheckIn"
-                  class="btn"
-                >
-                  Check In
-                </button>
-
-                <button
-                  v-if="isCheckedIn && activeEvent && activeEvent._id && !activeEvent.isPublished"
-                  @click="submitCheckOut(activeEvent._id)"
-                  class="btn"
-                >
-                  Check Out
-                </button>
+                    Edit Event
+                  </button>
+                  <button
+                    href="#"
+                    class="btn"
+                    @click.prevent="viewEvent(event.id)"
+                  >
+                    Event Info &amp; Sign-Up
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-          <!-- Footer Section with Check-In Button -->
-          <div class="event-footer" style="text-align: right; padding: 15px">
-            <div>
-              <!-- Pop-up modal -->
-              <div v-if="showCheckInForm" class="modal-overlay">
-                <div class="modal">
-                  <h2>Check In</h2>
-                  <input
-                    v-model="firstName"
-                    type="text"
-                    placeholder="Enter your first name"
-                    class="input"
-                  />
-                  <input
-                    v-model="discordId"
-                    type="text"
-                    placeholder="Enter your Discord ID"
-                    class="input"
-                  />
-                  <div class="button-container">
-                    <button
-                      @click="submitCheckIn(activeEvent._id)"
-                      class="submit-btn"
+
+          <div v-if="currentPage == 'viewEvent'" class="view-event-content">
+            <div class="mobile-events-logo-wrapper">
+              <img src="images/Logo.png" class="mobile-events-logo" />
+            </div>
+            <div class="event-header">
+              <button class="btn" @click="navigatePage('events')">
+                < Back to All Events
+              </button>
+            </div>
+
+            <div class="event-container">
+              <!-- Body Section -->
+
+              <div class="event-body">
+                <h1 class="event-title2">{{activeEvent.eventTitle}}</h1>
+                <div class="event-game"><h3>{{activeEvent.eventGame}}</h3></div>
+
+                <p class="event-day">
+                  {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
+                  {{activeEvent.eventDate}}
+                </p>
+                <p class="event-organizer">
+                  <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
+                </p>
+                <p class="organizer-contact">
+                  <strong>Contact Info:</strong>
+                  {{activeEvent.organizerContactInfo}}
+                </p>
+                <p class="player-count">
+                  <strong>Current Player Count:</strong>
+                  {{activeEvent.playerList.length}} / 4
+                </p>
+                <p class="event-description">
+                  {{activeEvent.eventDescription}}
+                </p>
+              </div>
+              <div class="players-on-page">
+                <div
+                  class="registered-players"
+                  v-if="activeEvent.isPublished && activeEvent.matches.length > 0"
+                >
+                  <h2 class="reg-player">Paired Players</h2>
+                  <ul class="player-list">
+                    <li
+                      v-for="(pair, index) in pairedPlayers"
+                      :key="index"
+                      class="player"
                     >
-                      Submit
-                    </button>
-                    <button @click="closeCheckIn" class="close-btn">
-                      Cancel
-                    </button>
+                      <p class="player-names">
+                        {{ pair.player1.player_name }}
+                        <span v-if="pair.player2">
+                          vs. {{ pair.player2.player_name }}</span
+                        >
+                        <span v-else> has a BYE </span>
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+                <div
+                  class="registered-players"
+                  v-if="activeEvent.playerList.length > 0"
+                >
+                  <h2 class="reg-player">Registered Players</h2>
+                  <ul class="player-list">
+                    <li
+                      v-for="player in activeEvent.playerList ?? [] "
+                      :key="player.discord_id"
+                      class="player"
+                    >
+                      <p class="player-names">{{player.player_name}}</p>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="event-buttons2">
+                  <button
+                    v-if="!isCheckedIn && !activeEvent.isPublished"
+                    @click="openCheckIn"
+                    class="btn"
+                  >
+                    Check In
+                  </button>
+
+                  <button
+                    v-if="isCheckedIn && activeEvent && activeEvent._id && !activeEvent.isPublished"
+                    @click="submitCheckOut(activeEvent._id)"
+                    class="btn"
+                  >
+                    Check Out
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Footer Section with Check-In Button -->
+            <div class="event-footer" style="text-align: right; padding: 15px">
+              <div>
+                <!-- Pop-up modal -->
+                <div v-if="showCheckInForm" class="modal-overlay">
+                  <div class="modal">
+                    <h2>Check In</h2>
+                    <input
+                      v-model="firstName"
+                      type="text"
+                      placeholder="Enter your first name"
+                      class="input"
+                    />
+                    <input
+                      v-model="discordId"
+                      type="text"
+                      placeholder="Enter your Discord ID"
+                      class="input"
+                    />
+                    <div class="button-container">
+                      <button
+                        @click="submitCheckIn(activeEvent._id)"
+                        class="submit-btn"
+                      >
+                        Submit
+                      </button>
+                      <button @click="closeCheckIn" class="close-btn">
+                        Cancel
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div v-if="currentPage == 'login'" class="login-content">
-          <div class="login-container">
-            <h2>Speak friend and enter:</h2>
-            <input
-              type="password"
-              placeholder="Password"
-              v-model="adminPassword"
-            />
-            <button @click="verifyAdmin()">Submit</button>
+          <div v-if="currentPage == 'login'" class="login-content">
+            <div class="login-container">
+              <h2>Speak friend and enter:</h2>
+              <input
+                type="password"
+                placeholder="Password"
+                v-model="adminPassword"
+              />
+              <button @click="verifyAdmin()">Submit</button>
+            </div>
           </div>
-        </div>
-        <div v-if="currentPage == 'creation'" class="admin-event-content">
-          <div class="mobile-events-logo-wrapper">
-            <img src="images/Logo.png" class="mobile-events-logo" />
-          </div>
-          <div class="event-header">
-            <button class="btn" @click="navigatePage('events')">
-              < Back to All Events
-            </button>
-          </div>
-          <div class="upcoming-events">
-            <h1>Event Creation</h1>
-          </div>
-          <div class="admin-event-content-wrapper">
-            <div class="template-area-creation">
-              <div>
-                <h1 class="event-title2">Title</h1>
-                <input
-                  v-model="newEvent.eventTitle"
-                  placeholder="Title"
-                  class="create-input"
-                  type="text"
-                />
-              </div>
-              <div>
-                <h2>Game</h2>
-                <input
-                  v-model="newEvent.eventGame"
-                  placeholder="Game"
-                  type="text"
-                />
-              </div>
+          <div v-if="currentPage == 'creation'" class="admin-event-content">
+            <div class="mobile-events-logo-wrapper">
+              <img src="images/Logo.png" class="mobile-events-logo" />
+            </div>
+            <div class="event-header">
+              <button class="btn" @click="navigatePage('events')">
+                < Back to All Events
+              </button>
+            </div>
+            <div class="upcoming-events">
+              <h1>Event Creation</h1>
+            </div>
+            <div class="admin-event-content-wrapper">
+              <div class="template-area-creation">
+                <div>
+                  <h1 class="event-title2">Title</h1>
+                  <input
+                    v-model="newEvent.eventTitle"
+                    placeholder="Title"
+                    class="create-input"
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <h2>Game</h2>
+                  <input
+                    v-model="newEvent.eventGame"
+                    placeholder="Game"
+                    type="text"
+                  />
+                </div>
 
-              <div>
-                <h2>Description</h2>
+                <div>
+                  <h2>Description</h2>
+                  <textarea
+                    v-model="newEvent.eventDescription"
+                    placeholder="Description"
+                    class="description"
+                    type="text"
+                  ></textarea>
+                </div>
+
+                <button class="btn">Create as Template</button>
+                <div>
+                  <label for="templates">Select a Template:</label>
+                  <select id="templates" name="templates">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                  </select>
+                </div>
+              </div>
+              <div class="follow-up-creation">
+                <div>
+                  <h2>Organizer</h2>
+                  <input
+                    v-model="newEvent.eventOrganizer"
+                    placeholder="Organizer"
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <h2>Organizer Contact Info</h2>
+                  <input
+                    v-model="newEvent.organizerContactInfo"
+                    placeholder="Organizer Contact"
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <h2>Event Day</h2>
+                  <label for="event-day">Day:</label>
+                  <select id="event-day" v-model="newEvent.eventDay">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="event-date">Date:</label>
+                  <input
+                    type="date"
+                    id="event-date"
+                    v-model="newEvent.eventDate"
+                    type="date"
+                  />
+                </div>
+                <div>
+                  <label for="event-time">Time:</label>
+                  <input
+                    type="time"
+                    id="event-time"
+                    v-model="newEvent.eventTime"
+                    type="time"
+                  />
+                </div>
+
+                <div>
+                  <button class="btn" @click="pushEvent()">Create Event</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-if="currentPage == 'edit'" class="edit-page-content">
+            <div class="mobile-events-logo-wrapper">
+              <img src="images/Logo.png" class="mobile-events-logo" />
+            </div>
+            <div class="admin-event-content-wrapper">
+              <div class="template-area-creation">
+                <div class="event-header">
+                  <button class="btn" @click="navigatePage('events')">
+                    < Back to All Events
+                  </button>
+                </div>
+                <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
+
+                <input
+                  class="event-title"
+                  v-model="activeEvent.eventTitle"
+                  placeholder="activeEvent.eventTitle"
+                  type="text"
+                  @input="updateActiveEvent('eventTitle', $event.target.value)"
+                />
+
+                <p class="event-game">{{activeEvent.eventGame}}</p>
+                <input
+                  v-model="activeEvent.eventGame"
+                  placeholder="activeEvent.eventGame"
+                  class="event-game"
+                  type="text"
+                  @input="updateActiveEvent('eventGame', $event.target.value)"
+                />
+                <p class="event-description">
+                  {{activeEvent.eventDescription}}
+                </p>
                 <textarea
-                  v-model="newEvent.eventDescription"
-                  placeholder="Description"
+                  v-model="activeEvent.eventDescription"
+                  placeholder="activeEvent.eventDescription"
                   class="description"
                   type="text"
+                  @input="updateActiveEvent('eventDescription', $event.target.value)"
                 ></textarea>
               </div>
+              <div class="follow-up-creation">
+                <p class="event-organizer">
+                  <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
+                </p>
+                <input
+                  class="event-organizer"
+                  type="text"
+                  v-model="activeEvent.eventOrganizer"
+                  placeholder="activeEvent.eventOrganizer"
+                  @input="updateActiveEvent('eventOrganizer', $event.target.value)"
+                />
+                <p class="organizer-contact">
+                  <strong>Organizer Contact Info:</strong>
+                  {{activeEvent.organizerContactInfo}}
+                </p>
+                <input
+                  class="organizer-contact"
+                  type="text"
+                  v-model="activeEvent.organizerContactInfo"
+                  placeholder="activeEvent.organizerContactInfo"
+                  @input="updateActiveEvent('organizerContactInfo', $event.target.value)"
+                />
+                <p class="event-day">
+                  {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
+                  {{activeEvent.eventDate}}
+                </p>
 
-              <button class="btn">Create as Template</button>
-              <div>
-                <label for="templates">Select a Template:</label>
-                <select id="templates" name="templates">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
-            </div>
-            <div class="follow-up-creation">
-              <div>
-                <h2>Organizer</h2>
-                <input
-                  v-model="newEvent.eventOrganizer"
-                  placeholder="Organizer"
-                  type="text"
-                />
-              </div>
-              <div>
-                <h2>Organizer Contact Info</h2>
-                <input
-                  v-model="newEvent.organizerContactInfo"
-                  placeholder="Organizer Contact"
-                  type="text"
-                />
-              </div>
-              <div>
-                <h2>Event Day</h2>
                 <label for="event-day">Day:</label>
-                <select id="event-day" v-model="newEvent.eventDay">
+                <select
+                  id="event-day"
+                  v-model="activeEvent.eventDay"
+                  @change="updateActiveEvent('eventDay', $event.target.value)"
+                >
                   <option value="Monday">Monday</option>
                   <option value="Tuesday">Tuesday</option>
                   <option value="Wednesday">Wednesday</option>
@@ -475,219 +644,109 @@
                   <option value="Saturday">Saturday</option>
                   <option value="Sunday">Sunday</option>
                 </select>
-              </div>
-              <div>
+
                 <label for="event-date">Date:</label>
                 <input
                   type="date"
                   id="event-date"
-                  v-model="newEvent.eventDate"
-                  type="date"
+                  v-model="activeEvent.date"
+                  @change="updateActiveEvent('eventDate', $event.target.value)"
                 />
-              </div>
-              <div>
+
                 <label for="event-time">Time:</label>
                 <input
                   type="time"
                   id="event-time"
-                  v-model="newEvent.eventTime"
-                  type="time"
+                  v-model="activeEvent.time"
+                  @change="updateActiveEvent('eventTime', $event.target.value)"
                 />
               </div>
-
-              <div>
-                <button class="btn" @click="pushEvent()">Create Event</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-if="currentPage == 'edit'" class="edit-page-content">
-          <div class="mobile-events-logo-wrapper">
-            <img src="images/Logo.png" class="mobile-events-logo" />
-          </div>
-          <div class="admin-event-content-wrapper">
-            <div class="template-area-creation">
-              <div class="event-header">
-                <button class="btn" @click="navigatePage('events')">
-                  < Back to All Events
-                </button>
-              </div>
-              <h1 class="event-title">{{activeEvent.eventTitle}}</h1>
-
-              <input
-                class="event-title"
-                v-model="activeEvent.eventTitle"
-                placeholder="activeEvent.eventTitle"
-                type="text"
-                @input="updateActiveEvent('eventTitle', $event.target.value)"
-              />
-
-              <p class="event-game">{{activeEvent.eventGame}}</p>
-              <input
-                v-model="activeEvent.eventGame"
-                placeholder="activeEvent.eventGame"
-                class="event-game"
-                type="text"
-                @input="updateActiveEvent('eventGame', $event.target.value)"
-              />
-              <p class="event-description">{{activeEvent.eventDescription}}</p>
-              <textarea
-                v-model="activeEvent.eventDescription"
-                placeholder="activeEvent.eventDescription"
-                class="description"
-                type="text"
-                @input="updateActiveEvent('eventDescription', $event.target.value)"
-              ></textarea>
-
-
-            </div>
-            <div class="follow-up-creation">
-              <p class="event-organizer">
-                <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
-              </p>
-              <input
-                class="event-organizer"
-                type="text"
-                v-model="activeEvent.eventOrganizer"
-                placeholder="activeEvent.eventOrganizer"
-                @input="updateActiveEvent('eventOrganizer', $event.target.value)"
-              />
-              <p class="organizer-contact">
-                <strong>Organizer Contact Info:</strong>
-                {{activeEvent.organizerContactInfo}}
-              </p>
-              <input
-                class="organizer-contact"
-                type="text"
-                v-model="activeEvent.organizerContactInfo"
-                placeholder="activeEvent.organizerContactInfo"
-                @input="updateActiveEvent('organizerContactInfo', $event.target.value)"
-              />
-              <p class="event-day">
-                {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
-                {{activeEvent.eventDate}}
-              </p>
-
-              <label for="event-day">Day:</label>
-              <select
-                id="event-day"
-                v-model="activeEvent.eventDay"
-                @change="updateActiveEvent('eventDay', $event.target.value)"
-              >
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-              </select>
-
-              <label for="event-date">Date:</label>
-              <input
-                type="date"
-                id="event-date"
-                v-model="activeEvent.date"
-                @change="updateActiveEvent('eventDate', $event.target.value)"
-              />
-
-              <label for="event-time">Time:</label>
-              <input
-                type="time"
-                id="event-time"
-                v-model="activeEvent.time"
-                @change="updateActiveEvent('eventTime', $event.target.value)"
-              />
-
-            </div>
             </div>
             <div class="admin-event-content-wrapper">
-              
               <div class="template-area-creation">
                 <p class="player-count" v-if="activeEvent">
                   <strong>Current Player Count:</strong>
                   {{activeEvent.playerList.length}} / 4
                 </p>
-            <div id="edit-player-list">
-              <h3>Registered Players</h3>
-              <ul class="edit-players">
-                <li
-                  v-for="player in activeEvent.playerList ?? [] "
-                  :key="player._id"
-                  :class="{ selected: selectedPlayers.includes(player._id) }"
-                >
-                  <div class="edit-player-names">
-                  {{player.player_name}}
-                  {{player.discord_id}}
-                </div>
-                <div class="edit-player-buttons">
-
-                
-                  <button
-                    @click="togglePlayerSelection(player._id)"
-                    class="btn"
-                  >
-                    Select player
-                  </button>
-                  <button
-                    @click="removePlayerFromEvent(activeEvent.id,player._id)"
-                    class="btn"
-                  >
-                    Remove player
-                  </button>
-                </div>
-                </li>
-              </ul>
-            </div>
-            <div id="pairing-controls">
-              <button
-                id="pair-button"
-                @click="pairSelectedPlayers"
-                ref="pairButton"
-                disabled
-              >
-                Pair Selected Players
-              </button>
-              <button
-                @click="giveBye()"
-                id="pair-button"
-                :disabled="selectedPlayers.length !== 1"
-                ref="byeButton"
-              >
-                Give Player Bye
-              </button>
-            </div>
-          </div>
-          <div class="follow-up-creation">
-            <div id="edit-player-list">
-              <h2>Paired Players</h2>
-              <ul class="edit-players">
-                <li v-for="(pair, index) in pairedPlayers" :key="index">
-                  <p>
-                    {{ pair.player1.player_name }}
-                    <span v-if="pair.player2">
-                      vs. {{ pair.player2.player_name }}</span
+                <div id="edit-player-list">
+                  <h3>Registered Players</h3>
+                  <ul class="edit-players">
+                    <li
+                      v-for="player in activeEvent.playerList ?? [] "
+                      :key="player._id"
+                      :class="{ selected: selectedPlayers.includes(player._id) }"
                     >
-                    <span v-else> has a BYE </span>
-                  </p>
-                  <button @click="removePair(index)" class="btn">Delete</button>
-                </li>
-              </ul>
+                      <div class="edit-player-names">
+                        {{player.player_name}} {{player.discord_id}}
+                      </div>
+                      <div class="edit-player-buttons">
+                        <button
+                          @click="togglePlayerSelection(player._id)"
+                          class="btn"
+                        >
+                          Select player
+                        </button>
+                        <button
+                          @click="removePlayerFromEvent(activeEvent.id,player._id)"
+                          class="btn"
+                        >
+                          Remove player
+                        </button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div id="pairing-controls">
+                  <button
+                    id="pair-button"
+                    @click="pairSelectedPlayers"
+                    ref="pairButton"
+                    disabled
+                  >
+                    Pair Selected Players
+                  </button>
+                  <button
+                    @click="giveBye()"
+                    id="pair-button"
+                    :disabled="selectedPlayers.length !== 1"
+                    ref="byeButton"
+                  >
+                    Give Player Bye
+                  </button>
+                </div>
+              </div>
+              <div class="follow-up-creation">
+                <div id="edit-player-list">
+                  <h2>Paired Players</h2>
+                  <ul class="edit-players">
+                    <li v-for="(pair, index) in pairedPlayers" :key="index">
+                      <p>
+                        {{ pair.player1.player_name }}
+                        <span v-if="pair.player2">
+                          vs. {{ pair.player2.player_name }}</span
+                        >
+                        <span v-else> has a BYE </span>
+                      </p>
+                      <button @click="removePair(index)" class="btn">
+                        Delete
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="edit-buttons">
-            <button @click="deleteEvent(activeEvent.id)" class="btn">
-              Delete
-            </button>
-            <button @click="togglePublish(activeEvent.id)" class="btn">
-              {{ activeEvent.isPublished ? 'Unpublish' : 'Publish' }}
-            </button>
-            <button @click="saveEvent(activeEvent.id)" class="svbtn">
-              Save
-              <!-- :disabled="saveButtonDisabled" -->
-            </button>
-          </div>
+            <div class="edit-buttons">
+              <button @click="deleteEvent(activeEvent.id)" class="btn">
+                Delete
+              </button>
+              <button @click="togglePublish(activeEvent.id)" class="btn">
+                {{ activeEvent.isPublished ? 'Unpublish' : 'Publish' }}
+              </button>
+              <button @click="saveEvent(activeEvent.id)" class="svbtn">
+                Save
+                <!-- :disabled="saveButtonDisabled" -->
+              </button>
+            </div>
           </div>
         </div>
         <div v-show="loading" class="loading-container">
@@ -696,86 +755,91 @@
         </div>
         <div class="footer">
           <div class="top-footer">
+            <div class="times">
+              <div id="open">
+                <div class="footer-header">STORE</div>
 
-          
-          <div class="times">
-            <div id="open">
-              <div class="footer-header">STORE</div>
-      
-              <div class="store-footer-wrapper">
+                <div class="store-footer-wrapper">
+                  <div class="store-footer-text">
+                    <p>
+                      <img src="images/location.png" class="social-icon" />
+                      250 Red Cliffs Dr #32
+                      <br />
+                      St. George, UT 84790
+                    </p>
 
-              
-                <div class="store-footer-text">
-
-                
-              <p>              <img src="images/location.png" class="social-icon" />
-                Game Haven
-                <br>
-                250 Red Cliffs Dr #32
-                <br>
-                St. George, UT 84790</p>
-
-
-              <img src="images/map.png" class="footer-map">
-
+                    <img src="images/map.png" class="footer-map" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="about-us">
-            <div class="footer-header">ABOUT US</div>
-            <br />
+            <div class="about-us">
+              <div class="footer-header">ABOUT US</div>
+              <br />
 
-            <p>
-              <img src="images/clock.png" class="social-icon" />Monday – Saturday: 10 AM – 10 PM
-              <br>
-              Sunday: Closed
+              <p>
+                <img src="images/clock.png" class="social-icon" />Monday –
+                Saturday: 10 AM – 10 PM
+                <br />
+                Sunday: Closed
               </p>
-              
-              <p><img src="images/phone.png" class="social-icon" />(435) 627-0616</p>
-              <p><img src="images/mail.png" class="social-icon" />store@gamehavenstg.com</p>
-          </div>
-          <div class="social">
-            <div class="footer-header">CONNECT</div>
-            <br />
-            <p><a
-              href="https://discord.gg/ZvvbE3e4Sp"
-              class="icon-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="https://discord.gg/GkBxQasQ"
-            >
-              <img src="images/discord-white-icon.png" class="social-icon" />
-            </a>Discord             </p>
 
-            <p><a
-              href="https://www.facebook.com/GameHavenSTG/"
-              class="icon-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="https://www.facebook.com/GameHavenSTG/"
-            >
-              <img src="images/facebook.png" class="social-icon" />
-            </a>Facebook             </p>
-            <p><a
-              href="https://www.instagram.com/gamehavenstg/"
-              class="icon-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="https://www.instagram.com/gamehavenstg/"
-            >
-              <img src="images/insta.png" class="social-icon" />
-            </a>Instagram</p>
-          </div>
-        </div>
-        <div class="copyright">
-          ©️ 2025 Gamehaven St. George
+              <p>
+                <img src="images/phone.png" class="social-icon" />(435) 627-0616
+              </p>
+              <p>
+                <img
+                  src="images/mail.png"
+                  class="social-icon"
+                />store@gamehavenstg.com
+              </p>
+            </div>
+            <div class="social">
+              <div class="footer-header">CONNECT</div>
+              <br />
+              <p>
+                <a
+                  href="https://discord.gg/ZvvbE3e4Sp"
+                  class="icon-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="https://discord.gg/GkBxQasQ"
+                >
+                  <img
+                    src="images/discord-white-icon.png"
+                    class="social-icon"
+                  /> </a
+                >Discord
+              </p>
 
-        </div>
+              <p>
+                <a
+                  href="https://www.facebook.com/GameHavenSTG/"
+                  class="icon-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="https://www.facebook.com/GameHavenSTG/"
+                >
+                  <img src="images/facebook.png" class="social-icon" /> </a
+                >Facebook
+              </p>
+              <p>
+                <a
+                  href="https://www.instagram.com/gamehavenstg/"
+                  class="icon-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="https://www.instagram.com/gamehavenstg/"
+                >
+                  <img src="images/insta.png" class="social-icon" /> </a
+                >Instagram
+              </p>
+            </div>
+          </div>
+          <div class="copyright">©️ 2025 Gamehaven St. George</div>
         </div>
       </div>
-      
     </div>
   </body>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>

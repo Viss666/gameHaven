@@ -476,6 +476,42 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
 //   }
 // });
 
+// app.put("/events/:eventId", async (req, res) => {
+//   try {
+//     const eventId = req.params.eventId;
+//     const { matches, ...otherFields } = req.body;
+
+//     let matchIds = [];
+
+//     if (matches && matches.length > 0) {
+//       for (const matchData of matches) {
+//         const match = new model.Match({
+//           player1: matchData.player1._id,
+//           player2: matchData.player2 ? matchData.player2._id : null,
+//           isBye: matchData.player2 === null, // Set isBye based on player2
+//         });
+//         await match.save();
+//         matchIds.push(match._id);
+//       }
+//     }
+
+//     const updatedEvent = await model.Event.findByIdAndUpdate(
+//       eventId,
+//       { ...otherFields, matches: matchIds },
+//       { new: true }
+//     );
+
+//     if (!updatedEvent) {
+//       return res.status(404).json({ message: "Event not found" });
+//     }
+
+//     res.status(200).json(updatedEvent);
+//   } catch (error) {
+//     console.error("Error updating event:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
+
 app.put("/events/:eventId", async (req, res) => {
   try {
     const eventId = req.params.eventId;
@@ -488,14 +524,14 @@ app.put("/events/:eventId", async (req, res) => {
         const match = new model.Match({
           player1: matchData.player1._id,
           player2: matchData.player2 ? matchData.player2._id : null,
-          isBye: matchData.player2 === null, // Set isBye based on player2
+          isBye: matchData.player2 === null,
         });
         await match.save();
         matchIds.push(match._id);
       }
     }
 
-    const updatedEvent = await model.Event.findByIdAndUpdate(
+    let updatedEvent = await model.Event.findByIdAndUpdate(
       eventId,
       { ...otherFields, matches: matchIds },
       { new: true }
@@ -504,6 +540,15 @@ app.put("/events/:eventId", async (req, res) => {
     if (!updatedEvent) {
       return res.status(404).json({ message: "Event not found" });
     }
+
+    // Populate player data for each match
+    updatedEvent = await model.Event.findById(eventId).populate({
+      path: "matches",
+      populate: {
+        path: "player1 player2", // Populate both player1 and player2
+        model: "Player", // Assuming your player model is named "Player"
+      },
+    });
 
     res.status(200).json(updatedEvent);
   } catch (error) {
