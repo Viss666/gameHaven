@@ -585,13 +585,19 @@ app.put("/events/:eventId", async (req, res) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    updatedEvent = await model.Event.findById(eventId).populate({
-      path: "matches",
-      populate: {
-        path: "player1 player2",
-        model: "Player",
-      },
-    });
+    // Populate playerList and matches
+    updatedEvent = await model.Event.findById(eventId)
+      .populate({
+        path: "playerList",
+        model: "Player", // Assuming your player model is named "Player"
+      })
+      .populate({
+        path: "matches",
+        populate: {
+          path: "player1 player2",
+          model: "Player",
+        },
+      });
 
     res.status(200).json(updatedEvent);
   } catch (error) {
