@@ -312,7 +312,7 @@
                 <div class="event-header">
                   <div class="event-title">
                     <h2>{{ event.eventTitle }}</h2>
-                    <img :src="event.iconUrl" />
+                    <img :src="event.iconUrl" class="icon-url"/>
                   </div>
                 </div>
                 <div class="event-side-info">
@@ -361,7 +361,12 @@
             <!-- Body Section -->
 
             <div class="event-body">
-              <h1 class="event-title2">{{activeEvent.eventTitle}}</h1>
+              <div class="view-header">
+                <h1 class="event-title2">{{activeEvent.eventTitle}}</h1>
+                <img :src="activeEvent.iconUrl" class="icon-url-header"/>
+              </div>
+
+
               <div class="event-game"><h3>{{activeEvent.eventGame}}</h3></div>
 
               <p class="event-day">
@@ -377,7 +382,7 @@
               </p>
               <p class="player-count">
                 <strong>Current Player Count:</strong>
-                {{activeEvent.playerList.length}} / 4
+                {{activeEvent.playerList.length}} / {{ activeEvent.maxPlayers}}
               </p>
               <p class="event-description">{{activeEvent.eventDescription}}</p>
             </div>
@@ -421,7 +426,7 @@
 
               <div class="event-buttons2">
                 <button
-                  v-if="!isCheckedIn && !activeEvent.isPublished"
+                  v-if="!isCheckedIn && !activeEvent.isPublished && activeEvent.maxPlayers > activeEvent.playerList.length"
                   @click="openCheckIn"
                   class="btn"
                 >

@@ -591,6 +591,8 @@ Vue.createApp({
             eventTime: formattedTime,
             matches: eventFromServer.matches, // Matches array will be populated
             isPublished: eventFromServer.isPublished,
+            maxPlayers: eventFromServer.maxPlayers,
+            iconUrl: eventFromServer.iconUrl,
           };
           //console.log("activeEvent:", this.activeEvent); // Log the activeEvent
 
