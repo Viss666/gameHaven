@@ -117,7 +117,6 @@ app.post("/events", async function (request, response) {
     let newEvent = new model.Event({
       eventTitle: request.body.eventTitle,
       eventGame: request.body.eventGame,
-      eventType: request.body.eventType,
       eventDescription: request.body.eventDescription,
       eventOrganizer: request.body.eventOrganizer,
       organizerContactInfo: request.body.organizerContactInfo,

@@ -40,14 +40,14 @@ const playerSchema = new mongoose.Schema(
     maxPlayers: {
       type: Number,
       min: 1, // Optional: Set a minimum value
-      required: false, // Optional: Make it required if needed
+      required: true, // Optional: Make it required if needed
       default: null, // Use null to represent "no maximum"
       nullable: true, //Added to explicitly say it is nullable
     },
     iconUrl: {
       // Added iconUrl field
       type: String,
-      required: false, // Optional: Make it required if needed
+      required: true, // Optional: Make it required if needed
     },
   },
   { _id: true }

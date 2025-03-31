@@ -7,7 +7,7 @@ Vue.createApp({
         tcg: false,
         games: false,
       },
-      isAdmin: false,
+      isAdmin: true,
       adminPassword: "",
       mobileSubmenuOpen: null,
       showCheckInForm: false,
@@ -19,7 +19,6 @@ Vue.createApp({
       discordId: "",
       templates: null,
       events: [],
-
       newEvent: {
         eventTitle: "",
         eventGame: "",
@@ -30,6 +29,8 @@ Vue.createApp({
         eventDay: "",
         eventDate: "",
         eventTime: "",
+        maxPlayers: null, // Initialize with null or a default value
+        iconUrl: "", // Initialize with an empty string or default value
       },
       activeEvent: null,
       checkedInEvents: [],
@@ -38,6 +39,8 @@ Vue.createApp({
       pairingsChanged: false, // Flag to track changes
 
       modifiedFields: {},
+      maxPlayersOptions: [2, 4, 8, 16, 32, 40], // Example player count options
+      // selectedMaxPlayers: null, // Default to unlimited
       loading: false,
       boardgames: [],
       selectedGame: "All Games",
@@ -147,6 +150,22 @@ Vue.createApp({
           imageUrl: "images/vanguard.png",
         },
       ],
+      iconSelection: [
+        {
+          name: "Dice",
+          imageUrl: "images/dice.png",
+        },
+        {
+          name: "Cards",
+          imageUrl: "images/cards.png",
+        },
+        {
+          name: "Board Game",
+          imageUrl: "images/boardgame.png",
+        },
+      ],
+      selectedIconUrl: "",
+
       showRentalDetail: false,
       selectedGame: "All Games",
     };
@@ -858,6 +877,7 @@ Vue.createApp({
       return fetch("https://gamehavenstg.com/events")
         .then((response) => response.json())
         .then((eventsFromServer) => {
+          console.log("events from server: ", eventsFromServer);
           this.events = eventsFromServer.map((event) => {
             let formattedDate = event.eventDate;
             let formattedTime = this.convertToStandardTime(event.eventTime);
@@ -885,6 +905,8 @@ Vue.createApp({
               eventTime: formattedTime,
               matches: event.matches,
               isPublished: event.isPublished,
+              maxPlayers: event.maxPlayers,
+              iconUrl: event.iconUrl,
             };
           });
 
@@ -896,7 +918,19 @@ Vue.createApp({
     },
 
     createEvent() {
-      this.activeEvent = null;
+      this.activeEvent = {
+        eventTitle: "",
+        eventGame: "",
+        eventType: "",
+        eventDescription: "",
+        eventOrganizer: "",
+        organizerContactInfo: "",
+        eventDay: "",
+        eventDate: "",
+        eventTime: "",
+        maxPlayers: null,
+        iconUrl: "",
+      };
       this.navigatePage("creation");
     },
 
@@ -916,7 +950,10 @@ Vue.createApp({
         eventTime: this.newEvent.eventTime,
         playerList: [],
         matches: [],
+        maxPlayers: this.newEvent.maxPlayers,
+        iconUrl: this.newEvent.iconUrl,
       };
+      console.log("New Event: ", newEvent);
 
       fetch("https://gamehavenstg.com/events", {
         method: "POST",
@@ -932,7 +969,7 @@ Vue.createApp({
           return response.json();
         })
         .then((createdEvent) => {
-          // console.log("Event created:", createdEvent);
+          console.log("Event created:", createdEvent);
 
           // Add the created event to the local events array
           this.events.push({
@@ -948,6 +985,8 @@ Vue.createApp({
             eventDay: createdEvent.eventDay,
             eventDate: createdEvent.eventDate,
             eventTime: createdEvent.eventTime,
+            maxPlayers: createdEvent.maxPlayers,
+            iconUrl: createdEvent.iconUrl,
           });
 
           // Reset form fields
@@ -961,6 +1000,8 @@ Vue.createApp({
             eventDay: "",
             eventDate: "",
             eventTime: "",
+            maxPlayers: 1,
+            iconUrl: "",
           };
         })
         .finally(() => {
@@ -971,7 +1012,9 @@ Vue.createApp({
     },
     editEvent(eventId) {
       this.currentPage = "edit";
+
       this.activeEvent = this.events.find((event) => event.id === eventId);
+      console.log("active event: ", this.activeEvent);
       // this.viewEvent(eventId);
     },
     deleteEvent(eventId) {
@@ -1095,10 +1138,58 @@ Vue.createApp({
     //       // this.viewEvent(eventId);
     //     });
     // },
+    // saveEvent(eventId) {
+    //   this.scrollToTop();
+    //   // this.loading = true;
+    //   this.startLoading();
+    //   if (this.pairingsChanged) {
+    //     const matchesToSend = this.pairedPlayers.map((pair) => ({
+    //       player1: pair.player1 ? pair.player1 : null,
+    //       player2: pair.player2 ? pair.player2 : null,
+    //     }));
+    //     this.modifiedFields.matches = matchesToSend;
+    //   }
+    //   return fetch(`https://gamehavenstg.com/events/${eventId}`, {
+    //     method: "PUT",
+    //     credentials: "include",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(this.modifiedFields),
+    //   })
+    //     .then((response) => {
+    //       if (!response.ok) {
+    //         throw new Error("Failed to update event");
+    //       }
+    //       return response.json();
+    //     })
+    //     .then((data) => {
+    //       data.playerList = data.playerList.map((player) => ({
+    //         player_name: player.playerName,
+    //         discord_id: player.playerDiscordID,
+    //         _id: player._id,
+    //       }));
+    //       this.activeEvent = data;
+    //       const index = this.events.findIndex((event) => event.id === eventId);
+    //       if (index !== -1) {
+    //         this.events[index] = data;
+    //       }
+    //       this.modifiedFields = {};
+    //       this.pairingsChanged = false;
+    //     })
+    //     .catch((error) => console.error("Error updating event:", error))
+    //     .finally(() => {
+    //       return new Promise((resolve) => {
+    //         // Return a promise to wait
+    //         setTimeout(() => {
+    //           // this.loading = false;
+    //           this.stopLoading();
+    //           resolve(); // Resolve the promise after 3 seconds
+    //         }, 4000);
+    //       });
+    //     });
+    // },
     saveEvent(eventId) {
       this.scrollToTop();
-      // this.loading = true;
-      this.startLoading();
+      this.startLoading(); // Assuming you have a startLoading method
       if (this.pairingsChanged) {
         const matchesToSend = this.pairedPlayers.map((pair) => ({
           player1: pair.player1 ? pair.player1 : null,
@@ -1106,6 +1197,12 @@ Vue.createApp({
         }));
         this.modifiedFields.matches = matchesToSend;
       }
+
+      // Add iconUrl and maxPlayers to modifiedFields
+      this.modifiedFields.iconUrl = this.activeEvent.iconUrl;
+      this.modifiedFields.maxPlayers = this.activeEvent.maxPlayers;
+      console.log(this.activeEvent);
+
       return fetch(`https://gamehavenstg.com/events/${eventId}`, {
         method: "PUT",
         credentials: "include",
@@ -1119,6 +1216,7 @@ Vue.createApp({
           return response.json();
         })
         .then((data) => {
+          console.log("saved event: ", data);
           data.playerList = data.playerList.map((player) => ({
             player_name: player.playerName,
             discord_id: player.playerDiscordID,
@@ -1135,11 +1233,9 @@ Vue.createApp({
         .catch((error) => console.error("Error updating event:", error))
         .finally(() => {
           return new Promise((resolve) => {
-            // Return a promise to wait
             setTimeout(() => {
-              // this.loading = false;
-              this.stopLoading();
-              resolve(); // Resolve the promise after 3 seconds
+              this.stopLoading(); // Assuming you have a stopLoading method
+              resolve();
             }, 4000);
           });
         });
