@@ -7,7 +7,7 @@ Vue.createApp({
         tcg: false,
         games: false,
       },
-      isAdmin: true,
+      isAdmin: false,
       adminPassword: "",
       mobileSubmenuOpen: null,
       showCheckInForm: false,
