@@ -103,7 +103,7 @@
               <h2 @click="navigatePage('tcg')">Trading Card Games</h2>
               <hr />
               <div class="card-list-div">
-                <ul>
+                <!-- <ul>
                   <li v-for="game in gamesToBuy.slice(0, 4)" :key="game.title">
                     <div>
                       <h3>
@@ -113,8 +113,13 @@
                     </div>
                     <img :src="game.imgURL" width="150" />
                   </li>
-                </ul>
+                </ul> -->
+                <div class="home-tcg-card" v-for="game in tcgs" :key="game.name" @click="redirectTo(game.link)">
+                  <img :src="game.imageUrl" :alt="game.name" class="tcg-icon"  >
+                  <p>{{ game.name }}</p>
+                </div>
               </div>
+              
             </div>
             <div class="main-card">
               <h2 @click="navigatePage('rentals')">Featured Rentals</h2>
@@ -123,11 +128,12 @@
                 <div v-if="loading">Loading board games...</div>
                 <div v-else-if="error">{{ error }}</div>
                 <ul v-else>
-                  <li v-for="game in boardgames.slice(2, 6)" :key="game.id">
+                  <li v-for="game in boardgames.slice(2, 4)" :key="game.id">
                     <h3>{{ game.name }}</h3>
                     <h4>({{ game.yearPublished }})</h4>
 
                     <img
+                    class="rental-thumbnail"
                       v-if="game.thumbnail"
                       :src="game.thumbnail"
                       alt="Thumbnail"
@@ -142,6 +148,19 @@
               <h2 @click="navigatePage('events')">Events</h2>
               <hr />
               <div class="see-us-list-div">
+                <div class="home-event-card" v-for="event in filteredEvents.slice(0, 3)" :key="event._id">
+                  <div class="home-event-title">
+                    <h3>{{ event.eventTitle }}</h3>
+                    
+                  </div>
+                  <div class="event-game"><p>{{event.eventGame}}</p></div>
+                  <div class="date-box">{{ event.eventDate }}</div>
+
+
+                  <button href="#" class="btn" @click.prevent="viewEvent(event.id)">
+                    Event Info &amp; Sign-Up
+                  </button>
+                </div>
                 <ul>
                   <li>
                     <p>
