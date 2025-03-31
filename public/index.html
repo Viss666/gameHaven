@@ -132,7 +132,7 @@
                 <div v-if="loading">Loading board games...</div>
                 <div v-else-if="error">{{ error }}</div>
                 <ul v-else>
-                  <li v-for="game in boardgames.slice(2, 4)" :key="game.id">
+                  <li v-for="game in boardgames.slice(2, 5)" :key="game.id">
                     <h3>{{ game.name }}</h3>
                     <h4>({{ game.yearPublished }})</h4>
 
