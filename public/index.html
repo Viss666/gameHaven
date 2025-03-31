@@ -158,6 +158,8 @@
                   :key="event._id"
                 >
                   <div class="home-event-title">
+                    <img :src="event.iconUrl" class="icon-url-home"/>
+
                     <h3>{{ event.eventTitle }}</h3>
                   </div>
                   <div class="event-game"><p>{{event.eventGame}}</p></div>
@@ -293,7 +295,7 @@
             </div>
 
             <div class="dropdown-filter">
-              <select v-model="selectedGame">
+              <select v-model="selectedGameEvent">
                 <option v-for="game in gameOptions" :key="game" :value="game">
                   {{ game }}
                 </option>
@@ -311,8 +313,10 @@
               <div class="event-main-info">
                 <div class="event-header">
                   <div class="event-title">
-                    <h2>{{ event.eventTitle }}</h2>
                     <img :src="event.iconUrl" class="icon-url"/>
+
+                    <h2>{{ event.eventTitle }}</h2>
+                    <!-- <img :src="event.iconUrl" class="icon-url"/> -->
                   </div>
                 </div>
                 <div class="event-side-info">
