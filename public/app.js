@@ -167,7 +167,7 @@ Vue.createApp({
       selectedIconUrl: "",
 
       showRentalDetail: false,
-      selectedGame: "All Games",
+      selectedGameEvent: "All Games",
     };
   },
   computed: {
@@ -189,9 +189,9 @@ Vue.createApp({
     filteredEvents() {
       let filtered = this.events;
 
-      if (this.selectedGame !== "All Games") {
+      if (this.selectedGameEvent !== "All Games") {
         filtered = filtered.filter(
-          (event) => event.eventGame === this.selectedGame
+          (event) => event.eventGame === this.selectedGameEvent
         );
       }
 
@@ -398,7 +398,7 @@ Vue.createApp({
     },
     clearInput() {
       this.searchInput = "";
-      this.selectedGame = "All Games";
+      this.selectedGameEvent = "All Games";
     },
     convertToStandardTime(militaryTime) {
       if (!militaryTime) return ""; // Handle null or empty time

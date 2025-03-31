@@ -188,6 +188,7 @@ nav ul li a.active {
   flex-direction: row;
   margin: 10% 0;
   align-items: center;
+  align-content: center;
 }
 .home-tcg-card:hover {
   cursor: pointer;
@@ -195,6 +196,9 @@ nav ul li a.active {
 }
 .icon-url {
   width: 9%;
+}
+.icon-url-home {
+  width: 50px;
 }
 .icon-url-header {
   height: 50px;
@@ -241,6 +245,10 @@ nav ul li a.active {
   list-style-type: none;
   margin: 0;
   padding: 0 5%;
+}
+
+.card-list-div {
+  margin-left: 9%;
 }
 
 .card-list-div li h3 {
