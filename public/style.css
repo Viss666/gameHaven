@@ -221,7 +221,7 @@ nav ul li a.active {
 .main-card h2 {
   margin: 0 1%;
   margin-top: 2%;
-  padding-left: 5%;
+  /* padding-left: 5%; */
 }
 .main-card h2:hover {
   cursor: pointer;
@@ -259,7 +259,7 @@ nav ul li a.active {
 }
 
 .card-list-div li img {
-  width: 80%;
+  width: 60%;
   height: auto;
   align-self: center;
   /* max-height: 200px; */
