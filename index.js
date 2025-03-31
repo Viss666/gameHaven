@@ -127,6 +127,8 @@ app.post("/events", async function (request, response) {
       playerList: request.body.playerList || [],
       matches: request.body.matches || [],
       isPublished: request.body.isPublished || false,
+      maxPlayers: request.body.maxPlayers, // Add maxPlayers
+      iconUrl: request.body.iconUrl, // Add iconUrl
     });
 
     let savedEvent = await newEvent.save();
