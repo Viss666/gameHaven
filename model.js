@@ -37,18 +37,6 @@ const playerSchema = new mongoose.Schema(
       type: String,
       required: [true, "please enter a Discord ID"],
     },
-    maxPlayers: {
-      type: Number,
-      min: 1, // Optional: Set a minimum value
-      required: true, // Optional: Make it required if needed
-      default: null, // Use null to represent "no maximum"
-      nullable: true, //Added to explicitly say it is nullable
-    },
-    iconUrl: {
-      // Added iconUrl field
-      type: String,
-      required: true, // Optional: Make it required if needed
-    },
   },
   { _id: true }
 );
@@ -78,6 +66,18 @@ const eventSchema = new mongoose.Schema(
     isPublished: {
       type: Boolean,
       required: [true, "event publishing required"],
+    },
+    maxPlayers: {
+      type: Number,
+      min: 1, // Optional: Set a minimum value
+      required: true, // Optional: Make it required if needed
+      default: null, // Use null to represent "no maximum"
+      nullable: true, //Added to explicitly say it is nullable
+    },
+    iconUrl: {
+      // Added iconUrl field
+      type: String,
+      required: true, // Optional: Make it required if needed
     },
   },
   { _id: true }
