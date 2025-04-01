@@ -250,6 +250,9 @@ nav ul li a.active {
 .card-list-div {
   margin-left: 9%;
 }
+.card-list-div-rentals {
+  margin: 0;
+}
 
 .card-list-div li h3 {
   margin: 0;
