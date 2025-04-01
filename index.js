@@ -388,8 +388,10 @@ app.put("/events/:eventId", async (req, res) => {
 
 //updated templates
 app.put("/templates/:templateId", async (req, res) => {
+  console.log("req.params:", req.params); // Add this line
+
   try {
-    const templateId = req.params.templateId;
+    const templateId = req.body.templateId;
     const templateBody = req.body;
 
     let updatedTemplate = await model.Event.findByIdAndUpdate(
