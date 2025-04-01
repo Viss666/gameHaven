@@ -152,7 +152,7 @@ app.post("/templates", async function (request, response) {
   try {
     let newTemplate = new model.Template({
       eventTitle: request.body.eventTitle,
-      eventGmae: request.body.eventGame,
+      eventGame: request.body.eventGame,
       eventDescription: request.body.eventDescription,
       maxPlayers: request.body.maxPlayers,
       iconUrl: request.body.iconUrl,
