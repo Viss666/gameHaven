@@ -84,6 +84,15 @@ app.get("/events", async function (request, response) {
     response.status(500).json({ message: "Internal Server Error" });
   }
 });
+app.get("/templates", async function (request, response) {
+  try {
+    const templates = await model.Template.find();
+    response.status(200).json(templates);
+  } catch (error) {
+    console.error("Error fetching templates: ", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
 
 //get singular event
 app.get("/events/:eventId", async function (request, response) {
@@ -134,6 +143,24 @@ app.post("/events", async function (request, response) {
     response.status(201).json(savedEvent);
   } catch (error) {
     console.error("Error creating event:", error);
+    response.status(500).json({ error: error.message });
+  }
+});
+//create a template
+app.post("/templates", async function (request, response) {
+  console.log("Received request body: ", request.body);
+  try {
+    let newTemplate = new model.Template({
+      eventTitle: request.body.eventTitle,
+      eventGmae: request.body.eventGame,
+      eventDescription: request.body.eventDescription,
+      maxPlayers: request.body.maxPlayers,
+      iconUrl: request.body.iconUrl,
+    });
+    let savedTemplate = await newTemplate.save();
+    response.status(201).json(savedTemplate);
+  } catch (error) {
+    console.log("error creating template:", error);
     response.status(500).json({ error: error.message });
   }
 });

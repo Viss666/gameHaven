@@ -41,11 +41,31 @@ const playerSchema = new mongoose.Schema(
   { _id: true }
 );
 
+const templateSchema = new mongoose.Schema(
+  {
+    eventTitle: { type: String, required: [true, "event title is required"] },
+    eventGame: { type: String, required: [true, "game is required"] },
+    eventDescription: { type: String, required: [true, "add a description"] },
+    iconUrl: {
+      // Added iconUrl field
+      type: String,
+      required: true, // Optional: Make it required if needed
+    },
+    maxPlayers: {
+      type: Number,
+      min: 1, // Optional: Set a minimum value
+      required: true, // Optional: Make it required if needed
+      default: null, // Use null to represent "no maximum"
+      nullable: true, //Added to explicitly say it is nullable
+    },
+  },
+  { _id: true }
+);
+
 const eventSchema = new mongoose.Schema(
   {
     eventTitle: { type: String, required: [true, "event title is required"] },
     eventGame: { type: String, required: [true, "game is required"] },
-    eventType: { type: String },
     eventDescription: { type: String, required: [true, "add a description"] },
     eventOrganizer: { type: String, required: [true, "add an organizer"] },
     organizerContactInfo: {
@@ -86,9 +106,11 @@ const eventSchema = new mongoose.Schema(
 const Event = mongoose.model("Event", eventSchema);
 const Player = mongoose.model("Player", playerSchema);
 const Match = mongoose.model("Match", matchSchema);
+const Template = mongoose.model("Template", templateSchema);
 
 module.exports = {
   Event: Event,
   Player: Player,
   Match: Match,
+  Template: Template,
 };
