@@ -252,6 +252,7 @@ nav ul li a.active {
 }
 .card-list-div-rentals {
   margin: 0;
+  /* display: flex; */
 }
 
 .card-list-div li h3 {
