@@ -391,13 +391,12 @@ app.put("/templates/:templateId", async (req, res) => {
   console.log("req.params:", req.params); // Add this line
 
   try {
-    const templateId = req.body.templateId;
+    const templateId = req.params.templateId;
     const templateBody = req.body;
 
     let updatedTemplate = await model.Event.findByIdAndUpdate(
       templateId,
-      templateBody,
-      { new: true }
+      templateBody
     );
 
     if (!updatedTemplate) {
