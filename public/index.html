@@ -128,7 +128,7 @@
             <div class="main-card">
               <h2 @click="navigatePage('rentals')">Featured Rentals</h2>
               <hr />
-              <div class="card-list-div">
+              <div class="card-list-div-rentals">
                 <div v-if="loading">Loading board games...</div>
                 <div v-else-if="error">{{ error }}</div>
                 <ul v-else>

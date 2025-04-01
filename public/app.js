@@ -1047,148 +1047,6 @@ Vue.createApp({
       //this.saveEvent(eventId);
     },
 
-    // saveEvent(eventId) {
-    //   // console.log("Modified fields:", this.modifiedFields);
-    //   this.scrollToTop();
-    //   this.loading = true;
-    //   console.log("Pairings changed:", this.pairingsChanged);
-    //   if (this.pairingsChanged) {
-    //     const matchesToSend = this.pairedPlayers.map((pair) => ({
-    //       player1: pair.player1 ? { _id: pair.player1._id } : null,
-    //       player2: pair.player2 ? { _id: pair.player2._id } : null,
-    //     }));
-    //     console.log("matches to send:", matchesToSend);
-    //     this.modifiedFields.matches = matchesToSend;
-    //   }
-
-    //   fetch(`https://gamehavenstg.com/events/${eventId}`, {
-    //     method: "PUT",
-    //     credentials: "include",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(this.modifiedFields),
-    //   })
-    //     .then((response) => {
-    //       if (!response.ok) {
-    //         throw new Error("Failed to update event");
-    //       }
-    //       console.log(response);
-    //       return response.json();
-    //     })
-    //     .then((data) => {
-    //       console.log("Event updated:", data);
-    //       // Update local event data
-    //       const index = this.events.findIndex((event) => event.id === eventId);
-    //       if (index !== -1) {
-    //         this.events[index] = {
-    //           ...this.events[index],
-    //           ...data,
-    //         };
-    //       }
-
-    //       this.activeEvent = {
-    //         ...this.activeEvent,
-    //         ...data,
-    //       };
-
-    //       this.modifiedFields = {}; // Reset modified fields
-    //       this.pairingsChanged = false; // Reset pairings changed flag
-    //       this.loading = false;
-    //     })
-    //     .catch((error) => console.error("Error updating event:", error))
-    //     .finally(() => {
-    //       this.loading = false; // Set loading to false after promise resolves
-    //       // this.getEvents();
-    //       // this.editEvent(this.activeEvent.id);
-    //     });
-    // },
-    // saveEvent(eventId) {
-    //   console.log("Save event paired players", this.pairedPlayers);
-    //   this.scrollToTop();
-    //   this.loading = true;
-    //   if (this.pairingsChanged) {
-    //     const matchesToSend = this.pairedPlayers.map((pair) => ({
-    //       player1: pair.player1 ? { _id: pair.player1._id } : null,
-    //       player2: pair.player2 ? { _id: pair.player2._id } : null,
-    //     }));
-    //     console.log("matches to send: ", matchesToSend);
-    //     this.modifiedFields.matches = matchesToSend;
-    //   }
-    //   fetch(`https://gamehavenstg.com/events/${eventId}`, {
-    //     method: "PUT",
-    //     credentials: "include",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(this.modifiedFields),
-    //   })
-    //     .then((response) => {
-    //       if (!response.ok) {
-    //         throw new Error("Failed to update event");
-    //       }
-    //       return response.json();
-    //     })
-    //     .then((data) => {
-    //       this.activeEvent = data;
-    //       const index = this.events.findIndex((event) => event.id === eventId);
-    //       if (index !== -1) {
-    //         this.events[index] = data;
-    //       }
-    //       this.modifiedFields = {};
-    //       this.pairingsChanged = false;
-    //     })
-    //     .catch((error) => console.error("Error updating event:", error))
-    //     .finally(() => {
-    //       this.loading = false;
-    //       // this.viewEvent(eventId);
-    //     });
-    // },
-    // saveEvent(eventId) {
-    //   this.scrollToTop();
-    //   // this.loading = true;
-    //   this.startLoading();
-    //   if (this.pairingsChanged) {
-    //     const matchesToSend = this.pairedPlayers.map((pair) => ({
-    //       player1: pair.player1 ? pair.player1 : null,
-    //       player2: pair.player2 ? pair.player2 : null,
-    //     }));
-    //     this.modifiedFields.matches = matchesToSend;
-    //   }
-    //   return fetch(`https://gamehavenstg.com/events/${eventId}`, {
-    //     method: "PUT",
-    //     credentials: "include",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(this.modifiedFields),
-    //   })
-    //     .then((response) => {
-    //       if (!response.ok) {
-    //         throw new Error("Failed to update event");
-    //       }
-    //       return response.json();
-    //     })
-    //     .then((data) => {
-    //       data.playerList = data.playerList.map((player) => ({
-    //         player_name: player.playerName,
-    //         discord_id: player.playerDiscordID,
-    //         _id: player._id,
-    //       }));
-    //       this.activeEvent = data;
-    //       const index = this.events.findIndex((event) => event.id === eventId);
-    //       if (index !== -1) {
-    //         this.events[index] = data;
-    //       }
-    //       this.modifiedFields = {};
-    //       this.pairingsChanged = false;
-    //     })
-    //     .catch((error) => console.error("Error updating event:", error))
-    //     .finally(() => {
-    //       return new Promise((resolve) => {
-    //         // Return a promise to wait
-    //         setTimeout(() => {
-    //           // this.loading = false;
-    //           this.stopLoading();
-    //           resolve(); // Resolve the promise after 3 seconds
-    //         }, 4000);
-    //       });
-    //     });
-    // },
     saveEvent(eventId) {
       this.scrollToTop();
       this.startLoading(); // Assuming you have a startLoading method
@@ -1242,6 +1100,9 @@ Vue.createApp({
           });
         });
     },
+
+    //async and await
+
     startLoading() {
       this.loading = true;
       document.body.style.overflow = "hidden"; // Lock scroll
