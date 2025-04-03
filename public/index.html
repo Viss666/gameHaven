@@ -199,6 +199,9 @@
 
         <div v-if="currentPage == 'games'" class="games-content"></div>
         <div v-if="currentPage == 'rentals'" class="rental-content">
+          <div class="mobile-events-logo-wrapper">
+            <img src="images/Logo.png" class="mobile-events-logo" />
+          </div>
           <h1>Rental Games</h1>
           <div class="rental-games-section">
             <div
@@ -254,6 +257,11 @@
                   Best Player Age: {{ selectedGame.minAge }} - {{
                   parseInt(selectedGame.minAge) + 2 }}
                 </p>
+                <div id="detail-description-div">
+                  <div id="detail-description-scroll-div">
+                    <p>{{ selectedGame.description }}</p>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- <div v-if="showRentalDetail" class="retail-detail-container">

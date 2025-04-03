@@ -298,7 +298,18 @@ Vue.createApp({
         item.querySelector("maxplaytime")?.getAttribute("value") || "";
       this.selectedGame.minAge =
         item.querySelector("minage")?.getAttribute("value") || "";
-
+      this.selectedGame.description = (item.querySelector("description")?.textContent || "") //.split("&#")[0].trim();
+        // .split("&#")[0]
+        .split("&mdash;description")[0]
+        .replace(/&lsquo;/g, '"')
+        .replace(/&rsquo;/g, '"')
+        .replace(/&#10;/g, " ")
+        .replace(/&ndash;/g, "-")
+        .replace(/&mdash;/g, "— ")
+        .replace(/&amp;/g, "&")
+        .replace(/&quot;/g, '"')
+        .replace(/&apos;/g, "'")
+        .trim();
       const gameData = {
         id: item.getAttribute("id"),
         thumbnail: item.querySelector("thumbnail")?.textContent || "",
