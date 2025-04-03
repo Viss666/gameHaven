@@ -486,12 +486,10 @@ app.delete("/templates/:templateId", async (req, res) => {
 
     // Handle potential casting errors specifically if validation didn't catch it
     if (error.name === "CastError" && error.path === "_id") {
-      return res
-        .status(400)
-        .json({
-          message: "Invalid template ID format provided.",
-          error: error.message,
-        });
+      return res.status(400).json({
+        message: "Invalid template ID format provided.",
+        error: error.message,
+      });
     }
 
     // General server error
