@@ -7,7 +7,7 @@ Vue.createApp({
         tcg: false,
         games: false,
       },
-      isAdmin: true,
+      isAdmin: false,
       adminPassword: "",
       mobileSubmenuOpen: null,
       showCheckInForm: false,
@@ -19,7 +19,6 @@ Vue.createApp({
       discordId: "",
       templates: null,
       events: [],
-
       newEvent: {
         eventTitle: "",
         eventGame: "",
@@ -30,6 +29,8 @@ Vue.createApp({
         eventDay: "",
         eventDate: "",
         eventTime: "",
+        maxPlayers: null, // Initialize with null or a default value
+        iconUrl: "", // Initialize with an empty string or default value
       },
       activeEvent: null,
       checkedInEvents: [],
@@ -38,9 +39,10 @@ Vue.createApp({
       pairingsChanged: false, // Flag to track changes
 
       modifiedFields: {},
+      maxPlayersOptions: [2, 4, 8, 16, 32, 40], // Example player count options
+      // selectedMaxPlayers: null, // Default to unlimited
       loading: false,
       boardgames: [],
-      loading: true,
       selectedGame: "All Games",
 
       error: null,
@@ -116,8 +118,56 @@ Vue.createApp({
           year: "2024",
         },
       ],
+      tcgs: [
+        {
+          name: "TCG General",
+          link: "https://gamehavenstgeorge.tcgplayerpro.com/",
+          imageUrl: "images/tcgplayerlogo.png",
+        },
+        {
+          name: "Magic: The Gathering",
+          link: "https://gamehavenstgeorge.tcgplayerpro.com/search/products?productLineName=Magic:+The+Gathering",
+          imageUrl: "images/mtg-logo.png",
+        },
+        {
+          name: "Pokemon",
+          link: "https://gamehavenstgeorge.tcgplayerpro.com/search/products?productLineName=Pokemon",
+          imageUrl: "images/pokemon.png",
+        },
+        {
+          name: "Flesh and Blood",
+          link: "https://gamehavenstgeorge.tcgplayerpro.com/search/products?productLineName=Flesh+and+Blood+TCG",
+          imageUrl: "images/fleshandblood.png",
+        },
+        {
+          name: "Star Wars: Unlimited",
+          link: "https://gamehavenstgeorge.tcgplayerpro.com/search/products?productLineName=Star+Wars:+Unlimited",
+          imageUrl: "images/starwarsunlimited.png",
+        },
+        {
+          name: "Cardfight Vanguard",
+          link: "https://gamehavenstgeorge.tcgplayerpro.com/search/products?productLineName=Cardfight+Vanguard",
+          imageUrl: "images/vanguard.png",
+        },
+      ],
+      iconSelection: [
+        {
+          name: "Dice",
+          imageUrl: "images/dice.png",
+        },
+        {
+          name: "Cards",
+          imageUrl: "images/cards.png",
+        },
+        {
+          name: "Board Game",
+          imageUrl: "images/boardgame.png",
+        },
+      ],
+      selectedIconUrl: "",
+
       showRentalDetail: false,
-      selectedGame: "All Games",
+      selectedGameEvent: "All Games",
     };
   },
   computed: {
@@ -139,9 +189,9 @@ Vue.createApp({
     filteredEvents() {
       let filtered = this.events;
 
-      if (this.selectedGame !== "All Games") {
+      if (this.selectedGameEvent !== "All Games") {
         filtered = filtered.filter(
-          (event) => event.eventGame === this.selectedGame
+          (event) => event.eventGame === this.selectedGameEvent
         );
       }
 
@@ -348,7 +398,7 @@ Vue.createApp({
     },
     clearInput() {
       this.searchInput = "";
-      this.selectedGame = "All Games";
+      this.selectedGameEvent = "All Games";
     },
     convertToStandardTime(militaryTime) {
       if (!militaryTime) return ""; // Handle null or empty time
@@ -440,7 +490,7 @@ Vue.createApp({
 
     // Explanatory
     navigatePage(page) {
-      if (page == "events") {
+      if (page == "events" || page == "home") {
         console.log(this.events);
 
         this.getEvents();
@@ -496,8 +546,13 @@ Vue.createApp({
       }
     },
 
+    redirectTo(link) {
+      window.open(link, "_blank");
+    },
+
     viewEvent(eventId) {
-      this.loading = true;
+      // this.loading = true;
+      this.startLoading();
       this.scrollToTop();
       // console.log("i am clicked");
       fetch(`https://gamehavenstg.com/events/${eventId}`)
@@ -536,6 +591,8 @@ Vue.createApp({
             eventTime: formattedTime,
             matches: eventFromServer.matches, // Matches array will be populated
             isPublished: eventFromServer.isPublished,
+            maxPlayers: eventFromServer.maxPlayers,
+            iconUrl: eventFromServer.iconUrl,
           };
           //console.log("activeEvent:", this.activeEvent); // Log the activeEvent
 
@@ -567,7 +624,8 @@ Vue.createApp({
         })
         .catch((error) => console.error("Error fetching single event:", error))
         .finally(() => {
-          this.loading = false;
+          // this.loading = false;
+          this.stopLoading();
           // console.log("viewed event: ", this.activeEvent.id);
         });
 
@@ -581,11 +639,13 @@ Vue.createApp({
     },
 
     submitCheckIn(eventId) {
-      this.loading = true; // Keep loading active
+      // this.loading = true; // Keep loading active
+      this.startLoading();
 
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
-        this.loading = false;
+        // this.loading = false;
+        this.stopLoading();
         return;
       }
       const now = new Date();
@@ -593,7 +653,8 @@ Vue.createApp({
 
       if (this.checkedInEvents.includes(eventId)) {
         alert("You are already checked in to this event.");
-        this.loading = false;
+        // this.loading = false;
+        this.stopLoading();
         return;
       }
 
@@ -655,11 +716,13 @@ Vue.createApp({
           .catch((error) => {
             console.error("Error during check-in:", error);
             alert("Failed to check in. Please try again.");
-            this.loading = false;
+            // this.loading = false;
+            this.stopLoading();
           });
       } else {
         alert("Please enter both your name and Discord ID.");
-        this.loading = false;
+        // this.loading = false;
+        this.stopLoading();
       }
     },
 
@@ -684,7 +747,8 @@ Vue.createApp({
     },
 
     submitCheckOut(eventId) {
-      this.loading = true;
+      // this.loading = true;
+      this.startLoading();
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
         return;
@@ -735,7 +799,8 @@ Vue.createApp({
           alert("Failed to check out. Please try again.");
         })
         .finally(() => {
-          this.loading = false;
+          // this.loading = false;
+          this.stopLoading();
 
           this.viewEvent(eventId);
         });
@@ -814,6 +879,7 @@ Vue.createApp({
       return fetch("https://gamehavenstg.com/events")
         .then((response) => response.json())
         .then((eventsFromServer) => {
+          console.log("events from server: ", eventsFromServer);
           this.events = eventsFromServer.map((event) => {
             let formattedDate = event.eventDate;
             let formattedTime = this.convertToStandardTime(event.eventTime);
@@ -841,6 +907,8 @@ Vue.createApp({
               eventTime: formattedTime,
               matches: event.matches,
               isPublished: event.isPublished,
+              maxPlayers: event.maxPlayers,
+              iconUrl: event.iconUrl,
             };
           });
 
@@ -852,7 +920,19 @@ Vue.createApp({
     },
 
     createEvent() {
-      this.activeEvent = null;
+      this.activeEvent = {
+        eventTitle: "",
+        eventGame: "",
+        eventType: "",
+        eventDescription: "",
+        eventOrganizer: "",
+        organizerContactInfo: "",
+        eventDay: "",
+        eventDate: "",
+        eventTime: "",
+        maxPlayers: null,
+        iconUrl: "",
+      };
       this.navigatePage("creation");
     },
 
@@ -872,7 +952,10 @@ Vue.createApp({
         eventTime: this.newEvent.eventTime,
         playerList: [],
         matches: [],
+        maxPlayers: this.newEvent.maxPlayers,
+        iconUrl: this.newEvent.iconUrl,
       };
+      console.log("New Event: ", newEvent);
 
       fetch("https://gamehavenstg.com/events", {
         method: "POST",
@@ -888,7 +971,7 @@ Vue.createApp({
           return response.json();
         })
         .then((createdEvent) => {
-          // console.log("Event created:", createdEvent);
+          console.log("Event created:", createdEvent);
 
           // Add the created event to the local events array
           this.events.push({
@@ -904,6 +987,8 @@ Vue.createApp({
             eventDay: createdEvent.eventDay,
             eventDate: createdEvent.eventDate,
             eventTime: createdEvent.eventTime,
+            maxPlayers: createdEvent.maxPlayers,
+            iconUrl: createdEvent.iconUrl,
           });
 
           // Reset form fields
@@ -917,6 +1002,8 @@ Vue.createApp({
             eventDay: "",
             eventDate: "",
             eventTime: "",
+            maxPlayers: 1,
+            iconUrl: "",
           };
         })
         .finally(() => {
@@ -927,7 +1014,9 @@ Vue.createApp({
     },
     editEvent(eventId) {
       this.currentPage = "edit";
+
       this.activeEvent = this.events.find((event) => event.id === eventId);
+      console.log("active event: ", this.activeEvent);
       // this.viewEvent(eventId);
     },
     deleteEvent(eventId) {
@@ -958,112 +1047,23 @@ Vue.createApp({
       //this.saveEvent(eventId);
     },
 
-    // saveEvent(eventId) {
-    //   // console.log("Modified fields:", this.modifiedFields);
-    //   this.scrollToTop();
-    //   this.loading = true;
-    //   console.log("Pairings changed:", this.pairingsChanged);
-    //   if (this.pairingsChanged) {
-    //     const matchesToSend = this.pairedPlayers.map((pair) => ({
-    //       player1: pair.player1 ? { _id: pair.player1._id } : null,
-    //       player2: pair.player2 ? { _id: pair.player2._id } : null,
-    //     }));
-    //     console.log("matches to send:", matchesToSend);
-    //     this.modifiedFields.matches = matchesToSend;
-    //   }
-
-    //   fetch(`https://gamehavenstg.com/events/${eventId}`, {
-    //     method: "PUT",
-    //     credentials: "include",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(this.modifiedFields),
-    //   })
-    //     .then((response) => {
-    //       if (!response.ok) {
-    //         throw new Error("Failed to update event");
-    //       }
-    //       console.log(response);
-    //       return response.json();
-    //     })
-    //     .then((data) => {
-    //       console.log("Event updated:", data);
-    //       // Update local event data
-    //       const index = this.events.findIndex((event) => event.id === eventId);
-    //       if (index !== -1) {
-    //         this.events[index] = {
-    //           ...this.events[index],
-    //           ...data,
-    //         };
-    //       }
-
-    //       this.activeEvent = {
-    //         ...this.activeEvent,
-    //         ...data,
-    //       };
-
-    //       this.modifiedFields = {}; // Reset modified fields
-    //       this.pairingsChanged = false; // Reset pairings changed flag
-    //       this.loading = false;
-    //     })
-    //     .catch((error) => console.error("Error updating event:", error))
-    //     .finally(() => {
-    //       this.loading = false; // Set loading to false after promise resolves
-    //       // this.getEvents();
-    //       // this.editEvent(this.activeEvent.id);
-    //     });
-    // },
-    // saveEvent(eventId) {
-    //   console.log("Save event paired players", this.pairedPlayers);
-    //   this.scrollToTop();
-    //   this.loading = true;
-    //   if (this.pairingsChanged) {
-    //     const matchesToSend = this.pairedPlayers.map((pair) => ({
-    //       player1: pair.player1 ? { _id: pair.player1._id } : null,
-    //       player2: pair.player2 ? { _id: pair.player2._id } : null,
-    //     }));
-    //     console.log("matches to send: ", matchesToSend);
-    //     this.modifiedFields.matches = matchesToSend;
-    //   }
-    //   fetch(`https://gamehavenstg.com/events/${eventId}`, {
-    //     method: "PUT",
-    //     credentials: "include",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(this.modifiedFields),
-    //   })
-    //     .then((response) => {
-    //       if (!response.ok) {
-    //         throw new Error("Failed to update event");
-    //       }
-    //       return response.json();
-    //     })
-    //     .then((data) => {
-    //       this.activeEvent = data;
-    //       const index = this.events.findIndex((event) => event.id === eventId);
-    //       if (index !== -1) {
-    //         this.events[index] = data;
-    //       }
-    //       this.modifiedFields = {};
-    //       this.pairingsChanged = false;
-    //     })
-    //     .catch((error) => console.error("Error updating event:", error))
-    //     .finally(() => {
-    //       this.loading = false;
-    //       // this.viewEvent(eventId);
-    //     });
-    // },
     saveEvent(eventId) {
-      console.log("Save event paired players", this.pairedPlayers);
       this.scrollToTop();
-      this.loading = true;
+      this.startLoading(); // Assuming you have a startLoading method
       if (this.pairingsChanged) {
         const matchesToSend = this.pairedPlayers.map((pair) => ({
-          player1: pair.player1 ? pair.player1 : null, // Send the entire player object
-          player2: pair.player2 ? pair.player2 : null, // Send the entire player object
+          player1: pair.player1 ? pair.player1 : null,
+          player2: pair.player2 ? pair.player2 : null,
         }));
-        console.log("matches to send: ", matchesToSend);
         this.modifiedFields.matches = matchesToSend;
       }
-      fetch(`https://gamehavenstg.com/events/${eventId}`, {
+
+      // Add iconUrl and maxPlayers to modifiedFields
+      this.modifiedFields.iconUrl = this.activeEvent.iconUrl;
+      this.modifiedFields.maxPlayers = this.activeEvent.maxPlayers;
+      console.log(this.activeEvent);
+
+      return fetch(`https://gamehavenstg.com/events/${eventId}`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -1076,6 +1076,12 @@ Vue.createApp({
           return response.json();
         })
         .then((data) => {
+          console.log("saved event: ", data);
+          data.playerList = data.playerList.map((player) => ({
+            player_name: player.playerName,
+            discord_id: player.playerDiscordID,
+            _id: player._id,
+          }));
           this.activeEvent = data;
           const index = this.events.findIndex((event) => event.id === eventId);
           if (index !== -1) {
@@ -1086,9 +1092,24 @@ Vue.createApp({
         })
         .catch((error) => console.error("Error updating event:", error))
         .finally(() => {
-          this.loading = false;
-          // this.viewEvent(eventId);
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              this.stopLoading(); // Assuming you have a stopLoading method
+              resolve();
+            }, 4000);
+          });
         });
+    },
+
+    //async and await
+
+    startLoading() {
+      this.loading = true;
+      document.body.style.overflow = "hidden"; // Lock scroll
+    },
+    stopLoading() {
+      this.loading = false;
+      document.body.style.overflow = ""; // Restore scroll
     },
   },
   created: function () {

@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const Player = model.Player; // Correct import
 const Event = model.Event;
+const Template = model.Template;
 
 var session = require("express-session");
 
@@ -84,6 +85,15 @@ app.get("/events", async function (request, response) {
     response.status(500).json({ message: "Internal Server Error" });
   }
 });
+app.get("/templates", async function (request, response) {
+  try {
+    const templates = await model.Template.find();
+    response.status(200).json(templates);
+  } catch (error) {
+    console.error("Error fetching templates: ", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
 
 //get singular event
 app.get("/events/:eventId", async function (request, response) {
@@ -117,7 +127,6 @@ app.post("/events", async function (request, response) {
     let newEvent = new model.Event({
       eventTitle: request.body.eventTitle,
       eventGame: request.body.eventGame,
-      eventType: request.body.eventType,
       eventDescription: request.body.eventDescription,
       eventOrganizer: request.body.eventOrganizer,
       organizerContactInfo: request.body.organizerContactInfo,
@@ -127,12 +136,32 @@ app.post("/events", async function (request, response) {
       playerList: request.body.playerList || [],
       matches: request.body.matches || [],
       isPublished: request.body.isPublished || false,
+      maxPlayers: request.body.maxPlayers, // Add maxPlayers
+      iconUrl: request.body.iconUrl, // Add iconUrl
     });
 
     let savedEvent = await newEvent.save();
     response.status(201).json(savedEvent);
   } catch (error) {
     console.error("Error creating event:", error);
+    response.status(500).json({ error: error.message });
+  }
+});
+//create a template
+app.post("/templates", async function (request, response) {
+  console.log("Received request body: ", request.body);
+  try {
+    let newTemplate = new model.Template({
+      eventTitle: request.body.eventTitle,
+      eventGame: request.body.eventGame,
+      eventDescription: request.body.eventDescription,
+      maxPlayers: request.body.maxPlayers,
+      iconUrl: request.body.iconUrl,
+    });
+    let savedTemplate = await newTemplate.save();
+    response.status(201).json(savedTemplate);
+  } catch (error) {
+    console.log("error creating template:", error);
     response.status(500).json({ error: error.message });
   }
 });
@@ -201,64 +230,6 @@ app.put("/events/:eventId/give-bye", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-// app.put("/events/:eventId/add-player", async (req, res) => {
-//   const eventId = req.params.eventId;
-//   const { playerName, playerDiscordID } = req.body;
-
-//   if (!playerName || !playerDiscordID) {
-//     return res
-//       .status(400)
-//       .json({ error: "Player name and Discord ID are required." });
-//   }
-
-//   try {
-//     const event = await model.Event.findById(eventId);
-//     if (!event) {
-//       return res.status(404).json({ error: "Event not found" });
-//     }
-
-//     // Check if the player is already in the list
-//     const existingPlayer = event.playerList.find(
-//       (player) => player.playerDiscordID === playerDiscordID
-//     );
-
-//     if (existingPlayer) {
-//       return res.status(400).json({ error: "Player is already checked in." });
-//     }
-
-//     // Add the player to the event
-//     event.playerList.push({ playerName, playerDiscordID });
-//     await event.save();
-
-//     res.status(200).json({ message: "Player successfully checked in.", event });
-//   } catch (error) {
-//     console.error("Error adding player:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-// app.put("/events/:eventId/add-player", async (req, res) => {
-//   try {
-//     const { playerName, playerDiscordID } = req.body;
-
-//     // Check if player exists, or create new
-//     let player = await Player.findOne({ playerDiscordID });
-//     if (!player) {
-//       player = await Player.create({ playerName, playerDiscordID });
-//     }
-
-//     // Update the event with player's ID
-//     const event = await Event.findByIdAndUpdate(
-//       req.params.eventId,
-//       { $push: { playerList: player._id } }, // Store only ObjectId
-//       { new: true }
-//     );
-
-//     res.json(event);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
 
 app.put("/events/:eventId/add-player", async (req, res) => {
   try {
@@ -366,196 +337,6 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
   }
 });
 
-// app.delete("/events/:eventId/remove-player", async (req, res) => {
-//   try {
-//     const eventId = req.params.eventId;
-//     const playerId = req.body.playerId; // Get playerId from request body
-
-//     if (!playerId) {
-//       return res.status(400).json({ error: "Player ID not provided" });
-//     }
-
-//     const event = await model.Event.findById(eventId);
-//     if (!event) {
-//       return res.status(404).json({ error: "Event not found" });
-//     }
-
-//     // Find the Player document using the playerId
-//     const player = await model.Player.findById(playerId);
-
-//     if (!player) {
-//       return res.status(404).json({ error: "Player not found" });
-//     }
-
-//     // Find the index of the player's ObjectId in the event's playerList
-//     const playerIndex = event.playerList.indexOf(player._id);
-
-//     if (playerIndex === -1) {
-//       return res
-//         .status(404)
-//         .json({ error: "Player not registered for this event" });
-//     }
-
-//     // Remove the player's ObjectId from the playerList
-//     event.playerList.splice(playerIndex, 1);
-//     await event.save();
-
-//     res.status(200).json({ message: "Player successfully removed from event" });
-//   } catch (error) {
-//     console.error("Error removing player:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
-// Update event information
-// Tested and functional (needs testing with matches)
-// app.put("/events/:eventId", async (req, res) => {
-//   try {
-//     const eventId = req.params.eventId;
-//     const { matches, ...otherFields } = req.body; // Separate matches from other fields
-//     // console.log("Received request body:", req.body);
-
-//     let matchIds = [];
-
-//     if (matches && matches.length > 0) {
-//       for (const matchData of matches) {
-//         // Create Match document
-//         const match = new model.Match({
-//           player1: matchData.player1._id, // Use player1's _id
-//           player2: matchData.player2._id, // Use player2's _id
-//         });
-//         await match.save();
-//         matchIds.push(match._id); // Push the match's _id
-//       }
-//     }
-
-//     // Update the event with other fields and matchIds
-//     const updatedEvent = await model.Event.findByIdAndUpdate(
-//       eventId,
-//       { ...otherFields, matches: matchIds }, // Save the matchIds array
-//       { new: true }
-//     );
-
-//     // ...
-//   } catch (error) {
-//     // ...
-//   }
-// });
-// app.put("/events/:eventId", async (req, res) => {
-//   try {
-//     const eventId = req.params.eventId;
-//     const { matches, ...otherFields } = req.body;
-
-//     let matchIds = [];
-
-//     if (matches && matches.length > 0) {
-//       for (const matchData of matches) {
-//         const match = new model.Match({
-//           player1: matchData.player1._id,
-//           player2: matchData.player2._id,
-//         });
-//         await match.save();
-//         matchIds.push(match._id);
-//       }
-//     }
-
-//     const updatedEvent = await model.Event.findByIdAndUpdate(
-//       eventId,
-//       { ...otherFields, matches: matchIds },
-//       { new: true }
-//     );
-
-//     if (!updatedEvent) {
-//       return res.status(404).json({ message: "Event not found" });
-//     }
-
-//     res.status(200).json(updatedEvent); // Send the updated event as JSON
-//   } catch (error) {
-//     console.error("Error updating event:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
-
-// app.put("/events/:eventId", async (req, res) => {
-//   try {
-//     const eventId = req.params.eventId;
-//     const { matches, ...otherFields } = req.body;
-
-//     let matchIds = [];
-
-//     if (matches && matches.length > 0) {
-//       for (const matchData of matches) {
-//         const match = new model.Match({
-//           player1: matchData.player1._id,
-//           player2: matchData.player2 ? matchData.player2._id : null,
-//           isBye: matchData.player2 === null, // Set isBye based on player2
-//         });
-//         await match.save();
-//         matchIds.push(match._id);
-//       }
-//     }
-
-//     const updatedEvent = await model.Event.findByIdAndUpdate(
-//       eventId,
-//       { ...otherFields, matches: matchIds },
-//       { new: true }
-//     );
-
-//     if (!updatedEvent) {
-//       return res.status(404).json({ message: "Event not found" });
-//     }
-
-//     res.status(200).json(updatedEvent);
-//   } catch (error) {
-//     console.error("Error updating event:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
-
-// app.put("/events/:eventId", async (req, res) => {
-//   try {
-//     const eventId = req.params.eventId;
-//     const { matches, ...otherFields } = req.body;
-
-//     let matchIds = [];
-
-//     if (matches && matches.length > 0) {
-//       for (const matchData of matches) {
-//         const match = new model.Match({
-//           player1: matchData.player1._id,
-//           player2: matchData.player2 ? matchData.player2._id : null,
-//           isBye: matchData.player2 === null,
-//         });
-//         await match.save();
-//         matchIds.push(match._id);
-//       }
-//     }
-
-//     let updatedEvent = await model.Event.findByIdAndUpdate(
-//       eventId,
-//       { ...otherFields, matches: matchIds },
-//       { new: true }
-//     );
-
-//     if (!updatedEvent) {
-//       return res.status(404).json({ message: "Event not found" });
-//     }
-
-//     // Populate player data for each match
-//     updatedEvent = await model.Event.findById(eventId).populate({
-//       path: "matches",
-//       populate: {
-//         path: "player1 player2", // Populate both player1 and player2
-//         model: "Player", // Assuming your player model is named "Player"
-//       },
-//     });
-
-//     res.status(200).json(updatedEvent);
-//   } catch (error) {
-//     console.error("Error updating event:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
 app.put("/events/:eventId", async (req, res) => {
   try {
     const eventId = req.params.eventId;
@@ -585,18 +366,138 @@ app.put("/events/:eventId", async (req, res) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    updatedEvent = await model.Event.findById(eventId).populate({
-      path: "matches",
-      populate: {
-        path: "player1 player2",
-        model: "Player",
-      },
-    });
+    // Populate playerList and matches
+    updatedEvent = await model.Event.findById(eventId)
+      .populate({
+        path: "playerList",
+        model: "Player", // Assuming your player model is named "Player"
+      })
+      .populate({
+        path: "matches",
+        populate: {
+          path: "player1 player2",
+          model: "Player",
+        },
+      });
 
     res.status(200).json(updatedEvent);
   } catch (error) {
     console.error("Error updating event:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//updated templates
+// Corrected function to update/edit templates
+app.put("/templates/:templateId", async (req, res) => {
+  console.log("Attempting to update template with ID:", req.params.templateId);
+  console.log("Update data:", req.body);
+
+  try {
+    const templateId = req.params.templateId;
+    const templateBody = req.body; // Contains fields like eventTitle, eventGame etc.
+
+    // --- Optional but Recommended: Validate ID format ---
+    if (!mongoose.Types.ObjectId.isValid(templateId)) {
+      return res.status(400).json({ message: "Invalid template ID format" });
+    }
+    // --- End Validation ---
+
+    // --- Use the CORRECT model: model.Template ---
+    // Also add options:
+    // { new: true } - returns the *updated* document instead of the original one
+    // { runValidators: true } - ensures your schema validations run on the update
+    let updatedTemplate = await model.Template.findByIdAndUpdate(
+      templateId,
+      templateBody,
+      { new: true, runValidators: true } // Added options
+    );
+    // --- End Correct Model Usage ---
+
+    if (!updatedTemplate) {
+      // If the ID format was valid but it wasn't found, send 404
+      return res
+        .status(404)
+        .json({ message: "Template not found with that ID" });
+    }
+
+    // Send back the updated template data
+    res.status(200).json(updatedTemplate);
+  } catch (error) {
+    console.error("Error updating template:", error);
+
+    // Handle potential casting errors specifically if validation didn't catch it
+    if (error.name === "CastError" && error.path === "_id") {
+      return res.status(400).json({
+        message: "Invalid template ID format provided.",
+        error: error.message,
+      });
+    }
+    // Handle validation errors from the schema
+    if (error.name === "ValidationError") {
+      return res
+        .status(400)
+        .json({ message: "Validation failed.", errors: error.errors });
+    }
+
+    // General server error
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+// Delete a specific template by ID
+app.delete("/templates/:templateId", async (req, res) => {
+  console.log("Attempting to delete template with ID:", req.params.templateId);
+
+  try {
+    const templateId = req.params.templateId;
+
+    // --- Optional but Recommended: Validate ID format ---
+    if (!mongoose.Types.ObjectId.isValid(templateId)) {
+      return res.status(400).json({ message: "Invalid template ID format" });
+    }
+    // --- End Validation ---
+
+    // --- Use the CORRECT model and findByIdAndDelete ---
+    // findByIdAndDelete finds the document by ID and removes it.
+    // It returns the document if found and deleted, or null if not found.
+    const deletedTemplate = await model.Template.findByIdAndDelete(templateId);
+    // --- End Correct Model Usage ---
+
+    if (!deletedTemplate) {
+      // If the ID format was valid but it wasn't found, send 404
+      return res
+        .status(404)
+        .json({ message: "Template not found with that ID" });
+    }
+
+    // Send a success confirmation message
+    // You can optionally include the data of the deleted template if needed
+    res.status(200).json({
+      message: "Template deleted successfully",
+      deletedTemplate: deletedTemplate, // Optional: send back the deleted data
+    });
+    // Alternatively, for a successful deletion, you could just send status 204 (No Content)
+    // res.status(204).send();
+  } catch (error) {
+    console.error("Error deleting template:", error);
+
+    // Handle potential casting errors specifically if validation didn't catch it
+    if (error.name === "CastError" && error.path === "_id") {
+      return res
+        .status(400)
+        .json({
+          message: "Invalid template ID format provided.",
+          error: error.message,
+        });
+    }
+
+    // General server error
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });
 
