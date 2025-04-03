@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const Player = model.Player; // Correct import
 const Event = model.Event;
+const Template = model.Template;
 
 var session = require("express-session");
 
@@ -387,25 +388,113 @@ app.put("/events/:eventId", async (req, res) => {
 });
 
 //updated templates
+// Corrected function to update/edit templates
 app.put("/templates/:templateId", async (req, res) => {
-  console.log("req.params:", req.params); // Add this line
+  console.log("Attempting to update template with ID:", req.params.templateId);
+  console.log("Update data:", req.body);
 
   try {
     const templateId = req.params.templateId;
-    const templateBody = req.body;
+    const templateBody = req.body; // Contains fields like eventTitle, eventGame etc.
 
-    let updatedTemplate = await model.Event.findByIdAndUpdate(
+    // --- Optional but Recommended: Validate ID format ---
+    if (!mongoose.Types.ObjectId.isValid(templateId)) {
+      return res.status(400).json({ message: "Invalid template ID format" });
+    }
+    // --- End Validation ---
+
+    // --- Use the CORRECT model: model.Template ---
+    // Also add options:
+    // { new: true } - returns the *updated* document instead of the original one
+    // { runValidators: true } - ensures your schema validations run on the update
+    let updatedTemplate = await model.Template.findByIdAndUpdate(
       templateId,
-      templateBody
+      templateBody,
+      { new: true, runValidators: true } // Added options
     );
+    // --- End Correct Model Usage ---
 
     if (!updatedTemplate) {
-      return res.status(404).json({ message: "Template not found" });
+      // If the ID format was valid but it wasn't found, send 404
+      return res
+        .status(404)
+        .json({ message: "Template not found with that ID" });
     }
 
+    // Send back the updated template data
     res.status(200).json(updatedTemplate);
   } catch (error) {
     console.error("Error updating template:", error);
+
+    // Handle potential casting errors specifically if validation didn't catch it
+    if (error.name === "CastError" && error.path === "_id") {
+      return res.status(400).json({
+        message: "Invalid template ID format provided.",
+        error: error.message,
+      });
+    }
+    // Handle validation errors from the schema
+    if (error.name === "ValidationError") {
+      return res
+        .status(400)
+        .json({ message: "Validation failed.", errors: error.errors });
+    }
+
+    // General server error
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+// Delete a specific template by ID
+app.delete("/templates/:templateId", async (req, res) => {
+  console.log("Attempting to delete template with ID:", req.params.templateId);
+
+  try {
+    const templateId = req.params.templateId;
+
+    // --- Optional but Recommended: Validate ID format ---
+    if (!mongoose.Types.ObjectId.isValid(templateId)) {
+      return res.status(400).json({ message: "Invalid template ID format" });
+    }
+    // --- End Validation ---
+
+    // --- Use the CORRECT model and findByIdAndDelete ---
+    // findByIdAndDelete finds the document by ID and removes it.
+    // It returns the document if found and deleted, or null if not found.
+    const deletedTemplate = await model.Template.findByIdAndDelete(templateId);
+    // --- End Correct Model Usage ---
+
+    if (!deletedTemplate) {
+      // If the ID format was valid but it wasn't found, send 404
+      return res
+        .status(404)
+        .json({ message: "Template not found with that ID" });
+    }
+
+    // Send a success confirmation message
+    // You can optionally include the data of the deleted template if needed
+    res.status(200).json({
+      message: "Template deleted successfully",
+      deletedTemplate: deletedTemplate, // Optional: send back the deleted data
+    });
+    // Alternatively, for a successful deletion, you could just send status 204 (No Content)
+    // res.status(204).send();
+  } catch (error) {
+    console.error("Error deleting template:", error);
+
+    // Handle potential casting errors specifically if validation didn't catch it
+    if (error.name === "CastError" && error.path === "_id") {
+      return res
+        .status(400)
+        .json({
+          message: "Invalid template ID format provided.",
+          error: error.message,
+        });
+    }
+
+    // General server error
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
