@@ -45,6 +45,9 @@ Vue.createApp({
       boardgames: [],
       selectedGame: "All Games",
 
+      templates: [],
+      activeTemplate: [],
+
       error: null,
       gamesToBuy: [
         {
@@ -298,7 +301,9 @@ Vue.createApp({
         item.querySelector("maxplaytime")?.getAttribute("value") || "";
       this.selectedGame.minAge =
         item.querySelector("minage")?.getAttribute("value") || "";
-      this.selectedGame.description = (item.querySelector("description")?.textContent || "") //.split("&#")[0].trim();
+      this.selectedGame.description = (
+        item.querySelector("description")?.textContent || ""
+      ) //.split("&#")[0].trim();
         // .split("&#")[0]
         .split("&mdash;description")[0]
         .replace(/&lsquo;/g, '"')
@@ -930,6 +935,59 @@ Vue.createApp({
         .catch((error) => console.error("Error fetching events:", error));
     },
 
+    getTemplates() {
+      // Use the appropriate URL for your templates endpoint
+      const templatesUrl = "https://gamehavenstg.com/templates"; // Or your local development URL e.g., http://localhost:8080/templates
+
+      console.log("Fetching templates from:", templatesUrl);
+
+      return fetch(templatesUrl)
+        .then((response) => {
+          // Check if the request was successful (status code 200-299)
+          if (!response.ok) {
+            // Throw an error to be caught by the .catch block
+            throw new Error(
+              `HTTP error fetching templates! status: ${response.status}`
+            );
+          }
+          return response.json(); // Parse the response body as JSON
+        })
+        .then((templatesFromServer) => {
+          console.log("Raw templates from server: ", templatesFromServer);
+
+          // Assuming your templates have fields: _id, eventTitle, eventGame, eventDescription, iconUrl, maxPlayers
+          // Map the data from the server to a format suitable for your front-end state
+          this.templates = templatesFromServer.map((template) => {
+            // No complex formatting needed here like dates/times for templates based on schema
+            return {
+              id: template._id, // Map the database ID
+              eventTitle: template.eventTitle,
+              eventGame: template.eventGame,
+              eventDescription: template.eventDescription,
+              iconUrl: template.iconUrl,
+              maxPlayers: template.maxPlayers,
+              // Add any other fields if your template schema includes them
+            };
+          });
+
+          console.log(
+            "Processed templates stored in this.templates:",
+            this.templates
+          );
+
+          // Optional: If you need to perform actions after templates are loaded,
+          // similar to updateCheckedInEvents, you can add them here.
+          // For example, using Vue's nextTick if in a Vue component:
+          // this.$nextTick(() => {
+          //   this.initializeTemplateSelector(); // Or whatever action is needed
+          // });
+        })
+        .catch((error) => {
+          console.error("Error fetching templates:", error);
+          // Consider setting an error state for the UI
+          // this.templateFetchError = "Could not load templates. Please try again later.";
+        });
+    },
     createEvent() {
       this.activeEvent = {
         eventTitle: "",
@@ -945,8 +1003,155 @@ Vue.createApp({
         iconUrl: "",
       };
       this.navigatePage("creation");
+      console.log(this.activeTemplate);
+    },
+    // loadTemplate(event) {
+    //   console.log("hello");
+    //   console.log("event target find", event.target.value);
+    //   const selectedTemplateId = event.target.value;
+    //   console.log("selected template id", selectedTemplateId);
+
+    //   const selectedTemplate = this.templates.find(
+    //     (template) => template._id === selectedTemplateId
+    //   );
+
+    //   console.log(selectedTemplate);
+
+    //   if (selectedTemplate) {
+    //     // Populate activeEvent with the desired fields
+    //     this.newEvent = {
+    //       eventTitle: selectedTemplate.eventTitle,
+    //       eventGame: selectedTemplate.eventGame,
+    //       eventDescription: selectedTemplate.eventDescription,
+    //       iconUrl: selectedTemplate.iconUrl,
+    //       maxPlayers: selectedTemplate.maxPlayers,
+    //       eventDay: selectedTemplate.eventDay,
+    //       eventTime: selectedTemplate.eventTime,
+    //     };
+    //   } else {
+    //     // Reset activeEvent if no template is found
+    //     this.newEvent = {
+    //       eventTitle: "",
+    //       eventGame: "",
+    //       eventDescription: "",
+    //       iconUrl: "",
+    //       maxPlayers: null,
+    //       eventDay: "",
+    //       eventTime: "",
+    //     };
+    //   }
+    // },
+
+    loadTemplate(selectedTemplateId) {
+      // console.log("hello");
+      // console.log("selected template id", selectedTemplateId);
+
+      const selectedTemplate = this.templates.find(
+        (template) => template._id === selectedTemplateId
+      );
+
+      console.log(selectedTemplate);
+
+      if (selectedTemplate) {
+        this.newEvent = {
+          eventTitle: selectedTemplate.eventTitle,
+          eventGame: selectedTemplate.eventGame,
+          eventDescription: selectedTemplate.eventDescription,
+          iconUrl: selectedTemplate.iconUrl,
+          maxPlayers: selectedTemplate.maxPlayers,
+          eventDay: selectedTemplate.eventDay,
+          eventTime: selectedTemplate.eventTime,
+        };
+        this.activeTemplate = selectedTemplate; // Store the entire template object
+
+        console.log("active template", this.activeTemplate);
+        console.log("template id", activeTemplate._id);
+      } else {
+        this.newEvent = {
+          eventTitle: "",
+          eventGame: "",
+          eventDescription: "",
+          iconUrl: "",
+          maxPlayers: null,
+          eventDay: "",
+          eventTime: "",
+        };
+        // this.activeTemplate = null; // Reset activeTemplate if no template is found
+      }
     },
 
+    async createTemplate() {
+      this.newTemplate = {
+        eventTitle: this.newEvent.eventTitle,
+        eventGame: this.newEvent.eventGame,
+        eventDescription: this.newEvent.eventDescription,
+        iconUrl: this.newEvent.iconUrl,
+        maxPlayers: this.newEvent.maxPlayers,
+        eventDay: this.newEvent.eventDay,
+        eventTime: this.newEvent.eventTime,
+      };
+      try {
+        const response = await fetch("https://gamehavenstg.com/templates", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.newTemplate),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        this.newEvent = {
+          eventTitle: "",
+          eventGame: "",
+          eventDescription: "",
+          iconUrl: "",
+          maxPlayers: null,
+          eventDay: "",
+          eventTime: "",
+        };
+        this.getTemplates();
+      } catch (error) {
+        console.error("Error creating template:", error);
+      }
+    },
+    deleteTemplate() {
+      console.log("active template before check:", this.activeTemplate);
+      // if (this.activeTemplate) {
+      console.log("active template: ", this.activeTemplate.id);
+      if (confirm("Are you sure you want to delete this template?")) {
+        fetch(`https://gamehavenstg.com/templates/${this.activeTemplate.id}`, {
+          method: "DELETE",
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json(); // Or response.text(), depending on your API response
+          })
+          .then((data) => {
+            this.getTemplates(); // Refresh the template list
+            this.activeTemplate = null; // Reset activeTemplate after deletion
+            this.newEvent = {
+              eventTitle: "",
+              eventGame: "",
+              eventDescription: "",
+              iconUrl: "",
+              maxPlayers: null,
+              eventDay: "",
+              eventTime: "",
+            };
+          })
+          .catch((error) => {
+            console.error("Error deleting template:", error);
+          });
+      }
+      // } else {
+      //   alert("Please select a template to delete.");
+      // }
+    },
     pushEvent() {
       // const formatEventDate = this.newEvent.eventDate;
       // formateeventDate.toISOString().split("T")[0];
@@ -1125,6 +1330,7 @@ Vue.createApp({
   },
   created: function () {
     this.getEvents();
+    this.getTemplates();
     if (this.events.length > 0) {
       this.activeEvent = this.events[0];
     }
