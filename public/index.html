@@ -560,21 +560,23 @@
                     {{ n }}
                   </option>
                 </select>
-                <p v-if="newEvent.maxPlayers === null">Maximum players: Unlimited</p>
-                <p v-else-if="newEvent.maxPlayers">Maximum players: {{ activeEvent.maxPlayers }}</p>
+                <!-- <p v-if="newEvent.maxPlayers === null">Maximum players: Unlimited</p> -->
+                <!-- <p v-else-if="newEvent.maxPlayers">Maximum players: {{ activeEvent.maxPlayers }}</p> -->
               </div>
-              <button @click="createTemplate()"class="btn">Create as template</button>
-              <button class="btn">Save template changes</button>
-              <button @click="deleteTemplate()" class="btn">Delete template</button>
+
               <div>
                 <label for="templates">Select a Template:</label>
                 <select id="templates" name="templates" @change="loadTemplate($event.target.value)">
                   <option value=""  selected>Select a template...</option>
                   <option v-for="template in templates" :key="template.id" :value="template.id">
                     {{ template.eventTitle }}
-                    {{ template.id }}
                   </option>
                 </select>
+                <div class="template-buttons">
+                <button @click="createTemplate()"class="btn">Create as template</button>
+                <button @click="editTemplate()"class="btn">Save template changes</button>
+                <button @click="deleteTemplate()" class="btn">Delete template</button>
+              </div>
               </div>
               
             </div>

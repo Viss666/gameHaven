@@ -1080,6 +1080,46 @@ Vue.createApp({
       }
     },
 
+    editTemplate() {
+      if (!this.activeTemplate) {
+        alert("Please select a template to edit.");
+        return;
+      }
+
+      const updatedTemplate = {
+        eventTitle: this.newEvent.eventTitle,
+        eventGame: this.newEvent.eventGame,
+        eventDescription: this.newEvent.eventDescription,
+        iconUrl: this.newEvent.iconUrl,
+        maxPlayers: this.newEvent.maxPlayers,
+        eventDay: this.newEvent.eventDay,
+        eventTime: this.newEvent.eventTime,
+      };
+
+      fetch(`https://gamehavenstg.com/templates/${this.activeTemplate.id}`, {
+        method: "PUT", // Or PATCH, depending on your API
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTemplate),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json(); // Or response.text(), depending on your API
+        })
+        .then((data) => {
+          console.log("Template updated:", data);
+          this.getTemplates(); // Refresh the template list
+          // Optionally provide user feedback (e.g., a success message)
+        })
+        .catch((error) => {
+          console.error("Error updating template:", error);
+          // Optionally display an error message to the user
+        });
+    },
+    
     async createTemplate() {
       this.newTemplate = {
         eventTitle: this.newEvent.eventTitle,

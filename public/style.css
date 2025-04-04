@@ -270,6 +270,10 @@ nav ul li a.active {
   align-items: center;
 }
 
+.template-buttons button {
+  margin: 5px;
+}
+
 .card-list-div li img {
   width: 60%;
   height: auto;
@@ -428,7 +432,7 @@ h4 {
   max-height: 200;
 }
 
-#detail-description-div{
+#detail-description-div {
   width: 100%;
   height: 30%;
 }
@@ -1526,7 +1530,7 @@ label {
     width: 100%;
   }
 
-  .rental-games-section{
+  .rental-games-section {
     justify-content: center;
     gap: 10px;
   }
