@@ -568,10 +568,11 @@
               <button @click="deleteTemplate()" class="btn">Delete template</button>
               <div>
                 <label for="templates">Select a Template:</label>
-                <select id="templates" name="templates" @change="loadTemplate($template) " >
-                  <option value="" disabled selected>Select a template...</option>
-                  <option v-for="template in templates" :key="template._id" :value="template._id">
+                <select id="templates" name="templates" @change="loadTemplate($event.target.value)">
+                  <option value=""  selected>Select a template...</option>
+                  <option v-for="template in templates" :key="template.id" :value="template.id">
                     {{ template.eventTitle }}
+                    {{ template.id }}
                   </option>
                 </select>
               </div>

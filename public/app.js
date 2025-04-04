@@ -1047,7 +1047,7 @@ Vue.createApp({
       // console.log("selected template id", selectedTemplateId);
 
       const selectedTemplate = this.templates.find(
-        (template) => template._id === selectedTemplateId
+        (template) => template.id === selectedTemplateId
       );
 
       console.log(selectedTemplate);
