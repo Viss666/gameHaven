@@ -4,6 +4,8 @@ const model = require("./model");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const path = require("path");
+
 const Player = model.Player; // Correct import
 const Event = model.Event;
 const Template = model.Template;
@@ -35,10 +37,13 @@ app.use(
     allowedHeaders: "Content-Type,Authorization",
   })
 );
-app.use(express.static("public"));
+// app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+
+const publicDirectoryPath = path.join(__dirname, "/public"); // Adjust path as needed
+app.use(express.static(publicDirectoryPath));
 
 app.use(
   session({
@@ -597,6 +602,10 @@ app.delete("/events/:eventId/unmatch", async (req, res) => {
     console.error("Error unmatching player:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(publicDirectoryPath, "index.html")); // Assuming your main HTML file is index.html
 });
 
 // Example Event
