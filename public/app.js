@@ -603,7 +603,7 @@ Vue.createApp({
       this.startLoading();
       this.scrollToTop();
       // console.log("i am clicked");
-      fetch(`https://gamehavenstg.com/api/events/${eventId}`)
+      fetch(`https://gamehavenstg.com/events/${eventId}`)
         .then((response) => response.json())
         .then((eventFromServer) => {
           let formattedDate = eventFromServer.eventDate;
