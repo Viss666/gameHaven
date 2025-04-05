@@ -156,8 +156,9 @@ app.post("/events", async function (request, response) {
       playerList: request.body.playerList || [],
       matches: request.body.matches || [],
       isPublished: request.body.isPublished || false,
-      maxPlayers: request.body.maxPlayers, // Add maxPlayers
-      iconUrl: request.body.iconUrl, // Add iconUrl
+      maxPlayers: request.body.maxPlayers,
+      iconUrl: request.body.iconUrl,
+      eventFee: request.body.eventFee,
     });
 
     let savedEvent = await newEvent.save();
@@ -177,6 +178,7 @@ app.post("/templates", async function (request, response) {
       eventDescription: request.body.eventDescription,
       maxPlayers: request.body.maxPlayers,
       iconUrl: request.body.iconUrl,
+      eventFee: request.body.eventFee,
     });
     let savedTemplate = await newTemplate.save();
     response.status(201).json(savedTemplate);

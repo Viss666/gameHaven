@@ -39,7 +39,11 @@ Vue.createApp({
       pairingsChanged: false, // Flag to track changes
 
       modifiedFields: {},
-      maxPlayersOptions: [2, 4, 8, 16, 32, 40], // Example player count options
+      maxPlayersOptions: [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+        39, 40,
+      ], // Example player count options
       // selectedMaxPlayers: null, // Default to unlimited
       loading: false,
       boardgames: [],
@@ -1275,6 +1279,13 @@ Vue.createApp({
       // const formatEventDate = this.newEvent.eventDate;
       // formateeventDate.toISOString().split("T")[0];
 
+      Cookies.set("organizerName", this.newEvent.eventOrganizer, {
+        expires: 999,
+      });
+      Cookies.set("organizerContact", this.newEvent.organizerContactInfo, {
+        expires: 999,
+      });
+
       const newEvent = {
         eventTitle: this.newEvent.eventTitle,
         eventGame: this.newEvent.eventGame,
@@ -1455,6 +1466,9 @@ Vue.createApp({
     }
     this.firstName = this.getCookie("firstName") || "";
     this.discordId = this.getCookie("discordId") || "";
+    this.newEvent.eventOrganizer = this.getCookie("organizerName") || "";
+    this.newEvent.organizerContactInfo =
+      this.getCookie("organizerContact") || "";
     this.checkedInEvents = JSON.parse(
       this.getCookie("checkedInEvents") || "[]"
     );

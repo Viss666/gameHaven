@@ -58,6 +58,7 @@ const templateSchema = new mongoose.Schema(
       default: null, // Use null to represent "no maximum"
       nullable: true, //Added to explicitly say it is nullable
     },
+    eventFee: { type: String },
   },
   { _id: true }
 );
@@ -98,6 +99,9 @@ const eventSchema = new mongoose.Schema(
       // Added iconUrl field
       type: String,
       required: true, // Optional: Make it required if needed
+    },
+    eventFee: {
+      type: String,
     },
   },
   { _id: true }
