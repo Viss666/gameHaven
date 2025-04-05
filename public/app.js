@@ -538,12 +538,21 @@ Vue.createApp({
 
     // Explanatory
     navigatePage(page) {
-      if (page == "events" || page == "home") {
-        console.log(this.events);
-
-        this.getEvents();
+      if (page === "events" || page === "home") {
+        this.getEvents(); // Fetch events when navigating to these pages
+        this.activeEvent = null; // Clear the active event when leaving the viewEvent page
+        if (page === "events") {
+          // Optionally, push the / or /events URL to history if not already there
+          if (
+            window.location.pathname !== "/" &&
+            window.location.pathname !== "/events"
+          ) {
+            history.pushState(null, "Game Haven STG Events", "/"); // Or '/events'
+          }
+        }
       }
-      if (page == "rentals") {
+
+      if (page === "rentals") {
         //this.fetchBoardGameInfo();
       }
       this.currentPage = page;
