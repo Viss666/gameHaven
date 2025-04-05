@@ -117,7 +117,7 @@ app.get("/templates", async function (request, response) {
 //     response.status(500).json({ message: "Internal Server Error" });
 //   }
 // });
-app.get("/events/:eventId", async function (request, response) {
+app.get("/api/events/:eventId", async function (request, response) {
   // Consider prefixing API routes
   try {
     const event = await model.Event.findById(request.params.eventId)
