@@ -216,28 +216,28 @@ Vue.createApp({
     mainContent.addEventListener("click", this.closeMenuOnClickOutside); //Desktop
     this.fetchBoardGames();
     this.checkInitialUrl(); // Call this method on mount
-    window.addEventListener("popstate", (event) => {
-      const pathSegments = window.location.pathname.split("/");
-      // Check if the URL matches the event detail pattern
-      if (pathSegments[1] === "events" && pathSegments[2]) {
-        const eventIdFromUrl = pathSegments[2];
-        if (event.state && event.state.eventId === eventIdFromUrl) {
-          this.viewEvent(eventIdFromUrl);
-          this.currentPage = "viewEvent";
-        } else if (!event.state || event.state.eventId !== eventIdFromUrl) {
-          // Handle cases where the popstate URL looks like an event but the state is missing or different
-          this.viewEvent(eventIdFromUrl);
-          this.currentPage = "viewEvent";
-        }
-      } else {
-        // If the URL doesn't look like an event detail page,
-        // assume it's a regular navigation and reset event-specific state
-        this.currentPage = "home"; // Or your default view
-        this.activeEvent = null;
-        // You might not need to reload events here, depending on your app flow
-        // this.getEvents();
-      }
-    });
+    // window.addEventListener("popstate", (event) => {
+    //   const pathSegments = window.location.pathname.split("/");
+    //   // Check if the URL matches the event detail pattern
+    //   if (pathSegments[1] === "events" && pathSegments[2]) {
+    //     const eventIdFromUrl = pathSegments[2];
+    //     if (event.state && event.state.eventId === eventIdFromUrl) {
+    //       this.viewEvent(eventIdFromUrl);
+    //       this.currentPage = "viewEvent";
+    //     } else if (!event.state || event.state.eventId !== eventIdFromUrl) {
+    //       // Handle cases where the popstate URL looks like an event but the state is missing or different
+    //       this.viewEvent(eventIdFromUrl);
+    //       this.currentPage = "viewEvent";
+    //     }
+    //   } else {
+    //     // If the URL doesn't look like an event detail page,
+    //     // assume it's a regular navigation and reset event-specific state
+    //     this.currentPage = "home"; // Or your default view
+    //     this.activeEvent = null;
+    //     // You might not need to reload events here, depending on your app flow
+    //     // this.getEvents();
+    //   }
+    // });
 
     console.log(this.events);
   },
