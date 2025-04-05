@@ -343,8 +343,8 @@
                     Current Player Count: {{ event.playerList.length}}/ {{
                     event.maxPlayers }}
                   </div>
-                  <div class="event-fee" v-if="event.eventFee">
-                    ${{ event.eventFee ? `$${event.eventFee}` : '' }}
+                  <div class="event-fee">
+                    ${{ event.eventFee ? `$${event.eventFee}` : 'FREE ENTRY' }}
                   </div>
                 </div>
               </div>
