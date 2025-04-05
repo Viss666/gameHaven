@@ -343,6 +343,9 @@
                     Current Player Count: {{ event.playerList.length}}/ {{
                     event.maxPlayers }}
                   </div>
+                  <div class="event-fee" v-if="event.eventFee">
+                    ${{ event.eventFee ? `$${event.eventFee}` : '' }}
+                  </div>
                 </div>
               </div>
               <div class="event-buttons1">
