@@ -858,6 +858,7 @@ h4 {
   width: 100%;
   display: flex;
   justify-content: center;
+  gap: 5px;
 }
 .svbtn {
   background-color: #37c8fc;
