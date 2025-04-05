@@ -215,6 +215,30 @@ Vue.createApp({
     mainContent.addEventListener("touchstart", this.closeMenuOnClickOutside); // Mobile
     mainContent.addEventListener("click", this.closeMenuOnClickOutside); //Desktop
     this.fetchBoardGames();
+    this.checkInitialUrl(); // Call this method on mount
+    window.addEventListener("popstate", (event) => {
+      const pathSegments = window.location.pathname.split("/");
+      // Check if the URL matches the event detail pattern
+      if (pathSegments[1] === "events" && pathSegments[2]) {
+        const eventIdFromUrl = pathSegments[2];
+        if (event.state && event.state.eventId === eventIdFromUrl) {
+          this.viewEvent(eventIdFromUrl);
+          this.currentPage = "viewEvent";
+        } else if (!event.state || event.state.eventId !== eventIdFromUrl) {
+          // Handle cases where the popstate URL looks like an event but the state is missing or different
+          this.viewEvent(eventIdFromUrl);
+          this.currentPage = "viewEvent";
+        }
+      } else {
+        // If the URL doesn't look like an event detail page,
+        // assume it's a regular navigation and reset event-specific state
+        this.currentPage = "home"; // Or your default view
+        this.activeEvent = null;
+        // You might not need to reload events here, depending on your app flow
+        // this.getEvents();
+      }
+    });
+
     console.log(this.events);
   },
   beforeUnmount() {
@@ -446,6 +470,14 @@ Vue.createApp({
       this.activeEvent[field] = value;
       this.modifiedFields[field] = value;
     },
+    checkInitialUrl() {
+      const pathSegments = window.location.pathname.split("/");
+      if (pathSegments[1] === "events" && pathSegments[2]) {
+        const eventIdFromUrl = pathSegments[2];
+        this.viewEvent(eventIdFromUrl);
+        this.currentPage = "viewEvent"; // Set the current page
+      }
+    },
 
     togglePlayerSelection(playerId) {
       const playerIndex = this.selectedPlayers.indexOf(playerId);
@@ -585,6 +617,9 @@ Vue.createApp({
           } else {
             formattedDate = ""; // Or some other default value
           }
+
+          const eventUrl = `https://gamehavenstg.com/events/${eventFromServer._id}`; // Generate the URL
+
           // console.log("Fetched Event:", eventFromServer); // Debugging log
 
           // Normalize the event data (if needed)
@@ -609,6 +644,7 @@ Vue.createApp({
             isPublished: eventFromServer.isPublished,
             maxPlayers: eventFromServer.maxPlayers,
             iconUrl: eventFromServer.iconUrl,
+            eventUrl: eventUrl,
           };
           //console.log("activeEvent:", this.activeEvent); // Log the activeEvent
 
@@ -634,6 +670,12 @@ Vue.createApp({
           }
 
           this.currentPage = "viewEvent";
+          history.pushState(
+            { eventId: eventFromServer._id },
+            eventFromServer.eventTitle,
+            `/events/${eventFromServer._id}`
+          );
+
           // console.log("viewed event: ", this.activeEvent.id);
 
           //Place any code here that enables the check out button.
@@ -890,7 +932,31 @@ Vue.createApp({
         })
         .catch((error) => console.error("Error removing player:", error));
     },
+    copyToClipboard(text) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          alert("Event link copied to clipboard!");
+        })
+        .catch((err) => {
+          console.error("Failed to copy text: ", err);
+        });
+    },
+    copyActiveEventLink() {
+      if (this.$refs.eventUrlInput) {
+        this.$refs.eventUrlInput.select();
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+        alert("Event link copied to clipboard!");
+      } else {
+        this.copyToClipboard(this.activeEvent.eventUrl);
+      }
+    },
 
+    // copyActiveEventLink() {
+    //   console.log(this.activeEvent.eventUrl);
+    //   this.copyToClipboard(this.activeEvent.eventUrl);
+    // },
     getEvents() {
       return fetch("https://gamehavenstg.com/events")
         .then((response) => response.json())
@@ -903,6 +969,8 @@ Vue.createApp({
             if (formattedDate) {
               formattedDate = formattedDate.split("T")[0]; // Split at "T" and take the date part
             }
+
+            const eventUrl = `https://gamehavenstg.com/events/${event._id}`; // Generate the URL
 
             return {
               id: event._id,
@@ -925,11 +993,13 @@ Vue.createApp({
               isPublished: event.isPublished,
               maxPlayers: event.maxPlayers,
               iconUrl: event.iconUrl,
+              eventUrl: eventUrl,
             };
           });
 
           this.$nextTick(() => {
             this.updateCheckedInEvents();
+            console.log(this.events);
           });
         })
         .catch((error) => console.error("Error fetching events:", error));
@@ -1119,7 +1189,7 @@ Vue.createApp({
           // Optionally display an error message to the user
         });
     },
-    
+
     async createTemplate() {
       this.newTemplate = {
         eventTitle: this.newEvent.eventTitle,

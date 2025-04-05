@@ -354,6 +354,8 @@
                 >
                   Event Info &amp; Sign-Up
                 </button>
+                <button @click="copyToClipboard(event.eventUrl)">Copy Event Link</button>
+
               </div>
             </div>
           </div>
@@ -397,6 +399,8 @@
                 {{activeEvent.playerList.length}} / {{ activeEvent.maxPlayers}}
               </p>
               <p class="event-description">{{activeEvent.eventDescription}}</p>
+              <button @click="copyActiveEventLink()">Copy Link</button>
+
             </div>
             <div class="players-on-page">
               <div
