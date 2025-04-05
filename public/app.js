@@ -29,8 +29,9 @@ Vue.createApp({
         eventDay: "",
         eventDate: "",
         eventTime: "",
-        maxPlayers: null, // Initialize with null or a default value
-        iconUrl: "", // Initialize with an empty string or default value
+        maxPlayers: null,
+        iconUrl: "",
+        eventFee: "",
       },
       activeEvent: null,
       checkedInEvents: [],
@@ -1049,6 +1050,7 @@ Vue.createApp({
               eventDescription: template.eventDescription,
               iconUrl: template.iconUrl,
               maxPlayers: template.maxPlayers,
+              eventFee: template.eventFee,
               // Add any other fields if your template schema includes them
             };
           });
@@ -1144,6 +1146,7 @@ Vue.createApp({
           maxPlayers: selectedTemplate.maxPlayers,
           eventDay: selectedTemplate.eventDay,
           eventTime: selectedTemplate.eventTime,
+          eventFee: selectedTemplate.eventFee,
         };
         this.activeTemplate = selectedTemplate; // Store the entire template object
 
@@ -1158,6 +1161,7 @@ Vue.createApp({
           maxPlayers: null,
           eventDay: "",
           eventTime: "",
+          eventFee: "",
         };
         // this.activeTemplate = null; // Reset activeTemplate if no template is found
       }
@@ -1177,6 +1181,7 @@ Vue.createApp({
         maxPlayers: this.newEvent.maxPlayers,
         eventDay: this.newEvent.eventDay,
         eventTime: this.newEvent.eventTime,
+        eventFee: this.newEvent.eventFee,
       };
 
       fetch(`https://gamehavenstg.com/templates/${this.activeTemplate.id}`, {
@@ -1212,6 +1217,7 @@ Vue.createApp({
         maxPlayers: this.newEvent.maxPlayers,
         eventDay: this.newEvent.eventDay,
         eventTime: this.newEvent.eventTime,
+        eventFee: this.newEvent.eventFee,
       };
       try {
         const response = await fetch("https://gamehavenstg.com/templates", {
@@ -1234,6 +1240,7 @@ Vue.createApp({
           maxPlayers: null,
           eventDay: "",
           eventTime: "",
+          eventFee: "",
         };
         this.getTemplates();
       } catch (error) {
@@ -1265,6 +1272,7 @@ Vue.createApp({
               maxPlayers: null,
               eventDay: "",
               eventTime: "",
+              eventFee: "",
             };
           })
           .catch((error) => {
@@ -1300,6 +1308,7 @@ Vue.createApp({
         matches: [],
         maxPlayers: this.newEvent.maxPlayers,
         iconUrl: this.newEvent.iconUrl,
+        eventFee: this.newEvent.eventFee,
       };
       console.log("New Event: ", newEvent);
 
@@ -1335,6 +1344,7 @@ Vue.createApp({
             eventTime: createdEvent.eventTime,
             maxPlayers: createdEvent.maxPlayers,
             iconUrl: createdEvent.iconUrl,
+            eventFee: createdEvent.eventFee,
           });
 
           // Reset form fields
@@ -1350,6 +1360,7 @@ Vue.createApp({
             eventTime: "",
             maxPlayers: 1,
             iconUrl: "",
+            eventFee: "",
           };
         })
         .finally(() => {
@@ -1442,7 +1453,7 @@ Vue.createApp({
             setTimeout(() => {
               this.stopLoading(); // Assuming you have a stopLoading method
               resolve();
-            }, 4000);
+            }, 4500);
           });
         });
     },
