@@ -14,6 +14,9 @@ var session = require("express-session");
 
 const app = express();
 
+const publicDirectoryPath = path.join(__dirname, "/public"); // Adjust path as needed
+app.use(express.static(publicDirectoryPath));
+
 const allowedOrigins = [
   "https://gamehavenstg.com", // live site
   "http://127.0.0.1:5500", // Local development (VS Code Live Server)
@@ -42,9 +45,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-const publicDirectoryPath = path.join(__dirname, "/public"); // Adjust path as needed
-app.use(express.static(publicDirectoryPath));
-
 app.use(
   session({
     secret: "super duper secret key",
@@ -67,11 +67,6 @@ app.use(
     credentials: true, // if you need to allow credentials (cookies, auth headers, etc.)
   })
 );
-
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, function () {
-  console.log(`Server is running on port ${PORT}...`);
-});
 
 app.get("/events", async function (request, response) {
   try {
@@ -101,16 +96,36 @@ app.get("/templates", async function (request, response) {
 });
 
 //get singular event
-app.get("/events/:eventId", async function (request, response) {
+// app.get("/events/:eventId", async function (request, response) {
+//   try {
+//     const event = await model.Event.findById(request.params.eventId)
+//       .populate("playerList") // ✅ Populate referenced players
+//       .populate({
+//         path: "matches",
+//         populate: { path: "player1 player2", model: "Player" }, // ✅ Populate player1 and player2 inside eventMatches
+//       });
+
+//     // console.log("** Fetched event:", event);
+
+//     if (!event) {
+//       return response.status(404).json({ message: "Event not found" });
+//     }
+
+//     response.status(200).json(event);
+//   } catch (error) {
+//     console.error("Error fetching event:", error);
+//     response.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
+app.get("/api/events/:eventId", async function (request, response) {
+  // Consider prefixing API routes
   try {
     const event = await model.Event.findById(request.params.eventId)
-      .populate("playerList") // ✅ Populate referenced players
+      .populate("playerList")
       .populate({
         path: "matches",
-        populate: { path: "player1 player2", model: "Player" }, // ✅ Populate player1 and player2 inside eventMatches
+        populate: { path: "player1 player2", model: "Player" },
       });
-
-    // console.log("** Fetched event:", event);
 
     if (!event) {
       return response.status(404).json({ message: "Event not found" });
@@ -174,6 +189,8 @@ app.post("/templates", async function (request, response) {
 // Delete an event
 // Tested and functional
 app.delete("/events/:eventId", async function (request, response) {
+  console.log("API route /events/:eventId hit:", request.params.eventId);
+
   try {
     const eventId = request.params.eventId;
 
@@ -605,7 +622,12 @@ app.delete("/events/:eventId/unmatch", async (req, res) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(publicDirectoryPath, "index.html")); // Assuming your main HTML file is index.html
+  res.sendFile(path.join(publicDirectoryPath, "index.html"));
+});
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, function () {
+  console.log(`Server is running on port ${PORT}...`);
 });
 
 // Example Event
