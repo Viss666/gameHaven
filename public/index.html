@@ -344,7 +344,7 @@
                     event.maxPlayers }}
                   </div>
                   <div class="event-fee">
-                    ${{ event.eventFee ? `$${event.eventFee}` : 'FREE ENTRY' }}
+                    {{ event.eventFee ? `$${event.eventFee}` : 'FREE' }} ENTRY
                   </div>
                 </div>
               </div>
@@ -408,7 +408,7 @@
                 {{activeEvent.playerList.length}} / {{ activeEvent.maxPlayers}}
               </p>
               <div class="event-fee">
-                ${{ activeEvent.eventFee ? `$${activeEvent.eventFee}` : '' }}
+                {{ activeEvent.eventFee ? `$${activeEvent.eventFee}` : 'FREE ENTRY' }}
               </div>
               <p class="event-description">{{activeEvent.eventDescription}}</p>
               <div class="event-buttons2">
@@ -581,13 +581,13 @@
                 <!-- <p v-else-if="newEvent.maxPlayers">Maximum players: {{ activeEvent.maxPlayers }}</p> -->
               </div>
 
-              <div>
+              <div >
                 <label for="event-fee-input">Event Fee:</label>
-                <div class="input-group">
-                  <span class="input-group-text">$</span>
+                <div class="money-input-wrapper">
+                  <span class="currency-symbol">$</span>
                   <input
                     type="number"
-                    id="event-fee-input"
+                    class="money-input"
                     v-model="newEvent.eventFee"
                     placeholder="0.00"
                     step="1.0"
