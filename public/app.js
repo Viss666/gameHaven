@@ -1008,6 +1008,7 @@ Vue.createApp({
               maxPlayers: event.maxPlayers,
               iconUrl: event.iconUrl,
               eventUrl: eventUrl,
+              eventFee: event.eventFee,
             };
           });
 
@@ -1086,6 +1087,7 @@ Vue.createApp({
         eventTime: "",
         maxPlayers: null,
         iconUrl: "",
+        eventFee: "",
       };
       this.navigatePage("creation");
       console.log(this.activeTemplate);
