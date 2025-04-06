@@ -1420,6 +1420,7 @@ Vue.createApp({
       // Add iconUrl and maxPlayers to modifiedFields
       this.modifiedFields.iconUrl = this.activeEvent.iconUrl;
       this.modifiedFields.maxPlayers = this.activeEvent.maxPlayers;
+      this.modifiedFields.eventFee = this.activeEvent.eventFee;
       console.log(this.activeEvent);
 
       return fetch(`https://gamehavenstg.com/events/${eventId}`, {
