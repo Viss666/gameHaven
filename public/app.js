@@ -1463,50 +1463,14 @@ Vue.createApp({
 
     sendEventToBot() {
       this.startLoading();
-      const eventToSend = this.activeEvent; // Create a copy to avoid modifying the original prematurely
 
-      // Map playerList to the format expected by the bot (playerName, playerDiscordID)
-      eventToSend.playerList = eventToSend.playerList.map((player) => ({
-        playerName: player.player_name || player.playerName, // Handle different naming conventions
-        playerDiscordID: player.discord_id || player.playerDiscordID,
-        _id: player._id, // Keep the ID if needed by the bot later
-      }));
-
-      // Map pairings to the format expected by the bot (player1, player2)
-      if (this.activeEvent.matches && Array.isArray(this.activeEvent.matches)) {
-        eventToSend.matches = this.activeEvent.matches.map((match) => ({
-          player1: match.player1, // Assuming player objects are already in the desired format
-          player2: match.player2,
-          isBye: match.isBye,
-          _id: match._id, // Keep the ID if needed
-          assignedByOrganizer: match.assignedByOrganizer,
-          __v: match.__v,
-        }));
-      } else {
-        eventToSend.matches = []; // Ensure matches is always an array
-      }
-
-      // Include other relevant event details for the bot
-      const botPayload = {
-        _id: eventToSend._id,
-        eventTitle: eventToSend.eventTitle,
-        eventGame: eventToSend.eventGame,
-        eventOrganizer: eventToSend.eventOrganizer,
-        organizerContactInfo: eventToSend.organizerContactInfo,
-        eventDate: eventToSend.eventDate,
-        eventDay: eventToSend.eventDay,
-        eventTime: eventToSend.eventTime,
-        eventFee: eventToSend.eventFee,
-        matches: eventToSend.matches,
-      };
-
-      console.log("Sending event to bot:", botPayload);
+      console.log("sending event to bot:", this.activeEvent);
 
       return fetch("https://gamehavenbot.onrender.com/publish_event", {
         // Use the bot's endpoint
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(botPayload),
+        body: JSON.stringify(this.activeEvent),
       })
         .then((response) => {
           if (!response.ok) {
