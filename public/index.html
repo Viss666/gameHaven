@@ -441,14 +441,14 @@
                 <h2 class="reg-player">Paired Players</h2>
                 <ul class="player-list">
                   <li
-                    v-for="(pair, index) in pairedPlayers"
+                    v-for="(pair, index) in activeEvent.matches"
                     :key="index"
                     class="player"
                   >
                     <p class="player-names">
-                      {{ pair.player1.player_name }}
+                      {{ pair.player1.playerName }}
                       <span v-if="pair.player2">
-                        vs. {{ pair.player2.player_name }}</span
+                        vs. {{ pair.player2.playerName }}</span
                       >
                       <span v-else> has a BYE </span>
                     </p>
@@ -463,10 +463,10 @@
                 <ul class="player-list">
                   <li
                     v-for="player in activeEvent.playerList ?? [] "
-                    :key="player.discord_id"
+                    :key="player.playerDiscordID"
                     class="player"
                   >
-                    <p class="player-names">{{player.player_name}}</p>
+                    <p class="player-names">{{player.playerName}}</p>
                   </li>
                 </ul>
               </div>
@@ -877,9 +877,9 @@
                   <ul class="edit-players">
                     <li v-for="(pair, index) in activeEvent.matches" :key="index">
                       <p>
-                        {{ pair.player1.player_name }}
+                        {{ pair.player1.playerName }}
                         <span v-if="pair.player2">
-                          vs. {{ pair.player2.player_name }}</span
+                          vs. {{ pair.player2.playerName }}</span
                         >
                         <span v-else> has a BYE </span>
                       </p>
