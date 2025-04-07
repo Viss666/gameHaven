@@ -1463,7 +1463,7 @@ Vue.createApp({
 
     sendEventToBot() {
       this.startLoading();
-      const eventToSend = { ...this.activeEvent }; // Create a copy to avoid modifying the original prematurely
+      const eventToSend = this.activeEvent; // Create a copy to avoid modifying the original prematurely
 
       // Map playerList to the format expected by the bot (playerName, playerDiscordID)
       eventToSend.playerList = eventToSend.playerList.map((player) => ({
