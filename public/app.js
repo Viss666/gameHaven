@@ -1502,7 +1502,7 @@ Vue.createApp({
 
       console.log("Sending event to bot:", botPayload);
 
-      return fetch("http://localhost:9999/publish_event", {
+      return fetch("https://gamehavenbot.onrender.com/publish_event", {
         // Use the bot's endpoint
         method: "POST",
         headers: { "Content-Type": "application/json" },
