@@ -19,6 +19,7 @@ Vue.createApp({
       discordId: "",
       templates: null,
       events: [],
+      pettyId: "",
       newEvent: {
         eventTitle: "",
         eventGame: "",
@@ -1376,6 +1377,7 @@ Vue.createApp({
     },
     editEvent(eventId) {
       this.currentPage = "edit";
+      this.pettyId = eventId;
 
       this.activeEvent = this.events.find((event) => event.id === eventId);
       console.log("active event: ", this.activeEvent);
@@ -1470,7 +1472,7 @@ Vue.createApp({
       console.log("sending event to bot:", this.activeEvent);
 
       const eventToSend = { ...this.activeEvent };
-      eventToSend._id = this.activeEvent.id; // If your frontend uses 'id'
+      eventToSend._id = this.pettyId; // If your frontend uses 'id'
 
       return fetch(
         "https://gamehavenbot-production.up.railway.app/publish_event",
