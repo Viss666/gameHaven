@@ -617,7 +617,8 @@ Vue.createApp({
       this.startLoading();
       this.scrollToTop();
       // console.log("i am clicked");
-      fetch(`https://gamehavenstg.com/api/events/${eventId}`)
+      // fetch(`https://gamehavenstg.com/api/events/${eventId}`)
+      fetch(`https://gamehaven-production.up.railway.app/api/events/${eventId}`)
         .then((response) => response.json())
         .then((eventFromServer) => {
           let formattedDate = eventFromServer.eventDate;
@@ -1023,8 +1024,9 @@ Vue.createApp({
 
     getTemplates() {
       // Use the appropriate URL for your templates endpoint
-      const templatesUrl = "https://gamehavenstg.com/templates"; // Or your local development URL e.g., http://localhost:8080/templates
-
+      // const templatesUrl = "https://gamehavenstg.com/templates"; // Or your local development URL e.g., http://localhost:8080/templates
+      const templatesUrl =
+        "https://gamehaven-production.up.railway.app/templates";
       console.log("Fetching templates from:", templatesUrl);
 
       return fetch(templatesUrl)
