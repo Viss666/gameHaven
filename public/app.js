@@ -1466,11 +1466,14 @@ Vue.createApp({
 
       console.log("sending event to bot:", this.activeEvent);
 
+      const eventToSend = { ...this.activeEvent };
+      eventToSend._id = this.activeEvent.id; // If your frontend uses 'id'
+
       return fetch("https://gamehavenbot.onrender.com/publish_event", {
         // Use the bot's endpoint
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(this.activeEvent),
+        body: JSON.stringify(eventToSend),
       })
         .then((response) => {
           if (!response.ok) {
