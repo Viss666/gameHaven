@@ -20,6 +20,7 @@ app.use(express.static(publicDirectoryPath));
 const allowedOrigins = [
   "https://gamehavenstg.com", // live site
   "http://127.0.0.1:5500", // Local development (VS Code Live Server)
+  "https://gamehaven-production.up.railway.app",
 ];
 
 //middlewares

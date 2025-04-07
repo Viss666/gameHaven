@@ -972,7 +972,8 @@ Vue.createApp({
     //   this.copyToClipboard(this.activeEvent.eventUrl);
     // },
     getEvents() {
-      return fetch("https://gamehavenstg.com/events")
+      // return fetch("https://gamehavenstg.com/events")
+      return fetch("https://gamehaven-production.up.railway.app/events")
         .then((response) => response.json())
         .then((eventsFromServer) => {
           console.log("events from server: ", eventsFromServer);
@@ -1469,12 +1470,15 @@ Vue.createApp({
       const eventToSend = { ...this.activeEvent };
       eventToSend._id = this.activeEvent.id; // If your frontend uses 'id'
 
-      return fetch("https://gamehavenbot.onrender.com/publish_event", {
-        // Use the bot's endpoint
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(eventToSend),
-      })
+      return fetch(
+        "https://gamehavenbot-production.up.railway.app/publish_event",
+        {
+          // Use the bot's endpoint
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(eventToSend),
+        }
+      )
         .then((response) => {
           if (!response.ok) {
             throw new Error(
