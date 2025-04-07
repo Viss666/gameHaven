@@ -875,7 +875,7 @@
                 <div id="edit-player-list">
                   <h2>Paired Players</h2>
                   <ul class="edit-players">
-                    <li v-for="(pair, index) in pairedPlayers" :key="index">
+                    <li v-for="(pair, index) in activeEvent.matches" :key="index">
                       <p>
                         {{ pair.player1.player_name }}
                         <span v-if="pair.player2">
