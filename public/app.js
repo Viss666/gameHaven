@@ -509,6 +509,29 @@ Vue.createApp({
       });
     },
 
+    // pairSelectedPlayers() {
+    //   if (this.selectedPlayers.length === 2) {
+    //     const player1 = this.activeEvent.playerList.find(
+    //       (p) => p._id === this.selectedPlayers[0]
+    //     );
+    //     const player2 = this.activeEvent.playerList.find(
+    //       (p) => p._id === this.selectedPlayers[1]
+    //     );
+
+    //     if (player1 && player2) {
+    //       this.pairedPlayers.push({
+    //         player1: player1,
+    //         player2: player2,
+    //       });
+    //       console.log("paired players: ", this.pairedPlayers);
+    //       this.pairingsChanged = true; // Set flag to true
+    //     }
+    //     console.log("post selected players: ", this.selectedPlayers);
+    //     this.selectedPlayers = [];
+    //     this.updatePairButtonState();
+    //   }
+    // },
+
     pairSelectedPlayers() {
       if (this.selectedPlayers.length === 2) {
         const player1 = this.activeEvent.playerList.find(
@@ -519,23 +542,44 @@ Vue.createApp({
         );
 
         if (player1 && player2) {
-          this.pairedPlayers.push({
-            player1: player1,
-            player2: player2,
+          // Create new objects that include playerName based on player_name
+          this.activeEvent.matches.push({
+            player1: { ...player1, playerName: player1.player_name },
+            player2: { ...player2, playerName: player2.player_name },
           });
-          console.log("paired players: ", this.pairedPlayers);
-          this.pairingsChanged = true; // Set flag to true
+          this.pairingsChanged = true;
         }
-        console.log("post selected players: ", this.selectedPlayers);
         this.selectedPlayers = [];
         this.updatePairButtonState();
       }
     },
+    giveBye() {
+      if (this.selectedPlayers.length === 1) {
+        const playerId = this.selectedPlayers[0];
+        const player1 = this.activeEvent.playerList.find(
+          (p) => p._id === playerId
+        );
+        if (player1) {
+          this.activeEvent.matches.push({
+            player1: { ...player1, playerName: player1.player_name },
+            player2: null,
+            isBye: true,
+          });
+          this.pairingsChanged = true;
+        }
+        this.selectedPlayers = [];
+      }
+    },
 
     removePair(index) {
-      this.pairedPlayers.splice(index, 1);
-      this.pairingsChanged = true; // Set flag to true
+      this.activeEvent.matches.splice(index, 1);
+      this.pairingsChanged = true;
     },
+
+    // removePair(index) {
+    //   this.pairedPlayers.splice(index, 1);
+    //   this.pairingsChanged = true; // Set flag to true
+    // },
 
     toggleDarkMode() {
       this.isDarkMode = !this.isDarkMode;
@@ -798,25 +842,25 @@ Vue.createApp({
       return date.getDate();
     },
 
-    giveBye() {
-      if (this.selectedPlayers.length === 1) {
-        const playerId = this.selectedPlayers[0];
-        const player1 = this.activeEvent.playerList.find(
-          (p) => p._id === playerId
-        );
+    // giveBye() {
+    //   if (this.selectedPlayers.length === 1) {
+    //     const playerId = this.selectedPlayers[0];
+    //     const player1 = this.activeEvent.playerList.find(
+    //       (p) => p._id === playerId
+    //     );
 
-        if (player1) {
-          this.pairedPlayers.push({
-            player1: player1,
-            player2: null,
-            isBye: true, // Set isBye to true
-          });
-          this.pairingsChanged = true;
-        }
+    //     if (player1) {
+    //       this.pairedPlayers.push({
+    //         player1: player1,
+    //         player2: null,
+    //         isBye: true, // Set isBye to true
+    //       });
+    //       this.pairingsChanged = true;
+    //     }
 
-        this.selectedPlayers = [];
-      }
-    },
+    //     this.selectedPlayers = [];
+    //   }
+    // },
 
     submitCheckOut(eventId) {
       this.startLoading();
