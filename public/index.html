@@ -390,8 +390,10 @@
 
             <div class="event-body">
               <div class="view-header">
-                <h1 class="event-title2">{{activeEvent.eventTitle}}</h1>
                 <img :src="activeEvent.iconUrl" class="icon-url-header"/>
+
+                <h1 class="event-title2">{{activeEvent.eventTitle}}</h1>
+                <h1>{{getMonth(activeEvent.eventDate)}} - {{getDay(activeEvent.eventDate)}}</h1>
               </div>
 
 
@@ -399,17 +401,12 @@
 
               <p class="event-day">
                 {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
-                {{activeEvent.eventDate}}
               </p>
               <p class="event-organizer">
-                <strong>Organizer:</strong> {{activeEvent.eventOrganizer}}
-              </p>
-              <p class="organizer-contact">
-                <strong>Contact Info:</strong>
-                {{activeEvent.organizerContactInfo}}
+                <strong>Organizer:</strong> {{activeEvent.eventOrganizer}} - {{activeEvent.organizerContactInfo}}
               </p>
               <p class="player-count">
-                <strong>Current Player Count:</strong>
+                <strong>Player Count:</strong>
                 {{activeEvent.playerList.length}} / {{ activeEvent.maxPlayers}}
               </p>
               <div class="event-fee">
