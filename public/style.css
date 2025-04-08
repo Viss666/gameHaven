@@ -157,6 +157,7 @@ nav ul li a.active {
 .main-card-div {
   display: flex;
   justify-content: space-between;
+  flex-direction: row-reverse;
   margin-top: -10%;
   position: relative;
   z-index: 10;
@@ -1186,8 +1187,39 @@ body.dark-mode {
     width: 100%;
     display: flex;
     align-items: center;
-    display: none;
+    margin: 0;
+    flex-direction: column;
+    /* display: none; */
     /* height: calc(100dvh - 6dvh); */
+  }
+
+  .hero {
+    /* min-height: 300px; */
+    object-fit: fill;
+    object-position: center center;
+  }
+  .hero img {
+    display: block; /* Prevent extra space below image */
+    /* width: 100%; Make it fill the container width */
+    height: 150px;
+  }
+
+  #main {
+    width: 100%;
+  }
+
+  .main-card-div {
+    flex-direction: column-reverse;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: -15%;
+  }
+
+  .main-card {
+    width: 95%;
+    margin: 0;
+    padding: 0;
   }
 
   .events-content {

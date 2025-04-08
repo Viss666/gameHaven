@@ -98,10 +98,37 @@
         </nav>
 
         <div v-if="currentPage == 'home'" class="home-content">
+          <div class="mobile-events-logo-wrapper">
+            <img src="images/Logo.png" class="mobile-events-logo" />
+          </div>
           <div class="hero">
             <img src="images/gameWall3.png" />
           </div>
           <div class="main-card-div">
+
+            <div class="main-card">
+              <h2 @click="navigatePage('rentals')">Featured Rentals</h2>
+              <hr />
+              <div class="card-list-div" style="margin-left:0;">
+                <div v-if="loading">Loading board games...</div>
+                <div v-else-if="error">{{ error }}</div>
+                <ul v-else>
+                  <li v-for="game in boardgames.slice(2, 5)" :key="game.id">
+                    <h3>{{ game.name }}</h3>
+                    <h4>({{ game.yearPublished }})</h4>
+
+                    <img
+                      class="rental-thumbnail"
+                      v-if="game.thumbnail"
+                      :src="game.thumbnail"
+                      alt="Thumbnail"
+                      width="150"
+                    />
+                    <button class="btn">Reserve Now</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
             <div class="main-card">
               <h2 @click="navigatePage('tcg')">Trading Card Games</h2>
               <hr />
@@ -126,29 +153,6 @@
                   <img :src="game.imageUrl" :alt="game.name" class="tcg-icon" />
                   <p>{{ game.name }}</p>
                 </div>
-              </div>
-            </div>
-            <div class="main-card">
-              <h2 @click="navigatePage('rentals')">Featured Rentals</h2>
-              <hr />
-              <div class="card-list-div" style="margin-left:0;">
-                <div v-if="loading">Loading board games...</div>
-                <div v-else-if="error">{{ error }}</div>
-                <ul v-else>
-                  <li v-for="game in boardgames.slice(2, 5)" :key="game.id">
-                    <h3>{{ game.name }}</h3>
-                    <h4>({{ game.yearPublished }})</h4>
-
-                    <img
-                      class="rental-thumbnail"
-                      v-if="game.thumbnail"
-                      :src="game.thumbnail"
-                      alt="Thumbnail"
-                      width="150"
-                    />
-                    <button class="btn">Reserve Now</button>
-                  </li>
-                </ul>
               </div>
             </div>
             <div class="main-card">
