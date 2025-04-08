@@ -1272,7 +1272,7 @@ body.dark-mode {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 0px;
     margin-left: 10px;
     margin-right: 10px;
     flex-direction: column;
