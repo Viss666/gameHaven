@@ -543,16 +543,13 @@ h4 {
 } */
 
 .date-box {
-  background-color: #333; /* Dark background for date box */
-  color: #fff; /* White text for date */
-  width: 25%; /* Fixed width for the date box */
+  background-color: #454955;
+  color: #fff;
+  width: 25%;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center content vertically */
-  align-items: center; /* Center content horizontally */
-  border-radius: 3px 0 0 3px; /* Rounded left corners to match card */
-  /* padding: 10px; */
-  font-size: 0.8rem; /* Smaller font size for month */
+  justify-content: center;
+  align-items: center;
 }
 
 .day {
