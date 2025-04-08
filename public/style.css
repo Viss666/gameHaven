@@ -186,10 +186,11 @@ nav ul li a.active {
   color: #00861d;
 }
 .icon-url {
-  width: 30px;
+  margin-top: 5px;
+
+  width: 50px;
 }
 .icon-url-home {
-  margin-top: 5px;
   width: 50px;
 }
 .icon-url-header {
