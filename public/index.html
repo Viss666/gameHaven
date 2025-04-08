@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- uncomment/comment these 2 lines when working in local, last link is local, /style is production -->
-    <base href="/">
-    <link rel="stylesheet" href="/style.css">
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- <base href="/">
+    <link rel="stylesheet" href="/style.css"> -->
+    <link rel="stylesheet" href="style.css">
 
 
     <link rel="icon" href="images/Logo.png" type="image/icon type" />
@@ -124,7 +124,7 @@
                       alt="Thumbnail"
                       width="150"
                     />
-                    <button class="btn">Reserve Now</button>
+                    <button class="btn" @click="navigatePage('rentals')">Reserve Now</button>
                   </li>
                 </ul>
               </div>
@@ -269,6 +269,12 @@
                     <p>{{ selectedGame.description }}</p>
                   </div>
                 </div>
+                <button class="actualRentalBtn" v-if="game.copies == 0" id="rentalWaitlistButton" @click="actualRentalButton(game, false)">
+                  Waitlist
+                </button>
+                <button class="actualRentalBtn" v-if="game.copies > 0" id="rentalReserveButton" @click="actualRentalButton(game, true)">
+                  Reserve
+                </button>
               </div>
             </div>
             <!-- <div v-if="showRentalDetail" class="retail-detail-container">
