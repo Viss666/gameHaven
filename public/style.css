@@ -7,16 +7,15 @@
 
 body {
   background-color: #fafafa;
-  /* font-family: "Acme"; */
   font-family: "Poppins";
   margin: 0;
-  /* display: flex; */
   height: 100%;
-  /* margin: 0 3%; */
-
-  /* display: flex; */
-  /* height: 100vh; */
 }
+
+/* .home-content.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+} */
 
 .description {
   width: 75%;
@@ -138,9 +137,6 @@ nav ul li a.active {
 
 /* Home page content */
 .home-content {
-  /* height: 50vh; */
-  /* background-color: #f3eff5; */
-  /* background-color: black; */
   margin: 0 3%;
 }
 
@@ -150,37 +146,31 @@ nav ul li a.active {
 }
 
 .hero {
-  position: relative; /* Needed for absolute positioning of cards */
+  position: relative;
 }
 
 .hero img {
-  width: 100%; /* Make the image fill the container */
-  display: block; /* Remove extra space below the image */
+  width: 100%;
+  display: block;
 }
 
 .main-card-div {
-  /* display: flex;
-  justify-content: space-between; */
-  display: flex; /* Arrange cards in a row */
-  justify-content: space-between; /* Center the cards horizontally */
-  margin-top: -10%; /* Adjust this negative margin to control the overlap */
-  position: relative; /* Needed to control z index if you want to add other elements */
-  z-index: 10; /* Ensures the cards are on top of the hero image */
-  width: 100%; /* Ensure the container is full width */
+  display: flex;
+  justify-content: space-between;
+  margin-top: -10%;
+  position: relative;
+  z-index: 10;
+  width: 100%;
 }
 
 .main-card {
-  /* background-color: white;
-  border-radius: 5px;
-  width: 31%;
-  box-shadow: rgba(51, 51, 51, 0.5) 2.5px 2.5px 10px 2.5px; */
-  background-color: white; /* Or any background color you prefer */
+  background-color: white;
   padding: 20px;
-  margin: 0 10px; /* Add some space between cards */
-  border-radius: 3px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
-  width: 30%; /* Adjust card width as needed */
-  text-align: center; /* Center the card text */
+  margin: 0 10px;
+  border-radius: 3px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  text-align: center;
 }
 
 .home-tcg-card {
@@ -225,7 +215,6 @@ nav ul li a.active {
 .main-card h2 {
   margin: 0 1%;
   margin-top: 2%;
-  /* padding-left: 5%; */
 }
 .main-card h2:hover {
   cursor: pointer;
@@ -330,23 +319,11 @@ h4 {
 }
 
 .login-container input {
-  /* width: 100%; */
   padding: 10px;
   margin: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
 }
-
-/* .login-container button {
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
-  border: none;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-} */
 
 .login-container button {
   background-color: #4caf50;
@@ -362,17 +339,6 @@ h4 {
 
 .login-container button:hover {
   background: #00861d;
-}
-
-/* The rest of these (blah)-content pages are for the other pages on the navigation. */
-.tcg-content {
-}
-.tcg-pokemon {
-}
-.tcg-mtg {
-}
-
-.games-content {
 }
 
 .rental-content {
@@ -420,7 +386,6 @@ h4 {
   border-radius: 3px;
   font-size: 16px;
   transition: 0.3s;
-  /* margin: 5px; */
 }
 
 .rental-game-btn:hover {
@@ -441,18 +406,6 @@ h4 {
   overflow: scroll;
 }
 
-/* .retail-detail-container {
-  display: block;
-  z-index: 2;
-  width: 25%;
-  border-radius: 5px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 3px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 20px;
-} */
-
 .rental-detail-container {
   background: #454955;
   color: white;
@@ -465,8 +418,6 @@ h4 {
   position: absolute;
   top: -3%;
   height: 100%;
-  /* top: 50%;
-  height: 42%; */
   left: 0;
   z-index: 2;
   animation: riseUp 1.5s;
@@ -518,11 +469,8 @@ h4 {
   margin-top: 0px;
 }
 
-/* Events content for senior project */
 .events-content {
   flex: 1;
-  /* flex-wrap: wrap; */
-  /* width: 100%; */
   height: 100%;
   min-height: 60dvh;
   margin: 0 3% 0 3%;
@@ -553,28 +501,23 @@ h4 {
   width: 60%;
   display: flex;
   flex-direction: row;
-  /* max-width: 400px; */
   background: #fff;
   padding: 20px;
   border-radius: 3px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 10px;
   text-align: center;
-  /* background-color: #00000099; */
 }
 
 .home-event-card {
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* max-width: 400px; */
   justify-content: space-between;
   background: #fff;
-  /* padding: 10px; */
   margin: 4% 0;
   border-radius: 3px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* margin: 10px; */
   text-align: center;
   align-items: center;
   padding-bottom: 2%;
@@ -598,26 +541,12 @@ h4 {
   width: 200px;
 }
 .event-title {
-  /* font-size: 1.5em;
-  font-weight: bold;
-  justify-content: flex-start;
-  padding: 15px 0px 0% 15px;
-  margin-bottom: 10px;
-  width: fit-content;
-  display: inline;
-  float: left; */
   margin-bottom: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.event-header {
-  /* width: 100%;
-  position: relative;
-  background-color: black;
-  border-radius: 10px; */
-}
 .event-header h2 {
   color: #3f7d20;
   margin: 0;
@@ -630,11 +559,6 @@ h4 {
 .event-main-info {
   text-align: left;
   width: 50%;
-  /* width: 100%; */
-  /* font-size: 1.1rem;
-  width: 100%;
-  position: relative;
-  flex-direction: row; */
 }
 
 .search-filter {
@@ -646,29 +570,20 @@ h4 {
 }
 .input-search button {
   height: fit-content;
-  margin-left: 10px; /* Add space between input and button */
+  margin-left: 10px;
 }
 #search-form {
   width: 100%;
 }
 
-/* .input-search {
-  width: 50%;
-  align-self: center;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  position: relative;
-  justify-content: center;
-} */
 .input-search {
   width: 50%;
   align-self: center;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: flex-start; /* Or space-between */
-  align-items: center; /* Vertically align items */
+  justify-content: flex-start;
+  align-items: center;
   margin: 0 3% 0 3%;
 }
 .dropdown-filter {
@@ -681,33 +596,14 @@ h4 {
 }
 
 .event-day {
-  /* font-size: 1.3rem;
-  padding: 5px;
-  margin-bottom: 15px;
-  padding: 15px 15px 0px 0px;
-
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-
-  width: fit-content;
-  float: right; */
 }
 .event-game {
-  /* padding: 2px; */
 }
 .event-side-info {
-  /* font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  padding: 15px;
-  padding-top: 8px;
-  width: fit-content;
-  display: inline;
-  float: left;
-  text-align: left; */
 }
 .event-players-signed {
-  /* padding: 2px; */
 }
 .event-time {
-  /* padding: 2px; */
 }
 
 .event-buttons1 {
@@ -717,7 +613,6 @@ h4 {
 
 #player-list,
 #paired-list {
-  /* border: 1px solid #ccc; */
   padding: 10px;
   margin-bottom: 20px;
 }
@@ -749,8 +644,6 @@ h4 {
   list-style: none;
   padding: 0;
   margin: 0;
-  /* gap: 5px; */
-  /* border: 2px solid #333; */
   border-radius: 3px;
   background: #f8f8f8;
 }
@@ -787,8 +680,6 @@ h4 {
   text-align: center;
   border-bottom: 2px solid black;
   margin: 0 3% 0 3%;
-  /* color: white; */
-  /* font-size: 1.2rem; */
   padding-top: 0;
   display: flex;
   flex-direction: column;
@@ -808,10 +699,8 @@ h4 {
 }
 
 .view-event-content {
-  /* position: relative; */
   background-color: #fafafa;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  /* min-height: 600px; */
   margin: 0 3%;
 }
 
@@ -821,8 +710,6 @@ h4 {
 
 .reg-player {
   color: #3f7d20;
-
-  /* margin-bottom: 0; */
 }
 
 .event-container {
@@ -838,7 +725,6 @@ h4 {
   width: 20%;
 }
 
-/* blah */
 .btn {
   background-color: #4caf50;
   color: white;
@@ -913,14 +799,12 @@ h4 {
   border-radius: 5px;
 }
 
-/* Button Container */
 .button-container {
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
 }
 
-/* Submit Button */
 .submit-btn {
   background-color: #2196f3;
   color: white;
@@ -936,7 +820,6 @@ h4 {
   background-color: #1976d2;
 }
 
-/* Close (Cancel) Button */
 .close-btn {
   background-color: #f44336;
   color: white;
@@ -985,19 +868,18 @@ h4 {
 }
 
 #edit-player-list .edit-players li {
-  display: flex; /* Enable flexbox for the list item */
-  justify-content: space-between; /* Distribute space evenly between elements */
-  align-items: center; /* Vertically align items in the center */
-  padding: 10px; /* Add some padding for spacing */
-  border-bottom: 1px solid #eee; /* Add a light border between list items */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
 }
 
 #edit-player-list .edit-players li:last-child {
-  border-bottom: none; /* Remove border from the last list item */
+  border-bottom: none;
 }
 
 #edit-player-list .btn {
-  /* Basic button styling (adjust as needed) */
   padding: 8px 12px;
   border: 1px solid black;
   border-radius: 4px;
@@ -1010,7 +892,7 @@ h4 {
 }
 
 #edit-player-list .selected {
-  background-color: #ffce3c; /* a light blue color */
+  background-color: #ffce3c;
 }
 
 .edit-players {
@@ -1022,7 +904,7 @@ h4 {
   margin-right: 3%;
 }
 .loading-container {
-  position: absolute; /* Covers the full screen */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -1031,7 +913,7 @@ h4 {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.5); /* Slight overlay effect */
+  background: rgba(0, 0, 0, 0.5);
   z-index: 10;
 }
 
@@ -1070,10 +952,6 @@ h4 {
   width: 100%;
   height: auto;
   padding: 0px;
-
-  /* bottom: 0;
-  left: 0;
-  position: fixed; */
 }
 
 .social p {
@@ -1099,9 +977,7 @@ h4 {
   padding-top: 10px;
 }
 
-/* Footer columns, 3 in total */
 .about-us {
-  /* text-align: left; */
 }
 
 .social {
@@ -1116,7 +992,6 @@ h4 {
 
 .social-icon {
   height: 25px;
-  /* padding: 5px; */
 }
 
 .icon-link {
@@ -1133,16 +1008,11 @@ h4 {
 }
 
 .store-footer-wrapper {
-  /* display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap; */
 }
 
-/* Store hours in footer */
 .times {
 }
 
-/* Titles of footer columns */
 .footer-header {
   display: inline-block;
   vertical-align: top;
@@ -1156,65 +1026,70 @@ input[type="text"],
 input[type="date"],
 input[type="time"],
 textarea {
-  width: 100%; /* Make the input take up the full width of its container */
-  padding: 10px; /* Add some padding for spacing */
-  margin: 8px 0; /* Add margin for spacing between elements */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  border: 1px solid #ccc; /* Add a light gray border */
-  border-radius: 4px; /* Add rounded corners */
-  font-size: 16px; /* Set a readable font size */
-  font-family: sans-serif; /* Use a basic sans-serif font */
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: sans-serif;
 }
 
 input[type="text"]:focus,
 input[type="date"]:focus,
 input[type="time"]:focus,
 textarea:focus {
-  outline: none; /* Remove the default focus outline */
-  border-color: #4caf50; /* Change the border color on focus */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Add a subtle box shadow on focus */
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
 label {
-  display: block; /* Make labels block elements for better spacing */
-  margin-bottom: 5px; /* Add some margin below the label */
-  font-weight: bold; /* Make the label text bold */
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 textarea {
-  resize: vertical; /* Allow vertical resizing of the textarea */
-  min-height: 100px; /* Set a minimum height for the textarea */
+  resize: vertical;
+  min-height: 100px;
 }
 
 select {
-  width: 100%; /* Make the dropdown take up the full width of its container */
-  padding: 10px; /* Add some padding for spacing */
-  margin: 8px 0; /* Add margin for spacing between elements */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  border: 1px solid #ccc; /* Add a light gray border */
-  border-radius: 4px; /* Add rounded corners */
-  font-size: 16px; /* Set a readable font size */
-  font-family: sans-serif; /* Use a basic sans-serif font */
-  background-color: white; /* Ensure a white background */
-  appearance: none; /* Remove default OS styling */
-  -webkit-appearance: none; /* For Safari */
-  -moz-appearance: none; /* For Firefox */
-  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Add a custom arrow icon */
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: sans-serif;
+  background-color: white;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
   background-repeat: no-repeat;
   background-position-x: 98%;
   background-position-y: 50%;
 }
 
 select:focus {
-  outline: none; /* Remove the default focus outline */
-  border-color: #4caf50; /* Change the border color on focus */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Add a subtle box shadow on focus */
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
 label {
-  display: block; /* Make labels block elements for better spacing */
-  margin-bottom: 5px; /* Add some margin below the label */
-  font-weight: bold; /* Make the label text bold */
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
 }
 
 /* mobile display */
@@ -1224,8 +1099,6 @@ label {
   }
   #main {
     flex-direction: column; /* Stack elements vertically */
-    /* height: 100dvh; */
-    /* height: 100%; */
   }
 
   nav {

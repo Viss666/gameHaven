@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- uncomment/comment these 2 lines when working in local, last link is local, /style is production -->
-    <base href="/">
-    <link rel="stylesheet" href="/style.css">
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- <base href="/"> -->
+    <!-- <link rel="stylesheet" href="/style.css"> -->
+    <link rel="stylesheet" href="style.css">
 
 
     <link rel="icon" href="images/Logo.png" type="image/icon type" />
@@ -27,8 +27,8 @@
 
     <title>Game Haven St. George</title>
   </head>
-  <body>
-    <div id="app">
+  <body :class="{ 'dark-mode': isDarkMode }">
+    <div id="app" :class="{ 'dark-mode': isDarkMode }">
       <div id="main">
         <!-- Mobile Menu Button -->
         <button class="menu-btn" @click="toggleMenu">
@@ -90,19 +90,14 @@
                 >Admin</a
               >
             </li>
+            <li>
+              <button @click="toggleDarkMode">{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</button>
+            </li>
 
-            <!-- <li>
-              <a
-                href="#"
-                @click="navigatePage('contact')"
-                :class="{ active: currentPage === 'contact' }"
-                >Contact</a
-              >
-            </li> -->
           </ul>
         </nav>
 
-        <div v-if="currentPage == 'home'" class="home-content">
+        <div v-if="currentPage == 'home'" class="home-content" :class="{ 'dark-mode': isDarkMode }">
           <div class="hero">
             <img src="images/gameWall3.png" />
           </div>
@@ -912,7 +907,7 @@
           <div class="spinner-text"><p>Loading event details...</p></div>
           <div class="spinner"></div>
         </div>
-        <div class="footer">
+        <div class="footer" :class="{ 'dark-mode': isDarkMode }">
           <div class="top-footer">
             <div class="times">
               <div id="open">

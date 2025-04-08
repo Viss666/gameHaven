@@ -3,6 +3,8 @@ Vue.createApp({
     return {
       currentPage: "home",
       menuOpen: false,
+      isDarkMode: false,
+
       dropdowns: {
         tcg: false,
         games: false,
@@ -222,28 +224,10 @@ Vue.createApp({
     mainContent.addEventListener("click", this.closeMenuOnClickOutside); //Desktop
     this.fetchBoardGames();
     this.checkInitialUrl(); // Call this method on mount
-    // window.addEventListener("popstate", (event) => {
-    //   const pathSegments = window.location.pathname.split("/");
-    //   // Check if the URL matches the event detail pattern
-    //   if (pathSegments[1] === "events" && pathSegments[2]) {
-    //     const eventIdFromUrl = pathSegments[2];
-    //     if (event.state && event.state.eventId === eventIdFromUrl) {
-    //       this.viewEvent(eventIdFromUrl);
-    //       this.currentPage = "viewEvent";
-    //     } else if (!event.state || event.state.eventId !== eventIdFromUrl) {
-    //       // Handle cases where the popstate URL looks like an event but the state is missing or different
-    //       this.viewEvent(eventIdFromUrl);
-    //       this.currentPage = "viewEvent";
-    //     }
-    //   } else {
-    //     // If the URL doesn't look like an event detail page,
-    //     // assume it's a regular navigation and reset event-specific state
-    //     this.currentPage = "home"; // Or your default view
-    //     this.activeEvent = null;
-    //     // You might not need to reload events here, depending on your app flow
-    //     // this.getEvents();
-    //   }
-    // });
+    const storedDarkMode = localStorage.getItem("darkMode");
+    if (storedDarkMode === "true") {
+      this.isDarkMode = true;
+    }
 
     console.log(this.events);
   },
@@ -540,6 +524,11 @@ Vue.createApp({
     removePair(index) {
       this.pairedPlayers.splice(index, 1);
       this.pairingsChanged = true; // Set flag to true
+    },
+
+    toggleDarkMode() {
+      this.isDarkMode = !this.isDarkMode;
+      localStorage.setItem("darkMode", this.isDarkMode);
     },
 
     // Explanatory
