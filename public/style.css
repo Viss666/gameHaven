@@ -186,7 +186,7 @@ nav ul li a.active {
   color: #00861d;
 }
 .icon-url {
-  width: 9%;
+  width: 15%;
 }
 .icon-url-home {
   width: 50px;
@@ -1276,6 +1276,39 @@ body.dark-mode {
     flex-direction: column;
   }
 
+  .date-box {
+    background-color: #454955;
+    color: #ffffff;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .day {
+    /* font-size: 75px; */
+    /* top: 50%; */
+    /* left: 50%; */
+    /* position: absolute; */
+    /* position: relative; */
+    margin-top: 8%;
+    /* transform: translate(-50%, -50%); */
+  }
+  .month {
+    margin-bottom: 20%;
+    /* font-size: 25px; */
+
+    /* position: absolute; */
+    /* top: 15%;
+    left: 50%; */
+    /* transform: translateX(-50%); */
+    /* position: relative; */
+
+    text-transform: uppercase;
+  }
+
   .events-content {
     margin: 0;
   }
@@ -1353,9 +1386,23 @@ body.dark-mode {
 
   .event-title {
     font-size: 4vw;
-    min-width: 50px; /* Prevents text from getting too small */
+    min-width: 50px;
     max-width: 100%;
+    display: flex;
+    flex-direction: column;
     text-align: center;
+  }
+
+  .event-main-info {
+    margin: 0;
+  }
+
+  .event-buttons1 {
+    width: 90%;
+  }
+
+  .event-buttons1 button {
+    margin: 0;
   }
 
   .event-title2 {
@@ -1416,7 +1463,7 @@ body.dark-mode {
   }
 
   .event-buttons1 button {
-    margin: 5px;
+    margin-bottom: 5px;
     width: 100%;
   }
 
