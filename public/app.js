@@ -643,6 +643,7 @@ Vue.createApp({
             maxPlayers: eventFromServer.maxPlayers,
             iconUrl: eventFromServer.iconUrl,
             eventUrl: eventUrl,
+            eventFee: eventFromServer.eventFee,
           };
           //console.log("activeEvent:", this.activeEvent);
 
