@@ -27,8 +27,8 @@
 
     <title>Game Haven St. George</title>
   </head>
-  <body :class="{ 'dark-mode': isDarkMode }">
-    <div id="app" :class="{ 'dark-mode': isDarkMode }">
+  <body>
+    <div id="app" >
       <div id="main">
         <!-- Mobile Menu Button -->
         <button class="menu-btn" @click="toggleMenu">
@@ -90,14 +90,14 @@
                 >Admin</a
               >
             </li>
-            <li>
+            <!-- <li>
               <button @click="toggleDarkMode">{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</button>
-            </li>
+            </li> -->
 
           </ul>
         </nav>
 
-        <div v-if="currentPage == 'home'" class="home-content" :class="{ 'dark-mode': isDarkMode }">
+        <div v-if="currentPage == 'home'" class="home-content">
           <div class="hero">
             <img src="images/gameWall3.png" />
           </div>
@@ -907,7 +907,7 @@
           <div class="spinner-text"><p>Loading event details...</p></div>
           <div class="spinner"></div>
         </div>
-        <div class="footer" :class="{ 'dark-mode': isDarkMode }">
+        <div class="footer">
           <div class="top-footer">
             <div class="times">
               <div id="open">
