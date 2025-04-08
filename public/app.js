@@ -771,6 +771,16 @@ Vue.createApp({
       }
     },
 
+    getMonth(dateString) {
+      const date = new Date(dateString);
+      const options = { month: "short" };
+      return new Intl.DateTimeFormat("en-US", options).format(date);
+    },
+    getDay(dateString) {
+      const date = new Date(dateString);
+      return date.getDate();
+    },
+
     giveBye() {
       if (this.selectedPlayers.length === 1) {
         const playerId = this.selectedPlayers[0];
