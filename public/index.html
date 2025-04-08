@@ -124,7 +124,7 @@
                       alt="Thumbnail"
                       width="150"
                     />
-                    <button class="btn">Reserve Now</button>
+                    <button class="btn" @click="navigatePage('rentals')">Reserve Now</button>
                   </li>
                 </ul>
               </div>
@@ -277,6 +277,12 @@
                     <p>{{ selectedGame.description }}</p>
                   </div>
                 </div>
+                <button class="actualRentalBtn" v-if="game.copies == 0" id="rentalWaitlistButton" @click="actualRentalButton(game, false)">
+                  Waitlist
+                </button>
+                <button class="actualRentalBtn" v-if="game.copies > 0" id="rentalReserveButton" @click="actualRentalButton(game, true)">
+                  Reserve
+                </button>
               </div>
             </div>
             <!-- <div v-if="showRentalDetail" class="retail-detail-container">

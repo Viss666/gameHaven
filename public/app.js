@@ -176,7 +176,7 @@ Vue.createApp({
         },
       ],
       selectedIconUrl: "",
-
+      hasReservedGame: false,
       showRentalDetail: false,
       selectedGameEvent: "All Games",
     };
@@ -261,6 +261,22 @@ Vue.createApp({
         return;
       }
       this.fetchBoardGameInfo(game);
+    },
+    actualRentalButton(game, isReserve) {
+      //use the hasReservedGame variable to check if the user has already reserved a game
+      //if they already have, they can't do mulitple 
+      //do the shake animation if the user has already 
+      //reserved but are trying to do 2 
+      //also change the inner html of the outer button 
+      // to reflect if the user has already reserved it, also 
+      // subtract one from copies
+      let waitlistButton = document.getElementById('rentalWaitlistButton');
+      let reserveButton = document.getElementById('rentalReserveButton');
+      if (isReserve){
+        reserveButton.innerHTML = 'Reserved';
+      } else {
+        waitlistButton.innerHTML = 'Waitlisted';
+      }
     },
     getRandomCopiesAmount() {
       min = Math.ceil(0);

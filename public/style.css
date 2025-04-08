@@ -396,6 +396,19 @@ h4 {
   background-color: #388e3c;
 }
 
+.actualRentalBtn {
+  background: black;
+  justify-self: anchor-center;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
 .rental-game-img {
   max-width: 150;
   max-height: 200;
@@ -461,8 +474,8 @@ h4 {
 .rental-detail-container button {
   margin-top: 10px;
   padding: 8px 15px;
-  background-color: red;
-  color: white;
+  background-color: white ;
+  color: #4caf50;
   border: none;
   cursor: pointer;
   border-radius: 3px;
@@ -1534,6 +1547,7 @@ body.dark-mode {
     gap: 10px;
   }
   .rental-game-container {
-    width: 60%;
+    width: 100%;
+    margin: 5px;
   }
 }
