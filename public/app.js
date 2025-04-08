@@ -264,18 +264,18 @@ Vue.createApp({
     },
     actualRentalButton(game, isReserve) {
       //use the hasReservedGame variable to check if the user has already reserved a game
-      //if they already have, they can't do mulitple 
-      //do the shake animation if the user has already 
-      //reserved but are trying to do 2 
-      //also change the inner html of the outer button 
-      // to reflect if the user has already reserved it, also 
+      //if they already have, they can't do mulitple
+      //do the shake animation if the user has already
+      //reserved but are trying to do 2
+      //also change the inner html of the outer button
+      // to reflect if the user has already reserved it, also
       // subtract one from copies
-      let waitlistButton = document.getElementById('rentalWaitlistButton');
-      let reserveButton = document.getElementById('rentalReserveButton');
-      if (isReserve){
-        reserveButton.innerHTML = 'Reserved';
+      let waitlistButton = document.getElementById("rentalWaitlistButton");
+      let reserveButton = document.getElementById("rentalReserveButton");
+      if (isReserve) {
+        reserveButton.innerHTML = "Reserved";
       } else {
-        waitlistButton.innerHTML = 'Waitlisted';
+        waitlistButton.innerHTML = "Waitlisted";
       }
     },
     getRandomCopiesAmount() {
@@ -618,8 +618,8 @@ Vue.createApp({
       this.startLoading();
       this.scrollToTop();
       // console.log("i am clicked");
-      // fetch(`https://gamehavenstg.com/api/events/${eventId}`)
-      fetch(`https://gamehaven-production.up.railway.app/api/events/${eventId}`)
+      fetch(`https://gamehavenstg.com/api/events/${eventId}`)
+        // fetch(`https://gamehaven-production.up.railway.app/api/events/${eventId}`)
         .then((response) => response.json())
         .then((eventFromServer) => {
           let formattedDate = eventFromServer.eventDate;
@@ -965,8 +965,7 @@ Vue.createApp({
     },
 
     getEvents() {
-      // return fetch("https://gamehavenstg.com/events")
-      return fetch("https://gamehaven-production.up.railway.app/events")
+      return fetch("https://gamehavenstg.com/events")
         .then((response) => response.json())
         .then((eventsFromServer) => {
           console.log("events from server: ", eventsFromServer);
@@ -1016,9 +1015,9 @@ Vue.createApp({
 
     getTemplates() {
       // Use the appropriate URL for your templates endpoint
-      // const templatesUrl = "https://gamehavenstg.com/templates"; // Or your local development URL e.g., http://localhost:8080/templates
-      const templatesUrl =
-        "https://gamehaven-production.up.railway.app/templates";
+      const templatesUrl = "https://gamehavenstg.com/templates"; // Or your local development URL e.g., http://localhost:8080/templates
+      // const templatesUrl =
+      //   "https://gamehaven-production.up.railway.app/templates";
       console.log("Fetching templates from:", templatesUrl);
 
       return fetch(templatesUrl)
@@ -1419,6 +1418,7 @@ Vue.createApp({
 
       return fetch(
         "https://gamehavenbot-production.up.railway.app/publish_event",
+
         {
           // Use the bot's endpoint
           method: "POST",
