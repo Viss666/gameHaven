@@ -557,11 +557,11 @@ h4 {
   /* top: 50%; */
   /* left: 50%; */
   position: absolute;
-  margin-top: 1.5%;
+  margin-top: 2%;
   /* transform: translate(-50%, -50%); */
 }
 .month {
-  margin-bottom: 5%;
+  margin-bottom: 4%;
   font-size: 25px;
   position: absolute;
   /* top: 15%;
