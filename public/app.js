@@ -516,11 +516,6 @@ Vue.createApp({
       }
     },
 
-    // removePair(index) {
-    //   this.pairedPlayers.splice(index, 1);
-    //   this.savePairsToEvent(); // Update the event after removing a pair
-    // },
-
     removePair(index) {
       this.pairedPlayers.splice(index, 1);
       this.pairingsChanged = true; // Set flag to true
@@ -618,16 +613,15 @@ Vue.createApp({
           ); // Convert time
 
           if (formattedDate) {
-            formattedDate = formattedDate.split("T")[0]; // Split at "T" and take the date part
+            formattedDate = formattedDate.split("T")[0];
           } else {
-            formattedDate = ""; // Or some other default value
+            formattedDate = "";
           }
 
-          const eventUrl = `https://gamehavenstg.com/events/${eventFromServer._id}`; // Generate the URL
+          const eventUrl = `https://gamehavenstg.com/events/${eventFromServer._id}`;
 
-          // console.log("Fetched Event:", eventFromServer); // Debugging log
+          // console.log("Fetched Event:", eventFromServer);
 
-          // Normalize the event data (if needed)
           this.activeEvent = {
             _id: eventFromServer._id,
             eventTitle: eventFromServer.eventTitle,
@@ -643,17 +637,15 @@ Vue.createApp({
             })),
             eventDay: eventFromServer.eventDay,
             eventDate: formattedDate,
-            // eventDate: eventFromServer.eventDate,
             eventTime: formattedTime,
-            matches: eventFromServer.matches, // Matches array will be populated
+            matches: eventFromServer.matches,
             isPublished: eventFromServer.isPublished,
             maxPlayers: eventFromServer.maxPlayers,
             iconUrl: eventFromServer.iconUrl,
             eventUrl: eventUrl,
           };
-          //console.log("activeEvent:", this.activeEvent); // Log the activeEvent
+          //console.log("activeEvent:", this.activeEvent);
 
-          // console.log(this.activeEvent.registered_players);
           this.pairedPlayers = eventFromServer.matches.map((match) => ({
             player1: match.player1
               ? {
@@ -680,19 +672,12 @@ Vue.createApp({
             eventFromServer.eventTitle,
             `/events/${eventFromServer._id}`
           );
-
-          // console.log("viewed event: ", this.activeEvent.id);
-
-          //Place any code here that enables the check out button.
         })
         .catch((error) => console.error("Error fetching single event:", error))
         .finally(() => {
-          // this.loading = false;
           this.stopLoading();
           // console.log("viewed event: ", this.activeEvent.id);
         });
-
-      // this.currentPage = "viewEvent";
     },
     openCheckIn() {
       this.showCheckInForm = true;
@@ -702,12 +687,10 @@ Vue.createApp({
     },
 
     submitCheckIn(eventId) {
-      // this.loading = true; // Keep loading active
       this.startLoading();
 
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
-        // this.loading = false;
         this.stopLoading();
         return;
       }
@@ -716,7 +699,6 @@ Vue.createApp({
 
       if (this.checkedInEvents.includes(eventId)) {
         alert("You are already checked in to this event.");
-        // this.loading = false;
         this.stopLoading();
         return;
       }
@@ -810,7 +792,6 @@ Vue.createApp({
     },
 
     submitCheckOut(eventId) {
-      // this.loading = true;
       this.startLoading();
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
@@ -844,7 +825,6 @@ Vue.createApp({
         .then((data) => {
           // console.log("Check-out successful:", data);
 
-          // Remove from checkedInEvents
           const index = this.checkedInEvents.indexOf(eventId);
           if (index > -1) {
             this.checkedInEvents.splice(index, 1);
@@ -862,7 +842,6 @@ Vue.createApp({
           alert("Failed to check out. Please try again.");
         })
         .finally(() => {
-          // this.loading = false;
           this.stopLoading();
 
           this.viewEvent(eventId);
@@ -958,10 +937,6 @@ Vue.createApp({
       }
     },
 
-    // copyActiveEventLink() {
-    //   console.log(this.activeEvent.eventUrl);
-    //   this.copyToClipboard(this.activeEvent.eventUrl);
-    // },
     getEvents() {
       // return fetch("https://gamehavenstg.com/events")
       return fetch("https://gamehaven-production.up.railway.app/events")
@@ -1053,18 +1028,9 @@ Vue.createApp({
             "Processed templates stored in this.templates:",
             this.templates
           );
-
-          // Optional: If you need to perform actions after templates are loaded,
-          // similar to updateCheckedInEvents, you can add them here.
-          // For example, using Vue's nextTick if in a Vue component:
-          // this.$nextTick(() => {
-          //   this.initializeTemplateSelector(); // Or whatever action is needed
-          // });
         })
         .catch((error) => {
           console.error("Error fetching templates:", error);
-          // Consider setting an error state for the UI
-          // this.templateFetchError = "Could not load templates. Please try again later.";
         });
     },
     createEvent() {
@@ -1085,42 +1051,6 @@ Vue.createApp({
       this.navigatePage("creation");
       console.log(this.activeTemplate);
     },
-    // loadTemplate(event) {
-    //   console.log("hello");
-    //   console.log("event target find", event.target.value);
-    //   const selectedTemplateId = event.target.value;
-    //   console.log("selected template id", selectedTemplateId);
-
-    //   const selectedTemplate = this.templates.find(
-    //     (template) => template._id === selectedTemplateId
-    //   );
-
-    //   console.log(selectedTemplate);
-
-    //   if (selectedTemplate) {
-    //     // Populate activeEvent with the desired fields
-    //     this.newEvent = {
-    //       eventTitle: selectedTemplate.eventTitle,
-    //       eventGame: selectedTemplate.eventGame,
-    //       eventDescription: selectedTemplate.eventDescription,
-    //       iconUrl: selectedTemplate.iconUrl,
-    //       maxPlayers: selectedTemplate.maxPlayers,
-    //       eventDay: selectedTemplate.eventDay,
-    //       eventTime: selectedTemplate.eventTime,
-    //     };
-    //   } else {
-    //     // Reset activeEvent if no template is found
-    //     this.newEvent = {
-    //       eventTitle: "",
-    //       eventGame: "",
-    //       eventDescription: "",
-    //       iconUrl: "",
-    //       maxPlayers: null,
-    //       eventDay: "",
-    //       eventTime: "",
-    //     };
-    //   }
-    // },
 
     loadTemplate(selectedTemplateId) {
       // console.log("hello");
@@ -1274,9 +1204,6 @@ Vue.createApp({
             console.error("Error deleting template:", error);
           });
       }
-      // } else {
-      //   alert("Please select a template to delete.");
-      // }
     },
     pushEvent() {
       // const formatEventDate = this.newEvent.eventDate;
@@ -1482,20 +1409,19 @@ Vue.createApp({
         })
         .then((data) => {
           console.log("Bot response:", data);
-          this.showNotification("Event details sent to Discord!"); // Assuming you have a notification method
+          this.showNotification("Event details sent to Discord!");
         })
         .catch((error) => {
           console.error("Error sending event to bot:", error);
           this.showNotification(
             "Failed to send event details to Discord.",
             "error"
-          ); // Show error notification
+          );
         })
         .finally(() => {
           this.stopLoading();
         });
     },
-    //async and await
 
     startLoading() {
       this.loading = true;
