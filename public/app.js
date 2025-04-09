@@ -1509,19 +1509,41 @@ Vue.createApp({
         })
         .then((data) => {
           console.log("saved event: ", data);
+
+          // Ensure playerList is fully shaped
           data.playerList = data.playerList.map((player) => ({
             playerName: player.playerName,
             playerDiscordID: player.playerDiscordID,
             _id: player._id,
           }));
+
+          // Make sure matches are fully hydrated with objects, not just ids
+          data.matches = data.matches.map((pair) => ({
+            player1:
+              typeof pair.player1 === "object"
+                ? pair.player1
+                : { _id: pair.player1 },
+            player2: pair.player2
+              ? typeof pair.player2 === "object"
+                ? pair.player2
+                : { _id: pair.player2 }
+              : null,
+          }));
+
+          // Normalize for frontend consistency
+          data.id = data._id;
+
           this.activeEvent = data;
+
           const index = this.events.findIndex((event) => event.id === eventId);
           if (index !== -1) {
             this.events[index] = data;
           }
+
           this.modifiedFields = {};
           this.pairingsChanged = false;
         })
+
         .catch((error) => console.error("Error updating event:", error))
         .finally(() => {
           return new Promise((resolve) => {
