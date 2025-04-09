@@ -1562,7 +1562,6 @@ Vue.createApp({
         console.log("sending event to bot:", this.activeEvent);
 
         const eventToSend = { ...this.activeEvent };
-        eventToSend._id = this.pettyId; // If your frontend uses 'id'
 
         return fetch(
           "https://gamehavenbot-production.up.railway.app/publish_event",
