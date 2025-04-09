@@ -564,7 +564,7 @@ Vue.createApp({
         );
         if (player1) {
           this.activeEvent.matches.push({
-            player1: player1,
+            player1: player1._id, 
             player2: null,
             isBye: true,
           });
