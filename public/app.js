@@ -1,4 +1,6 @@
-Vue.createApp({
+import { createApp } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+const App = {
   data() {
     return {
       currentPage: "home",
@@ -1619,4 +1621,6 @@ Vue.createApp({
       this.getCookie("checkedInEvents") || "[]"
     );
   },
-}).mount("#app");
+};
+
+createApp(App).mount("#app");
