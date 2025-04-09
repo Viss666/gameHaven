@@ -544,8 +544,8 @@ Vue.createApp({
         if (player1 && player2) {
           // Instead of sending the whole object, send just the _id
           this.activeEvent.matches.push({
-            player1: player1._id,
-            player2: player2._id,
+            player1: player1,
+            player2: player2,
           });
           this.pairingsChanged = true;
         }
@@ -561,7 +561,7 @@ Vue.createApp({
         );
         if (player1) {
           this.activeEvent.matches.push({
-            player1: player1._id,
+            player1: player1,
             player2: null,
             isBye: true,
           });
