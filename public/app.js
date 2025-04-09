@@ -542,17 +542,20 @@ Vue.createApp({
         );
 
         if (player1 && player2) {
-          // Instead of sending the whole object, send just the _id
-          this.activeEvent.matches.push({
-            player1: player1,
-            player2: player2,
-          });
+          const newPair = {
+            player1: { ...player1 },
+            player2: { ...player2 },
+          };
+          // Update both arrays
+          this.activeEvent.matches.push(newPair);
+          this.pairedPlayers.push(newPair);
           this.pairingsChanged = true;
         }
         this.selectedPlayers = [];
         this.updatePairButtonState();
       }
     },
+
     giveBye() {
       if (this.selectedPlayers.length === 1) {
         const playerId = this.selectedPlayers[0];
