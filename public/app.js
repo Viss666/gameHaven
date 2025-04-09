@@ -563,8 +563,9 @@ Vue.createApp({
           (p) => p._id === playerId
         );
         if (player1) {
+          // Store the full object so that the UI can display playerName
           this.activeEvent.matches.push({
-            player1: player1._id,
+            player1: { ...player1 }, // entire object with playerName, etc.
             player2: null,
             isBye: true,
           });
@@ -1401,13 +1402,20 @@ Vue.createApp({
     },
     saveEvent(eventId) {
       this.scrollToTop();
-      this.startLoading();
+      this.startLoading(); // Assuming you have a startLoading method
 
-      // Use activeEvent.matches to build the payload
+      // Ensure modifiedFields is an object
+      this.modifiedFields = this.modifiedFields || {};
+
       if (this.pairingsChanged) {
         const matchesToSend = this.activeEvent.matches.map((pair) => ({
-          player1: pair.player1 ? pair.player1._id : null,
-          player2: pair.player2 ? pair.player2._id : null,
+          player1:
+            typeof pair.player1 === "object" ? pair.player1._id : pair.player1,
+          player2: pair.player2
+            ? typeof pair.player2 === "object"
+              ? pair.player2._id
+              : pair.player2
+            : null,
         }));
         this.modifiedFields.matches = matchesToSend;
       }
@@ -1450,7 +1458,7 @@ Vue.createApp({
         .finally(() => {
           return new Promise((resolve) => {
             setTimeout(() => {
-              this.stopLoading();
+              this.stopLoading(); // Assuming you have a stopLoading method
               resolve();
             }, 4500);
           });
