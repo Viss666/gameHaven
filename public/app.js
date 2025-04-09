@@ -564,7 +564,7 @@ Vue.createApp({
         );
         if (player1) {
           this.activeEvent.matches.push({
-            player1: player1._id, 
+            player1: player1._id,
             player2: null,
             isBye: true,
           });
@@ -1399,21 +1399,24 @@ Vue.createApp({
       // console.log("modifiedFields before saveEvent:", this.modifiedFields);
       //this.saveEvent(eventId);
     },
-
     saveEvent(eventId) {
       this.scrollToTop();
-      this.startLoading(); // Assuming you have a startLoading method
+      this.startLoading();
+
+      // Use activeEvent.matches to build the payload
       if (this.pairingsChanged) {
-        const matchesToSend = this.pairedPlayers.map((pair) => ({
+        const matchesToSend = this.activeEvent.matches.map((pair) => ({
           player1: pair.player1 ? pair.player1._id : null,
           player2: pair.player2 ? pair.player2._id : null,
         }));
         this.modifiedFields.matches = matchesToSend;
       }
-      // Add iconUrl and maxPlayers to modifiedFields
+
+      // Add other modified fields
       this.modifiedFields.iconUrl = this.activeEvent.iconUrl;
       this.modifiedFields.maxPlayers = this.activeEvent.maxPlayers;
       this.modifiedFields.eventFee = this.activeEvent.eventFee;
+
       console.log(this.activeEvent);
 
       return fetch(`https://gamehavenstg.com/events/${eventId}`, {
@@ -1447,7 +1450,7 @@ Vue.createApp({
         .finally(() => {
           return new Promise((resolve) => {
             setTimeout(() => {
-              this.stopLoading(); // Assuming you have a stopLoading method
+              this.stopLoading();
               resolve();
             }, 4500);
           });
