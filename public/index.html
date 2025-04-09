@@ -900,7 +900,7 @@
                         <span v-else> has a BYE </span>
                       </p>
                       <button @click="removePair(index)" class="btn">
-                        Delete
+                        Delete Pair
                       </button>
                     </li>
                   </ul>
@@ -909,13 +909,13 @@
             </div>
             <div class="edit-buttons">
               <button @click="deleteEvent(activeEvent.id)" class="btn">
-                Delete
+                Delete Event
               </button>
               <button @click="togglePublish(activeEvent.id)" class="btn">
                 {{ activeEvent.isPublished ? 'Unpublish' : 'Publish' }}
               </button>
               <button @click="saveEvent(activeEvent.id)" class="svbtn">
-                Save
+                Save Event
                 <!-- :disabled="saveButtonDisabled" -->
               </button>
               <button @click="sendEventToBot()" class="btn">
