@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- uncomment/comment these 2 lines when working in local, last link is local, /style is production -->
-    <!-- <base href="/">
-    <link rel="stylesheet" href="/style.css"> -->
-    <link rel="stylesheet" href="style.css">
+    <base href="/">
+    <link rel="stylesheet" href="/style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
 
 
     <link rel="icon" href="images/Logo.png" type="image/icon type" />
@@ -396,55 +396,52 @@
               < Back to All Events
             </button>
             <button class="btn"@click="copyActiveEventLink()">Copy Link</button>
+              <button
+                v-if="!isCheckedIn && !activeEvent.isPublished && activeEvent.maxPlayers > activeEvent.playerList.length"
+                @click="openCheckIn"
+                class="btn"
+              >
+                Check In
+              </button>
+
+              <button
+                v-if="isCheckedIn && activeEvent && activeEvent._id && !activeEvent.isPublished"
+                @click="submitCheckOut(activeEvent._id)"
+                class="btn"
+              >
+                Check Out
+              </button>
+
 
           </div>
 
           <div class="event-container">
             <!-- Body Section -->
 
-            <div class="event-body">
-              <div class="view-header">
-                <img :src="activeEvent.iconUrl" class="icon-url-header"/>
-
-                <h1 class="event-title2">{{activeEvent.eventTitle}}</h1>
-                <h1>{{getMonth(activeEvent.eventDate)}} - {{getDay(activeEvent.eventDate)}}</h1>
-              </div>
-
-
-              <div class="event-game"><h3>{{activeEvent.eventGame}}</h3></div>
-
-              <p class="event-day">
-                {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
-              </p>
-              <p class="event-organizer">
-                <strong>Organizer:</strong> {{activeEvent.eventOrganizer}} - {{activeEvent.organizerContactInfo}}
-              </p>
-              <p class="player-count">
-                <strong>Player Count:</strong>
-                {{activeEvent.playerList.length}} / {{ activeEvent.maxPlayers}}
-              </p>
-              <div class="event-fee">
-                {{ activeEvent.eventFee ? `$${activeEvent.eventFee}` : 'FREE ENTRY' }}
-              </div>
-              <p class="event-description">{{activeEvent.eventDescription}}</p>
-              <div class="event-buttons2">
-                <button
-                  v-if="!isCheckedIn && !activeEvent.isPublished && activeEvent.maxPlayers > activeEvent.playerList.length"
-                  @click="openCheckIn"
-                  class="btn"
-                >
-                  Check In
-                </button>
-
-                <button
-                  v-if="isCheckedIn && activeEvent && activeEvent._id && !activeEvent.isPublished"
-                  @click="submitCheckOut(activeEvent._id)"
-                  class="btn"
-                >
-                  Check Out
-                </button>
-
-              </div>
+            <div class="event-body1">
+                <div class="event-header1">
+                  <img :src="activeEvent.iconUrl" class="event-icon1" />
+                  <div class="header-text1">
+                    <h1 class="event-title1">{{activeEvent.eventTitle}}</h1>
+                    <p class="event-date1">{{ getMonth(activeEvent.eventDate) }} - {{ getDay(activeEvent.eventDate) }}</p>
+                  </div>
+                </div>
+              
+                <div class="event-details1">
+                  <h3 class="event-game1">{{ activeEvent.eventGame }}</h3>
+                  <p class="event-day-time1">{{ activeEvent.eventDay }} - {{ activeEvent.eventTime }}</p>
+                  <p class="event-organizer1">
+                    <strong>Organizer:</strong> {{ activeEvent.eventOrganizer }} - {{ activeEvent.organizerContactInfo }}
+                  </p>
+                  <p class="player-count1">
+                    <strong>Players:</strong> {{ activeEvent.playerList.length }} / {{ activeEvent.maxPlayers }}
+                  </p>
+                  <div class="event-fee1">
+                    ENTRY FEE: {{ activeEvent.eventFee ? `$${activeEvent.eventFee}` : 'FREE ENTRY' }}
+                  </div>
+                  <p class="event-description1">{{ activeEvent.eventDescription }}</p>
+                </div>
+              
             </div>
             <div class="players-on-page">
               <div
