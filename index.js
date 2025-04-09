@@ -366,6 +366,7 @@ app.put("/events/:eventId", async (req, res) => {
   try {
     const eventId = req.params.eventId;
     const { matches, ...otherFields } = req.body;
+    console.log("request body: ", req.body);
     console.log("Incoming matches:", req.body.matches);
 
     let matchIds = [];
