@@ -21,7 +21,6 @@ Vue.createApp({
       discordId: "",
       templates: null,
       events: [],
-      pettyId: "",
       newEvent: {
         eventTitle: "",
         eventGame: "",
@@ -186,6 +185,16 @@ Vue.createApp({
       return (
         Object.keys(this.modifiedFields).length === 0 && !this.pairingsChanged
       );
+    },
+    pairedPlayerIds() {
+      const ids = new Set();
+      if (this.activeEvent && this.activeEvent.matches) {
+        this.activeEvent.matches.forEach((match) => {
+          if (match.player1?._id) ids.add(match.player1._id);
+          if (match.player2?._id) ids.add(match.player2._id);
+        });
+      }
+      return ids;
     },
     saveButtonDisabled() {
       return !this.pairingsChanged;
@@ -1017,41 +1026,49 @@ Vue.createApp({
         .then((response) => response.json())
         .then((eventsFromServer) => {
           console.log("events from server: ", eventsFromServer);
-          this.events = eventsFromServer.map((event) => {
-            let formattedDate = event.eventDate;
-            let formattedTime = this.convertToStandardTime(event.eventTime);
 
-            if (formattedDate) {
-              formattedDate = formattedDate.split("T")[0]; // Split at "T" and take the date part
-            }
+          this.events = eventsFromServer
+            .map((event) => {
+              let formattedDate = event.eventDate;
+              let formattedTime = this.convertToStandardTime(event.eventTime);
 
-            const eventUrl = `https://gamehavenstg.com/events/${event._id}`; // Generate the URL
+              if (formattedDate) {
+                formattedDate = formattedDate.split("T")[0];
+              }
 
-            return {
-              id: event._id,
-              eventTitle: event.eventTitle,
-              eventGame: event.eventGame,
-              eventType: event.eventType,
-              eventDescription: event.eventDescription,
-              eventOrganizer: event.eventOrganizer,
-              organizerContactInfo: event.organizerContactInfo,
-              playerList:
-                event.playerList.map((player) => ({
-                  playerName: player.playerName,
-                  playerDiscordID: player.playerDiscordID,
-                  _id: player._id,
-                })) || [],
-              eventDay: event.eventDay,
-              eventDate: formattedDate, // Use the formatted date
-              eventTime: formattedTime,
-              matches: event.matches,
-              isPublished: event.isPublished,
-              maxPlayers: event.maxPlayers,
-              iconUrl: event.iconUrl,
-              eventUrl: eventUrl,
-              eventFee: event.eventFee,
-            };
-          });
+              const eventUrl = `https://gamehavenstg.com/events/${event._id}`;
+
+              return {
+                id: event._id,
+                eventTitle: event.eventTitle,
+                eventGame: event.eventGame,
+                eventType: event.eventType,
+                eventDescription: event.eventDescription,
+                eventOrganizer: event.eventOrganizer,
+                organizerContactInfo: event.organizerContactInfo,
+                playerList:
+                  event.playerList.map((player) => ({
+                    playerName: player.playerName,
+                    playerDiscordID: player.playerDiscordID,
+                    _id: player._id,
+                  })) || [],
+                eventDay: event.eventDay,
+                eventDate: formattedDate,
+                eventTime: formattedTime,
+                matches: event.matches,
+                isPublished: event.isPublished,
+                maxPlayers: event.maxPlayers,
+                iconUrl: event.iconUrl,
+                eventUrl: eventUrl,
+                eventFee: event.eventFee,
+              };
+            })
+            .sort((a, b) => {
+              // Convert to Date objects for proper comparison
+              const dateA = new Date(a.eventDate);
+              const dateB = new Date(b.eventDate);
+              return dateA - dateB; // Ascending order
+            });
 
           this.$nextTick(() => {
             this.updateCheckedInEvents();
@@ -1060,6 +1077,55 @@ Vue.createApp({
         })
         .catch((error) => console.error("Error fetching events:", error));
     },
+
+    // getEvents() {
+    //   return fetch("https://gamehavenstg.com/events")
+    //     .then((response) => response.json())
+    //     .then((eventsFromServer) => {
+    //       console.log("events from server: ", eventsFromServer);
+    //       this.events = eventsFromServer.map((event) => {
+    //         let formattedDate = event.eventDate;
+    //         let formattedTime = this.convertToStandardTime(event.eventTime);
+
+    //         if (formattedDate) {
+    //           formattedDate = formattedDate.split("T")[0]; // Split at "T" and take the date part
+    //         }
+
+    //         const eventUrl = `https://gamehavenstg.com/events/${event._id}`; // Generate the URL
+
+    //         return {
+    //           id: event._id,
+    //           eventTitle: event.eventTitle,
+    //           eventGame: event.eventGame,
+    //           eventType: event.eventType,
+    //           eventDescription: event.eventDescription,
+    //           eventOrganizer: event.eventOrganizer,
+    //           organizerContactInfo: event.organizerContactInfo,
+    //           playerList:
+    //             event.playerList.map((player) => ({
+    //               playerName: player.playerName,
+    //               playerDiscordID: player.playerDiscordID,
+    //               _id: player._id,
+    //             })) || [],
+    //           eventDay: event.eventDay,
+    //           eventDate: formattedDate, // Use the formatted date
+    //           eventTime: formattedTime,
+    //           matches: event.matches,
+    //           isPublished: event.isPublished,
+    //           maxPlayers: event.maxPlayers,
+    //           iconUrl: event.iconUrl,
+    //           eventUrl: eventUrl,
+    //           eventFee: event.eventFee,
+    //         };
+    //       });
+
+    //       this.$nextTick(() => {
+    //         this.updateCheckedInEvents();
+    //         console.log(this.events);
+    //       });
+    //     })
+    //     .catch((error) => console.error("Error fetching events:", error));
+    // },
 
     getTemplates() {
       // Use the appropriate URL for your templates endpoint
@@ -1280,8 +1346,7 @@ Vue.createApp({
       }
     },
     pushEvent() {
-      // const formatEventDate = this.newEvent.eventDate;
-      // formateeventDate.toISOString().split("T")[0];
+      this.scrollToTop();
 
       Cookies.set("organizerName", this.newEvent.eventOrganizer, {
         expires: 999,
@@ -1367,28 +1432,31 @@ Vue.createApp({
     },
     editEvent(eventId) {
       this.currentPage = "edit";
-      this.pettyId = eventId;
-
+      this.scrollToTop();
       this.activeEvent = this.events.find((event) => event.id === eventId);
       console.log("active event: ", this.activeEvent);
       // this.viewEvent(eventId);
     },
     deleteEvent(eventId) {
-      fetch(`https://gamehavenstg.com/events/${eventId}`, {
-        method: "DELETE",
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to delete event");
-          }
-          return response.json();
+      if (confirm("Are you sure you want to delete this event?")) {
+        fetch(`https://gamehavenstg.com/events/${eventId}`, {
+          method: "DELETE",
         })
-        .then((data) => {
-          // console.log("Deleted event:", data);
-          this.events = this.events.filter((event) => event.id !== eventId);
-          this.currentPage = "events";
-        })
-        .catch((error) => console.error("Error deleting event:", error));
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to delete event");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            // console.log("Deleted event:", data);
+            this.events = this.events.filter((event) => event.id !== eventId);
+            this.currentPage = "events";
+          })
+          .catch((error) => console.error("Error deleting event:", error));
+      } else {
+        return;
+      }
     },
     togglePublish(eventId) {
       // console.log("togglePublish called with eventId:", eventId);
@@ -1466,45 +1534,44 @@ Vue.createApp({
     },
 
     sendEventToBot() {
-      this.startLoading();
+      if (confirm("Are you sure you want to send this event to the discord")) {
+        this.startLoading();
 
-      console.log("sending event to bot:", this.activeEvent);
+        console.log("sending event to bot:", this.activeEvent);
 
-      const eventToSend = { ...this.activeEvent };
-      eventToSend._id = this.pettyId; // If your frontend uses 'id'
+        const eventToSend = { ...this.activeEvent };
+        eventToSend._id = this.pettyId; // If your frontend uses 'id'
 
-      return fetch(
-        "https://gamehavenbot-production.up.railway.app/publish_event",
+        return fetch(
+          "https://gamehavenbot-production.up.railway.app/publish_event",
 
-        {
-          // Use the bot's endpoint
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(eventToSend),
-        }
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(
-              `Failed to send event to bot: ${response.status} - ${response.statusText}`
-            );
+          {
+            // Use the bot's endpoint
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(eventToSend),
           }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Bot response:", data);
-          this.showNotification("Event details sent to Discord!");
-        })
-        .catch((error) => {
-          console.error("Error sending event to bot:", error);
-          this.showNotification(
-            "Failed to send event details to Discord.",
-            "error"
-          );
-        })
-        .finally(() => {
-          this.stopLoading();
-        });
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                `Failed to send event to bot: ${response.status} - ${response.statusText}`
+              );
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Bot response:", data);
+          })
+          .catch((error) => {
+            console.error("Error sending event to bot:", error);
+          })
+          .finally(() => {
+            this.stopLoading();
+          });
+      } else {
+        return;
+      }
     },
 
     startLoading() {
