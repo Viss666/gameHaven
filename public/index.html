@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- uncomment/comment these 2 lines when working in local, last link is local, /style is production -->
-    <base href="/">
-    <link rel="stylesheet" href="/style.css">
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- <base href="/">
+    <link rel="stylesheet" href="/style.css"> -->
+    <link rel="stylesheet" href="style.css">
 
 
     <link rel="icon" href="images/Logo.png" type="image/icon type" />
@@ -476,10 +476,10 @@
                 <ul class="player-list">
                   <li
                     v-for="player in activeEvent.playerList ?? [] "
-                    :key="player.discord_id"
+                    :key="player.playerDiscordID"
                     class="player"
                   >
-                    <p class="player-names">{{player.player_name}}</p>
+                    <p class="player-names">{{player.playerName}}</p>
                   </li>
                 </ul>
               </div>
@@ -846,7 +846,7 @@
                       :class="{ selected: selectedPlayers.includes(player._id) }"
                     >
                       <div class="edit-player-names">
-                        {{player.player_name}} {{player.discord_id}}
+                        {{player.playerName}} {{player.playerDiscordID}}
                       </div>
                       <div class="edit-player-buttons">
                         <button

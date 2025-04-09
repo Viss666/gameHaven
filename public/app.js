@@ -542,10 +542,10 @@ Vue.createApp({
         );
 
         if (player1 && player2) {
-          // Create new objects that include playerName based on player_name
+          // Instead of sending the whole object, send just the _id
           this.activeEvent.matches.push({
-            player1: { ...player1, playerName: player1.player_name },
-            player2: { ...player2, playerName: player2.player_name },
+            player1: player1._id,
+            player2: player2._id,
           });
           this.pairingsChanged = true;
         }
@@ -561,7 +561,7 @@ Vue.createApp({
         );
         if (player1) {
           this.activeEvent.matches.push({
-            player1: { ...player1, playerName: player1.player_name },
+            player1: player1._id,
             player2: null,
             isBye: true,
           });
@@ -691,8 +691,8 @@ Vue.createApp({
             eventOrganizer: eventFromServer.eventOrganizer,
             organizerContactInfo: eventFromServer.organizerContactInfo,
             playerList: eventFromServer.playerList.map((player) => ({
-              player_name: player.playerName,
-              discord_id: player.playerDiscordID,
+              playerName: player.playerName,
+              playerDiscordID: player.playerDiscordID,
               _id: player._id,
             })),
             eventDay: eventFromServer.eventDay,
@@ -710,13 +710,13 @@ Vue.createApp({
           this.pairedPlayers = eventFromServer.matches.map((match) => ({
             player1: match.player1
               ? {
-                  player_name: match.player1.playerName,
+                  playerName: match.player1.playerName,
                   _id: match.player1._id,
                 }
               : null,
             player2: match.player2
               ? {
-                  player_name: match.player2.playerName,
+                  playerName: match.player2.playerName,
                   _id: match.player2.id,
                 }
               : null,
@@ -805,8 +805,8 @@ Vue.createApp({
               Array.isArray(this.activeEvent.playerList)
             ) {
               this.activeEvent.playerList.push({
-                player_name: this.firstName,
-                discord_id: this.discordId,
+                playerName: this.firstName,
+                playerDiscordID: this.discordId,
               });
             } else {
               console.warn(
@@ -875,7 +875,7 @@ Vue.createApp({
       }
 
       const player = this.activeEvent.playerList.find(
-        (p) => p.discord_id === this.discordId
+        (p) => p.playerDiscordID === this.discordId
       );
 
       if (!player) {
@@ -932,7 +932,7 @@ Vue.createApp({
       let playerId = null;
       for (const event of this.events) {
         const player = event.playerList.find(
-          (p) => p.discord_id === this.discordId
+          (p) => p.playerDiscordID === this.discordId
         );
         if (player) {
           playerId = player._id;
@@ -1033,8 +1033,8 @@ Vue.createApp({
               organizerContactInfo: event.organizerContactInfo,
               playerList:
                 event.playerList.map((player) => ({
-                  player_name: player.playerName,
-                  discord_id: player.playerDiscordID,
+                  playerName: player.playerName,
+                  playerDiscordID: player.playerDiscordID,
                   _id: player._id,
                 })) || [],
               eventDay: event.eventDay,
@@ -1402,12 +1402,11 @@ Vue.createApp({
       this.startLoading(); // Assuming you have a startLoading method
       if (this.pairingsChanged) {
         const matchesToSend = this.pairedPlayers.map((pair) => ({
-          player1: pair.player1 ? pair.player1 : null,
-          player2: pair.player2 ? pair.player2 : null,
+          player1: pair.player1 ? pair.player1._id : null,
+          player2: pair.player2 ? pair.player2._id : null,
         }));
         this.modifiedFields.matches = matchesToSend;
       }
-
       // Add iconUrl and maxPlayers to modifiedFields
       this.modifiedFields.iconUrl = this.activeEvent.iconUrl;
       this.modifiedFields.maxPlayers = this.activeEvent.maxPlayers;
@@ -1429,8 +1428,8 @@ Vue.createApp({
         .then((data) => {
           console.log("saved event: ", data);
           data.playerList = data.playerList.map((player) => ({
-            player_name: player.playerName,
-            discord_id: player.playerDiscordID,
+            playerName: player.playerName,
+            playerDiscordID: player.playerDiscordID,
             _id: player._id,
           }));
           this.activeEvent = data;
