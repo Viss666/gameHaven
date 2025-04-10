@@ -290,8 +290,8 @@ const App = {
       }
     },
     getRandomCopiesAmount() {
-      min = Math.ceil(0);
-      max = Math.floor(9);
+      const min = Math.ceil(0);
+      const max = Math.floor(9);
       return Math.floor(Math.random() * (max - min)) + min;
     },
     fetchBoardGames() {
