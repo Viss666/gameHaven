@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- uncomment/comment these 2 lines when working in local, last link is local, /style is production -->
-    <base href="/">
-    <link rel="stylesheet" href="/style.css">
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- <base href="/">
+    <link rel="stylesheet" href="/style.css"> -->
+    <link rel="stylesheet" href="style.css">
 
 
     <link rel="icon" href="images/Logo.png" type="image/icon type" />
@@ -912,7 +912,7 @@
                 Delete Event
               </button>
               <button @click="togglePublish(activeEvent.id)" class="btn">
-                {{ activeEvent.isPublished ? 'Unpublish' : 'Publish' }}
+                {{ activeEvent.isPublished ? 'Unpublish Event' : 'Publish Event' }}
               </button>
               <button @click="saveEvent(activeEvent.id)" class="svbtn">
                 Save Event
