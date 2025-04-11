@@ -182,7 +182,7 @@
                   <button
                     href="#"
                     class="btn"
-                    @click.prevent="viewEvent(event.id)"
+                    @click.prevent="viewEvent(event._id)"
                   >
                     Event Info &amp; Sign-Up
                   </button>
@@ -370,14 +370,14 @@
                 <button
                   v-if="isAdmin == true"
                   class="btn"
-                  @click="editEvent(event.id)"
+                  @click="editEvent(event._id)"
                 >
                   Edit Event
                 </button>
                 <button
                   href="#"
                   class="btn"
-                  @click.prevent="viewEvent(event.id)"
+                  @click.prevent="viewEvent(event._id)"
                 >
                   Event Info &amp; Sign-Up
                 </button>
@@ -908,13 +908,13 @@
               </div>
             </div>
             <div class="edit-buttons">
-              <button @click="deleteEvent(activeEvent.id)" class="btn">
+              <button @click="deleteEvent(activeEvent._id)" class="btn">
                 Delete Event
               </button>
-              <button @click="togglePublish(activeEvent.id)" class="btn">
+              <button @click="togglePublish(activeEvent._id)" class="btn">
                 {{ activeEvent.isPublished ? 'Unpublish Event' : 'Publish Event' }}
               </button>
-              <button @click="saveEvent(activeEvent.id)" class="svbtn">
+              <button @click="saveEvent(activeEvent._id)" class="svbtn">
                 Save Event
                 <!-- :disabled="saveButtonDisabled" -->
               </button>
