@@ -1041,7 +1041,7 @@ const App = {
               const eventUrl = `https://gamehavenstg.com/events/${event._id}`;
 
               return {
-                id: event._id,
+                _id: event._id,
                 eventTitle: event.eventTitle,
                 eventGame: event.eventGame,
                 eventType: event.eventType,
