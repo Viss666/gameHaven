@@ -1435,7 +1435,7 @@ const App = {
     editEvent(eventId) {
       this.currentPage = "edit";
       this.scrollToTop();
-      this.activeEvent = this.events.find((event) => event.id === eventId);
+      this.activeEvent = this.events.find((event) => event._id === eventId);
       console.log("active event: ", this.activeEvent);
       // this.viewEvent(eventId);
     },
