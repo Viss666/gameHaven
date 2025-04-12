@@ -1546,7 +1546,7 @@ const App = {
             setTimeout(() => {
               this.stopLoading();
               resolve();
-            }, 4500);
+            }, 1500);
           });
         });
     },
