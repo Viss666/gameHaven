@@ -1472,28 +1472,27 @@ const App = {
     },
     saveEvent(eventId) {
       this.scrollToTop();
-      this.startLoading(); // Assuming you have a startLoading method
+      this.startLoading();
 
-      // Ensure modifiedFields is an object
       this.modifiedFields = this.modifiedFields || {};
 
-      if (this.pairingsChanged) {
-        const matchesToSend = this.activeEvent.matches.map((pair) => ({
-          player1:
-            typeof pair.player1 === "object" ? pair.player1._id : pair.player1,
-          player2: pair.player2
-            ? typeof pair.player2 === "object"
-              ? pair.player2._id
-              : pair.player2
-            : null,
-        }));
-        this.modifiedFields.matches = matchesToSend;
-      }
+      // Always include matches in modifiedFields
+      const matchesToSend = this.activeEvent.matches.map((pair) => ({
+        player1:
+          typeof pair.player1 === "object" ? pair.player1._id : pair.player1,
+        player2: pair.player2
+          ? typeof pair.player2 === "object"
+            ? pair.player2._id
+            : pair.player2
+          : null,
+      }));
+      this.modifiedFields.matches = matchesToSend;
 
       // Add other modified fields
       this.modifiedFields.iconUrl = this.activeEvent.iconUrl;
       this.modifiedFields.maxPlayers = this.activeEvent.maxPlayers;
       this.modifiedFields.eventFee = this.activeEvent.eventFee;
+      this.modifiedFields.isPublished = this.activeEvent.isPublished; //Include the isPublished value.
 
       console.log(this.activeEvent);
 
@@ -1512,14 +1511,12 @@ const App = {
         .then((data) => {
           console.log("saved event: ", data);
 
-          // Ensure playerList is fully shaped
           data.playerList = data.playerList.map((player) => ({
             playerName: player.playerName,
             playerDiscordID: player.playerDiscordID,
             _id: player._id,
           }));
 
-          // Make sure matches are fully hydrated with objects, not just ids
           data.matches = data.matches.map((pair) => ({
             player1:
               typeof pair.player1 === "object"
@@ -1532,9 +1529,7 @@ const App = {
               : null,
           }));
 
-          // Normalize for frontend consistency
           data.id = data._id;
-
           this.activeEvent = data;
 
           const index = this.events.findIndex((event) => event.id === eventId);
@@ -1545,17 +1540,102 @@ const App = {
           this.modifiedFields = {};
           this.pairingsChanged = false;
         })
-
         .catch((error) => console.error("Error updating event:", error))
         .finally(() => {
           return new Promise((resolve) => {
             setTimeout(() => {
-              this.stopLoading(); // Assuming you have a stopLoading method
+              this.stopLoading();
               resolve();
             }, 4500);
           });
         });
     },
+    // saveEvent(eventId) {
+    //   this.scrollToTop();
+    //   this.startLoading(); // Assuming you have a startLoading method
+
+    //   // Ensure modifiedFields is an object
+    //   this.modifiedFields = this.modifiedFields || {};
+
+    //   if (this.pairingsChanged) {
+    //     const matchesToSend = this.activeEvent.matches.map((pair) => ({
+    //       player1:
+    //         typeof pair.player1 === "object" ? pair.player1._id : pair.player1,
+    //       player2: pair.player2
+    //         ? typeof pair.player2 === "object"
+    //           ? pair.player2._id
+    //           : pair.player2
+    //         : null,
+    //     }));
+    //     this.modifiedFields.matches = matchesToSend;
+    //   }
+
+    //   // Add other modified fields
+    //   this.modifiedFields.iconUrl = this.activeEvent.iconUrl;
+    //   this.modifiedFields.maxPlayers = this.activeEvent.maxPlayers;
+    //   this.modifiedFields.eventFee = this.activeEvent.eventFee;
+
+    //   console.log(this.activeEvent);
+
+    //   return fetch(`https://gamehavenstg.com/events/${eventId}`, {
+    //     method: "PUT",
+    //     credentials: "include",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(this.modifiedFields),
+    //   })
+    //     .then((response) => {
+    //       if (!response.ok) {
+    //         throw new Error("Failed to update event");
+    //       }
+    //       return response.json();
+    //     })
+    //     .then((data) => {
+    //       console.log("saved event: ", data);
+
+    //       // Ensure playerList is fully shaped
+    //       data.playerList = data.playerList.map((player) => ({
+    //         playerName: player.playerName,
+    //         playerDiscordID: player.playerDiscordID,
+    //         _id: player._id,
+    //       }));
+
+    //       // Make sure matches are fully hydrated with objects, not just ids
+    //       data.matches = data.matches.map((pair) => ({
+    //         player1:
+    //           typeof pair.player1 === "object"
+    //             ? pair.player1
+    //             : { _id: pair.player1 },
+    //         player2: pair.player2
+    //           ? typeof pair.player2 === "object"
+    //             ? pair.player2
+    //             : { _id: pair.player2 }
+    //           : null,
+    //       }));
+
+    //       // Normalize for frontend consistency
+    //       data.id = data._id;
+
+    //       this.activeEvent = data;
+
+    //       const index = this.events.findIndex((event) => event.id === eventId);
+    //       if (index !== -1) {
+    //         this.events[index] = data;
+    //       }
+
+    //       this.modifiedFields = {};
+    //       this.pairingsChanged = false;
+    //     })
+
+    //     .catch((error) => console.error("Error updating event:", error))
+    //     .finally(() => {
+    //       return new Promise((resolve) => {
+    //         setTimeout(() => {
+    //           this.stopLoading(); // Assuming you have a stopLoading method
+    //           resolve();
+    //         }, 4500);
+    //       });
+    //     });
+    // },
 
     sendEventToBot() {
       if (confirm("Are you sure you want to send this event to the discord")) {
