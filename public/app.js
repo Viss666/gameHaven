@@ -992,7 +992,7 @@ const App = {
           // console.log("Successfully removed player", data);
           this.getEvents().then(() => {
             const updatedEvent = this.events.find(
-              (event) => event.id === eventId
+              (event) => event._id === eventId
             );
             if (updatedEvent) {
               this.activeEvent = updatedEvent;
