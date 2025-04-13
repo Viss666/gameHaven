@@ -1530,6 +1530,7 @@ const App = {
           }));
 
           data.id = data._id;
+          data.eventTime = this.convertToStandardTime(data.eventTime);
           this.activeEvent = data;
 
           const index = this.events.findIndex((event) => event.id === eventId);
