@@ -634,13 +634,16 @@ const App = {
     },
 
     verifyAdmin() {
-      if (this.adminPassword == "friend") {
+      const lol = "R0gyMDI1";
+      const password = atob(lol);
+      const enteredPassword = this.adminPassword;
+
+      if (enteredPassword === password) {
         this.isAdmin = true;
         this.currentPage = "events";
       } else {
-        alert("wrong password you are not friend");
+        alert("wrong password you are not admin");
         this.adminPassword = "";
-        return;
       }
     },
 
