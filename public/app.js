@@ -240,7 +240,7 @@ const App = {
       this.isDarkMode = true;
     }
 
-    console.log(this.events);
+    // console.log(this.events);
   },
   beforeUnmount() {
     const mainContent = document.getElementById("main");
@@ -444,8 +444,8 @@ const App = {
           const parser = new DOMParser();
           const xmlDoc = parser.parseFromString(xmlText, "text/xml");
           const gameInfo = this.parseBoardGameXML(xmlDoc);
-          console.log(gameInfo);
-          console.log(this.selectedGame);
+          // console.log(gameInfo);
+          // console.log(this.selectedGame);
           //console.log(xmlDoc);
           //this.selectedGame.description = xmlDoc.querySelector('description').textContent;
         })
@@ -498,11 +498,11 @@ const App = {
 
     togglePlayerSelection(playerId) {
       const playerIndex = this.selectedPlayers.indexOf(playerId);
-      console.log("playerindex: ", playerIndex);
-      console.log("player id: ", playerId);
+      // console.log("playerindex: ", playerIndex);
+      // console.log("player id: ", playerId);
       if (playerIndex === -1) {
         this.selectedPlayers.push(playerId);
-        console.log(this.selectedPlayers);
+        // console.log(this.selectedPlayers);
       } else {
         this.selectedPlayers.splice(playerIndex, 1);
       }
@@ -771,7 +771,7 @@ const App = {
         return;
       }
       const now = new Date();
-      console.log(now);
+      // console.log(now);
 
       if (this.checkedInEvents.includes(eventId)) {
         alert("You are already checked in to this event.");
@@ -1027,7 +1027,7 @@ const App = {
       return fetch("https://gamehavenstg.com/events")
         .then((response) => response.json())
         .then((eventsFromServer) => {
-          console.log("events from server: ", eventsFromServer);
+          // console.log("events from server: ", eventsFromServer);
 
           this.events = eventsFromServer
             .map((event) => {
@@ -1074,7 +1074,7 @@ const App = {
 
           this.$nextTick(() => {
             this.updateCheckedInEvents();
-            console.log(this.events);
+            // console.log(this.events);
           });
         })
         .catch((error) => console.error("Error fetching events:", error));
@@ -1134,7 +1134,7 @@ const App = {
       const templatesUrl = "https://gamehavenstg.com/templates"; // Or your local development URL e.g., http://localhost:8080/templates
       // const templatesUrl =
       //   "https://gamehaven-production.up.railway.app/templates";
-      console.log("Fetching templates from:", templatesUrl);
+      // console.log("Fetching templates from:", templatesUrl);
 
       return fetch(templatesUrl)
         .then((response) => {
@@ -1148,7 +1148,7 @@ const App = {
           return response.json(); // Parse the response body as JSON
         })
         .then((templatesFromServer) => {
-          console.log("Raw templates from server: ", templatesFromServer);
+          // console.log("Raw templates from server: ", templatesFromServer);
 
           // Assuming your templates have fields: _id, eventTitle, eventGame, eventDescription, iconUrl, maxPlayers
           // Map the data from the server to a format suitable for your front-end state
@@ -1166,10 +1166,10 @@ const App = {
             };
           });
 
-          console.log(
-            "Processed templates stored in this.templates:",
-            this.templates
-          );
+          // console.log(
+          //   "Processed templates stored in this.templates:",
+          //   this.templates
+          // );
         })
         .catch((error) => {
           console.error("Error fetching templates:", error);
@@ -1191,7 +1191,7 @@ const App = {
         eventFee: "",
       };
       this.navigatePage("creation");
-      console.log(this.activeTemplate);
+      // console.log(this.activeTemplate);
     },
 
     loadTemplate(selectedTemplateId) {
@@ -1202,7 +1202,7 @@ const App = {
         (template) => template.id === selectedTemplateId
       );
 
-      console.log(selectedTemplate);
+      // console.log(selectedTemplate);
 
       if (selectedTemplate) {
         this.newEvent = {
@@ -1217,8 +1217,8 @@ const App = {
         };
         this.activeTemplate = selectedTemplate; // Store the entire template object
 
-        console.log("active template", this.activeTemplate);
-        console.log("template id", activeTemplate._id);
+        // console.log("active template", this.activeTemplate);
+        // console.log("template id", activeTemplate._id);
       } else {
         this.newEvent = {
           eventTitle: "",
@@ -1265,7 +1265,7 @@ const App = {
           return response.json(); // Or response.text(), depending on your API
         })
         .then((data) => {
-          console.log("Template updated:", data);
+          // console.log("Template updated:", data);
           this.getTemplates(); // Refresh the template list
           // Optionally provide user feedback (e.g., a success message)
         })
@@ -1315,9 +1315,9 @@ const App = {
       }
     },
     deleteTemplate() {
-      console.log("active template before check:", this.activeTemplate);
+      // console.log("active template before check:", this.activeTemplate);
       // if (this.activeTemplate) {
-      console.log("active template: ", this.activeTemplate.id);
+      // console.log("active template: ", this.activeTemplate.id);
       if (confirm("Are you sure you want to delete this template?")) {
         fetch(`https://gamehavenstg.com/templates/${this.activeTemplate.id}`, {
           method: "DELETE",
@@ -1373,7 +1373,7 @@ const App = {
         iconUrl: this.newEvent.iconUrl,
         eventFee: this.newEvent.eventFee,
       };
-      console.log("New Event: ", newEvent);
+      // console.log("New Event: ", newEvent);
 
       fetch("https://gamehavenstg.com/events", {
         method: "POST",
@@ -1389,7 +1389,7 @@ const App = {
           return response.json();
         })
         .then((createdEvent) => {
-          console.log("Event created:", createdEvent);
+          // console.log("Event created:", createdEvent);
 
           // Add the created event to the local events array
           this.events.push({
@@ -1436,7 +1436,7 @@ const App = {
       this.currentPage = "edit";
       this.scrollToTop();
       this.activeEvent = this.events.find((event) => event._id === eventId);
-      console.log("active event: ", this.activeEvent);
+      // console.log("active event: ", this.activeEvent);
       // this.viewEvent(eventId);
     },
     deleteEvent(eventId) {
@@ -1665,7 +1665,7 @@ const App = {
             return response.json();
           })
           .then((data) => {
-            console.log("Bot response:", data);
+            // console.log("Bot response:", data);
           })
           .catch((error) => {
             console.error("Error sending event to bot:", error);
