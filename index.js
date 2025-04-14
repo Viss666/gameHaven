@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const path = require("path");
 
-const Player = model.Player; // Correct import
+const Player = model.Player;
 const Event = model.Event;
 const Template = model.Template;
 
@@ -14,7 +14,7 @@ var session = require("express-session");
 
 const app = express();
 
-const publicDirectoryPath = path.join(__dirname, "/public"); // Adjust path as needed
+const publicDirectoryPath = path.join(__dirname, "/public"); 
 app.use(express.static(publicDirectoryPath));
 
 const allowedOrigins = [
