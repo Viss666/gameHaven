@@ -893,7 +893,7 @@ const App = {
       }
 
       const player = this.activeEvent.playerList.find(
-        (p) => p.playerDiscordID === this.playerDiscordID
+        (p) => p.playerDiscordID === this.discordId
       );
 
       if (!player) {
@@ -969,7 +969,7 @@ const App = {
 
       // Keep only the events where the user is still checked in
       this.checkedInEvents = storedEvents.filter((eventId) => {
-        const event = this.events.find((e) => e.id === eventId);
+        const event = this.events.find((e) => e._id === eventId);
         return event?.playerList.some((p) => p._id === playerId);
       });
 
