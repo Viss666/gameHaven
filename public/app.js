@@ -893,7 +893,7 @@ const App = {
       }
 
       const player = this.activeEvent.playerList.find(
-        (p) => p.playerDiscordID === this.discordId
+        (p) => p.playerDiscordID === this.playerDiscordID
       );
 
       if (!player) {
