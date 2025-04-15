@@ -1692,7 +1692,6 @@ const App = {
   },
   created: function () {
     this.getEvents();
-    console.log("Events: ", this.events);
     this.getTemplates();
     if (this.events.length > 0) {
       this.activeEvent = this.events[0];
