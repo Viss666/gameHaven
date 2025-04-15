@@ -176,8 +176,8 @@
 
                     <h3>{{ event.eventTitle }}</h3>
                   </div>
-                  <div class="event-game"><p>{{event.eventGame}}</p></div>
-                  <div class="home-event-date">{{ event.eventDate }}</div>
+                  <div class="event-game"><p>{{getMonth(event.eventGame)}}</p></div>
+                  <div class="home-event-date">{{ getDay(event.eventDate) }}</div>
 
                   <button
                     href="#"
