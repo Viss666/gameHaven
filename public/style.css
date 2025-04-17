@@ -790,7 +790,7 @@ h4 {
   border-radius: 3px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.075);
   padding: 20px;
-  margin: auto;
+  height: fit-content;
 }
 .event-header1 {
   display: flex;
@@ -1466,6 +1466,7 @@ body.dark-mode {
 
   .event-body1 {
     padding: 0;
+    margin: auto;
   }
 
   .edit-players {
