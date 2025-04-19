@@ -276,20 +276,22 @@
                 class="rental-game-img"
               />
               <h3>{{ game.name }}</h3>
-              <p>Copies in stock: {{ game.copies }}</p>
+              <p style="margin-top:0px;" >Copies in stock: {{ game.copies }}</p>
+              <button id="unreserve-button-id" class="rental-game-btn" v-if="game.isReserved" @click="toggleRentalDetail(game, true, false)">Unreserve</button>
+              <button id="unwaitlist-button-id" class="rental-game-btn" v-if="game.isWaitlisted" @click="toggleRentalDetail(game, false, true)">Unwaitlist</button>
               <button
                 class="rental-game-btn"
-                v-if="game.copies == 0"
+                v-if="game.copies == 0 && !game.isReserved && !game.isWaitlisted"
                 @click="toggleRentalDetail(game)"
               >
-                Waitlist
+                About
               </button>
               <button
                 class="rental-game-btn"
-                v-if="game.copies > 0"
+                v-if="game.copies > 0 && !game.isReserved && !game.isWaitlisted"
                 @click="toggleRentalDetail(game)"
               >
-                Reserve
+                About
               </button>
 
               <div
@@ -298,23 +300,23 @@
                 class="rental-detail-container"
               >
                 <!-- <button @click="selectedGame = null">Close</button> -->
-                <span @click="closeRentalDetail">x</span>
+                <span @click="closeRentalDetail(selectedGame)" style="cursor:pointer;" >x</span>
                 <h3 style="margin: 0">{{ selectedGame.name }}</h3>
                 <!-- <p>{{ selectedGame.description }}</p> -->
                 <p>
-                  Players: {{ selectedGame.minPlayers }} - {{
+                  <strong>Players:</strong> {{ selectedGame.minPlayers }} - {{
                   selectedGame.maxPlayers }}
                 </p>
                 <p>
-                  Play Time: {{ selectedGame.minPlaytime }} - {{
+                  <strong>Play Time:</strong> {{ selectedGame.minPlaytime }} - {{
                   selectedGame.maxPlaytime }} Minutes
                 </p>
                 <p v-if="this.selectedGame.bestPlayerAge > 0">
-                  Best Player Age: {{ selectedGame.bestPlayerAge - 2 }} - {{
+                  <strong>Best Player Age:</strong> {{ selectedGame.bestPlayerAge - 2 }} - {{
                   selectedGame.bestPlayerAge }}
                 </p>
-                <p v-if="this.selectedGame.bestPlayerAge <= 0">
-                  Best Player Age: {{ selectedGame.minAge }} - {{
+                <p style="margin-bottom: 0px;" v-if="this.selectedGame.bestPlayerAge <= 0">
+                  <strong>Best Player Age:</strong> {{ selectedGame.minAge }} - {{
                   parseInt(selectedGame.minAge) + 2 }}
                 </p>
                 <div id="detail-description-div">
@@ -322,6 +324,8 @@
                     <p>{{ selectedGame.description }}</p>
                   </div>
                 </div>
+                <p v-if="showPhoneNumberInput" style="color: #3f7d20;">Enter Phone Number</p>
+                <input v-if="showPhoneNumberInput" type="text" v-model="userPhoneNumber">
                 <button class="actualRentalBtn" v-if="game.copies == 0" id="rentalWaitlistButton" @click="actualRentalButton(game, false)">
                   Waitlist
                 </button>

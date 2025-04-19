@@ -590,6 +590,11 @@ h4 {
   animation-direction: normal;
 }
 
+.rental-detail-container p {
+  margin-bottom: 0px;
+  margin-top: 2px;
+}
+
 @keyframes riseUp {
   from {
     height: 0%;
@@ -633,6 +638,17 @@ h4 {
 .rental-detail-container span {
   margin-left: 90%;
   margin-top: 0px;
+}
+
+@keyframes horizontal-shaking {
+  0% { transform: translateX(0) }
+  25% { transform: translateX(3px) }
+  50% { transform: translateX(-3px) }
+  75% { transform: translateX(3px) }
+  100% { transform: translateX(0) }
+}
+.shake {
+  animation: horizontal-shaking 0.3s ease-in-out;
 }
 
 .events-content {
