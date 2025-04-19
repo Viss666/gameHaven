@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- uncomment/comment these 2 lines when working in local, last link is local, /style is production -->
-    <base href="/">
-    <link rel="stylesheet" href="/style.css">
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- <base href="/">
+    <link rel="stylesheet" href="/style.css"> -->
+    <link rel="stylesheet" href="style.css">
 
 
     <link rel="icon" href="images/Logo.png" type="image/icon type" />
@@ -221,7 +221,43 @@
 
         <!-- CONTENT AFTER CURRENTPAGE SELECTION -->
 
-        <div v-if="currentPage == 'games'" class="games-content"></div>
+        <div v-if="currentPage == 'games'" class="games-content">
+          <div class="mobile-events-logo-wrapper">
+            <img src="images/Logo.png" class="mobile-events-logo" />
+          </div>
+          <div class="games-content-wrapper">
+            <div class="upcoming-events">
+              <h1>Games</h1>
+            </div>
+            <div class="promotions-container">
+              <h2>Current Promotions</h2>
+              <div class="promotions-list">
+                <div class="promotion-item" v-for="promo in featuredDeals" :key="promo.title">
+                  <div class="promotion-icon">
+                    <img :src="promo.iconUrl" alt="Promotion Icon" class="promo-icon-url">
+                  </div>
+                  <div class="promotion-details">
+                    <h3>{{ promo.title }}</h3>
+                    <p>{{ promo.description }}</p>
+                    <p>Good Until: {{ promo.goodUntil }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="games-game-container">
+              <div class="game-container" v-for="game in gamesToBuy" :key="game.title">
+                <div class="game-image-container"><img :src="game.imgURL" class="game-image"></div>
+                
+                <div class="game-info">
+                  <h3>{{ game.title }}</h3>
+                  <p>Price: {{ game.price }}</p>
+                  <p>Players: {{ game.recommended_players }}</p>
+                  <p>Year: {{ game.year }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div v-if="currentPage == 'rentals'" class="rental-content">
           <div class="mobile-events-logo-wrapper">
             <img src="images/Logo.png" class="mobile-events-logo" />

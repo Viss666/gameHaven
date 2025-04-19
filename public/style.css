@@ -140,6 +140,154 @@ nav ul li a.active {
   margin: 0 3%;
 }
 
+.games-content-wrapper {
+  margin: 0 3%;
+}
+.games-game-container {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  /* Default for smaller screens (adjust as needed) */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.game-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.game-image-container {
+  aspect-ratio: 4 / 3; /* Example: 4:3 aspect ratio (adjust as needed) */
+  overflow: hidden; /* Clip the image if it overflows */
+}
+
+.game-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.game-info {
+  padding: 15px;
+}
+
+.game-info h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+/* For screens wider than a certain breakpoint (e.g., 768px) */
+@media (min-width: 768px) {
+  .games-game-container {
+    grid-template-columns: repeat(4, 1fr); /* Force 4 equal-width columns */
+  }
+}
+
+/* Responsive adjustments for smaller screens (optional, refine as needed) */
+@media (max-width: 600px) {
+  .games-game-container {
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(150px, 1fr)
+    ); /* Adjust min width for smaller screens */
+  }
+  .game-image-container {
+    overflow: visible;
+    aspect-ratio: auto;
+    width: 100%;
+  }
+  .game-container {
+    flex-direction: column;
+    align-items: center;
+    overflow: visible;
+  }
+  .game-image {
+    max-height: 350px;
+    object-fit: cover;
+  }
+}
+
+.promotions-container {
+  padding: 20px;
+  /* margin: 0 20%; */
+}
+
+.promotions-container h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.promotions-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px; /* Space between promotion items */
+}
+
+.promo-icon-url {
+}
+
+.promotion-item {
+  display: flex; /* Use flexbox for horizontal layout of icon and text */
+  align-items: center; /* Vertically center icon and text */
+  background-color: #fff; /* White background for each promotion item */
+  width: 20%;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border: 1px solid #ddd;
+}
+
+.promotion-icon {
+  max-width: 60px;
+  margin-right: 15px; /* Space between icon and text */
+  display: flex; /* Use flexbox to center the image */
+  align-items: center;
+  justify-content: center;
+  /* overflow: hidden; */
+}
+.promotions-container h2 {
+  margin-top: 0;
+}
+
+.promotion-icon img {
+  max-width: 100%; /* Ensure image doesn't exceed container size */
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.promotion-details h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.promotion-details p {
+  margin: 0;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .promotion-item {
+    flex-direction: column; /* Stack icon and text vertically on small screens */
+    text-align: center; /* Center text on small screens */
+    width: auto;
+  }
+  .promotion-icon {
+    margin-right: 0; /* Remove right margin on small screens */
+    margin-bottom: 10px; /* Add bottom margin instead */
+  }
+
+  .promotions-list {
+    flex-direction: column;
+  }
+}
+
 #gameWall {
   width: 100%;
   margin: 0;

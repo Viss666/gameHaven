@@ -58,6 +58,32 @@ const App = {
       activeTemplate: [],
 
       error: null,
+      featuredDeals: [
+        {
+          title: "BOGO Board Games",
+          description: "Buy one board game get one free!",
+          iconUrl: "images/boardgame.png",
+          goodUntil: "March",
+        },
+        {
+          title: "Dice Discount",
+          description: "20% off all dice!",
+          iconUrl: "images/dice.png",
+          goodUntil: "April",
+        },
+        {
+          title: "Card Game Sale",
+          description: "Buy two card games, get the third 50% off!",
+          iconUrl: "images/cards.png",
+          goodUntil: "May",
+        },
+        {
+          title: "Free Shipping on Orders Over $50",
+          description: "Get free shipping on any in-store order over $50!",
+          iconUrl: "images/boardgame.png", // Or a more generic icon
+          goodUntil: "June",
+        },
+      ],
       gamesToBuy: [
         {
           title: "Settlers of Catan",
@@ -127,6 +153,20 @@ const App = {
           price: "$59.99",
           recommended_players: "2-4",
           imgURL: "images/dndMaster.png",
+          year: "2024",
+        },
+        {
+          title: "Escape the Dark Sector",
+          price: "$49.95",
+          recommended_players: "1-4",
+          imgURL: "images/darksector.png",
+          year: "2020",
+        },
+        {
+          title: "Halo Flashpoint Spartan Edition",
+          price: "$89.99",
+          recommended_players: "2",
+          imgURL: "images/flashpoint.png",
           year: "2024",
         },
       ],
