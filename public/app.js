@@ -220,6 +220,8 @@ const App = {
       hasReservedGame: false,
       showRentalDetail: false,
       selectedGameEvent: "All Games",
+      showPhoneNumberInput: false,
+      userPhoneNumber: "",
     };
   },
   computed: {
@@ -289,9 +291,12 @@ const App = {
   },
 
   methods: {
-    closeRentalDetail() {
+    closeRentalDetail(game) {
       let rentalDetail = document.querySelector(".rental-detail-container"); //this.$refs.rentalDetailContainer;
-
+      this.showRentalDetail = false;
+      this.showPhoneNumberInput = false;
+      this.userPhoneNumber = "";
+      game.userRentalButtonClicks = 0;
       //console.log("rental detail ref: ", rentalDetail);
       rentalDetail.style.animation = "slideDownAnimation 1.5s";
       // rentalDetail.classList.add("slide");
@@ -305,13 +310,34 @@ const App = {
     getRentalDetail(game) {
       this.showRentalDetail = true;
     },
-    toggleRentalDetail(game) {
+    toggleRentalDetail(game, isUnreserve, isWaitlisted) {
+      if (isUnreserve){
+        let unreserveButton = document.getElementById("unreserve-button-id");
+        unreserveButton.innerHTML = "Reserve";
+        game.isReserved = false;
+        game.isWaitlisted = false;
+        game.userRentalButtonClicks = 0;
+        game.copies += 1;
+        return;
+      }
+      if (isWaitlisted) {
+        let unwaitlistButton = document.getElementById("unwaitlist-button-id");
+        unwaitlistButton.innerHTML = "Waitlist";
+        game.isReserved = false;
+        game.isWaitlisted = false;
+        game.userRentalButtonClicks = 0;
+        return;
+      }
       this.selectedGame =
         this.selectedGame && this.selectedGame.id === game.id ? null : game;
       if (this.selectedGame == null) {
         return;
       }
       this.fetchBoardGameInfo(game);
+    },
+    isValidPhoneNumber(num) {
+      const phoneRegex = /^\d{10}$/; 
+      return phoneRegex.test(num);
     },
     actualRentalButton(game, isReserve) {
       //use the hasReservedGame variable to check if the user has already reserved a game
@@ -321,12 +347,66 @@ const App = {
       //also change the inner html of the outer button
       // to reflect if the user has already reserved it, also
       // subtract one from copies
-      let waitlistButton = document.getElementById("rentalWaitlistButton");
+      let theGame = this.boardgames.find(obj => obj.id === game.id);
       let reserveButton = document.getElementById("rentalReserveButton");
-      if (isReserve) {
-        reserveButton.innerHTML = "Reserved";
-      } else {
-        waitlistButton.innerHTML = "Waitlisted";
+      if (game.isReserved == true && theGame.userRentalButtonClicks < 2){
+        reserveButton.innerHTML = "Unreserve";
+        theGame.isWaitlisted = false;
+      } 
+      if (game.isReserved == true && theGame.userRentalButtonClicks >= 2){
+        reserveButton.innerHTML = "Unreserve";
+        theGame.copies += 1;
+        theGame.isReserved = false;
+        theGame.reservedPhoneNumber = "";
+        theGame.isWaitlisted = false;
+      }
+
+      console.log("game: ", theGame)
+      theGame.userRentalButtonClicks += 1;
+      let waitlistButton = document.getElementById("rentalWaitlistButton");
+      theGame.isWaitlisted = false;
+      
+      let description = document.getElementById("detail-description-div");
+      description.style.height = "20%";
+      this.showPhoneNumberInput = true;
+
+      if(isReserve && theGame.userRentalButtonClicks < 2){
+        reserveButton.innerHTML = "Submit";
+        theGame.isWaitlisted = false;
+      } 
+      if (!isReserve && theGame.userRentalButtonClicks < 2){
+        waitlistButton.innerHTML = "Submit";
+        theGame.isWaitlisted = false;
+      }
+
+      if (isReserve && theGame.userRentalButtonClicks >= 2) {
+        if(this.userPhoneNumber != "" && this.isValidPhoneNumber(this.userPhoneNumber)){
+          theGame.copies -= 1;
+          reserveButton.innerHTML = "Reserved";
+          theGame.isReserved = true;
+          theGame.isWaitlisted = false;
+          theGame.reservedPhoneNumber = this.userPhoneNumber;
+          this.showPhoneNumberInput = false;
+        } else {
+          reserveButton.classList.add("shake");
+          setTimeout(() => {
+              reserveButton.classList.remove("shake");
+          }, 300);
+          return;
+        }
+      } if (!isReserve && theGame.userRentalButtonClicks >= 2) {
+        if(this.userPhoneNumber != "" && this.isValidPhoneNumber(this.userPhoneNumber)){
+          waitlistButton.innerHTML = "Waitlisted";
+          theGame.isWaitlisted = true;
+          theGame.waitlistPhoneNumber = this.userPhoneNumber;
+          this.showPhoneNumberInput = false;
+        } else {
+          waitlistButton.classList.add("shake");
+          setTimeout(() => {
+              waitlistButton.classList.remove("shake");
+          }, 300);
+          return;
+        }
       }
     },
     getRandomCopiesAmount() {
@@ -340,15 +420,14 @@ const App = {
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
-          return response.text(); // BGG API returns XML
+          return response.text(); 
         })
         .then((str) => {
           const parser = new DOMParser();
           const xml = parser.parseFromString(str, "application/xml");
           const items = xml.querySelectorAll("item");
 
-          // Map each item with thumbnail, name, yearPublished
-          this.boardgames = Array.from(items).map((item) => ({
+          this.boardgames = Array.from(items).slice(0, 48).map((item) => ({
             id: item.getAttribute("id"),
             rank: item.getAttribute("rank"),
             name:
@@ -360,9 +439,15 @@ const App = {
               item.querySelector("thumbnail")?.getAttribute("value") || "",
             copies: this.getRandomCopiesAmount(),
             detailShow: false,
+            isReserved: false,
+            reservedPhoneNumber: "",
+            userRentalButtonClicks: 0,
+            isWaitlisted: false,
+            waitlistPhoneNumber: ""
           }));
 
           this.loading = false;
+          console.log("boardgames from api: ", this.boardgames)
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
