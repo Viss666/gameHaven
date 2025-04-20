@@ -74,7 +74,7 @@
             <li>
               <a
                 href="#"
-                @click="navigatePage('rentals')"
+                @click.prevent="navigatePage('rentals')"
                 :class="{ active: currentPage === 'rentals' }"
                 >Rentals</a
               >
@@ -82,7 +82,7 @@
             <li>
               <a
                 href="#"
-                @click="navigatePage('games')"
+                @click.prevent="navigatePage('games')"
                 :class="{ active: currentPage === 'games' }"
                 >Games</a
               >
@@ -94,7 +94,7 @@
             <li>
               <a
                 href="#"
-                @click="navigatePage('login')"
+                @click.prevent="navigatePage('login')"
                 :class="{ active: currentPage === 'login' }"
                 >Admin</a
               >
