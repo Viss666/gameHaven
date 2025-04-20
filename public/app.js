@@ -738,16 +738,15 @@ const App = {
     // Explanatory
     navigatePage(page) {
       if (page === "events" || page === "home") {
-        this.getEvents();
-        this.activeEvent = null;
+        this.getEvents(); // Fetch events when navigating to these pages
+        this.activeEvent = null; // Clear the active event when leaving the viewEvent page
         if (page === "events") {
-          // Push history only if navigating to the main events page
-          if (window.location.pathname !== "/events") {
-            history.pushState(null, "Game Haven STG Events", "/events");
-          }
-        } else if (page === "home") {
-          if (window.location.pathname !== "/") {
-            history.pushState(null, "Game Haven STG", "/");
+          // Optionally, push the / or /events URL to history if not already there
+          if (
+            window.location.pathname !== "/" &&
+            window.location.pathname !== "/events"
+          ) {
+            history.pushState(null, "Game Haven STG Events", "/"); // Or '/events'
           }
         }
       }
