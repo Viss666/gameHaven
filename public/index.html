@@ -5,19 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://gamehavenstg.com/" />
-    <meta name="description" content="Game Haven St. George offers trading card games like Magic and Pokémon, tabletop war games, board games, gaming accessories, free rentals, and weekly community events." />
+    <meta
+      name="description"
+      content="Game Haven St. George offers trading card games like Magic and Pokémon, tabletop war games, board games, gaming accessories, free rentals, and weekly community events."
+    />
 
     <meta property="og:title" content="Game Haven STG" />
-    <meta property="og:image" content="https://gamehavenstg.com/images/embedlogo.png" />
+    <meta
+      property="og:image"
+      content="https://gamehavenstg.com/images/embedlogo.png"
+    />
 
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://gamehavenstg.com/" />
 
     <!-- uncomment/comment these 2 lines when working in local, last link is local, /style is production -->
-    <base href="/">
-    <link rel="stylesheet" href="/style.css">
+    <base href="/" />
+    <link rel="stylesheet" href="/style.css" />
     <!-- <link rel="stylesheet" href="style.css"> -->
-
 
     <link rel="icon" href="images/Logo.webp" type="image/icon type" />
 
@@ -37,16 +42,21 @@
     <title>Game Haven St. George</title>
   </head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XVQ8D2EHNK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-XVQ8D2EHNK"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
 
-  gtag('config', 'G-XVQ8D2EHNK');
-</script>
+    gtag("config", "G-XVQ8D2EHNK");
+  </script>
   <body>
-    <div id="app" >
+    <div id="app">
       <div id="main">
         <!-- Mobile Menu Button -->
         <button class="menu-btn" @click="toggleMenu">
@@ -55,8 +65,6 @@
           <div></div>
         </button>
 
-
-        
         <!-- ezra change -->
 
         <!-- Navigation -->
@@ -111,23 +119,25 @@
             <!-- <li>
               <button @click="toggleDarkMode">{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</button>
             </li> -->
-
           </ul>
         </nav>
 
         <div v-if="currentPage == 'home'" class="home-content">
           <div class="mobile-events-logo-wrapper">
-            <img src="images/Logo.webp" class="mobile-events-logo" />
+            <img
+              src="images/Logo.webp"
+              class="mobile-events-logo"
+              alt="Game Haven STG Logo"
+            />
           </div>
           <div class="hero">
-            <img src="images/gameWall3.webp" />
+            <img src="images/gameWall3.webp" alt="Board Game Product Wall" />
           </div>
           <div class="main-card-div">
-
             <div class="main-card">
               <h2 @click="navigatePage('rentals')">Featured Rentals</h2>
               <hr />
-              <div class="card-list-div" style="margin-left:0;">
+              <div class="card-list-div" style="margin-left: 0">
                 <div v-if="loading">Loading board games...</div>
                 <div v-else-if="error">{{ error }}</div>
                 <ul v-else>
@@ -142,7 +152,9 @@
                       alt="Thumbnail"
                       width="150"
                     />
-                    <button class="btn" @click="navigatePage('rentals')">Reserve Now</button>
+                    <button class="btn" @click="navigatePage('rentals')">
+                      Reserve Now
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -172,13 +184,21 @@
                   <p>{{ game.name }}</p>
                 </div>
               </div>
-                <p>
-                  Dive into the multiverse with Magic: The Gathering, catch 'em all with Pokémon, or battle with honor in Flesh and Blood!
-                </p>
-                <img class="placeholder" src="images/playing.webp" />
+              <p>
+                Dive into the multiverse with Magic: The Gathering, catch 'em
+                all with Pokémon, or battle with honor in Flesh and Blood!
+              </p>
+              <img
+                class="placeholder"
+                src="images/playing.webp"
+                alt="Players Playing Many Games"
+              />
 
-                <p>
-                  We’ve got a wide range of trading card products, including booster packs, singles, sleeves, deck boxes, and accessories, all designed to enhance your game.                </p>
+              <p>
+                We’ve got a wide range of trading card products, including
+                booster packs, singles, sleeves, deck boxes, and accessories,
+                all designed to enhance your game.
+              </p>
             </div>
             <div class="main-card">
               <h2 @click="navigatePage('events')">Events</h2>
@@ -190,7 +210,11 @@
                   :key="event._id"
                 >
                   <div class="home-event-title">
-                    <img :src="event.iconUrl" class="icon-url-home"/>
+                    <img
+                      :src="event.iconUrl"
+                      class="icon-url-home"
+                      alt="event.iconUrl"
+                    />
 
                     <h3>{{ event.eventTitle }}</h3>
                   </div>
@@ -221,8 +245,7 @@
                     </p>
                   </li>
                 </ul>
-                <img class="placeholder"src="images/playing.webp" />
-
+                <img class="placeholder" src="images/playing.webp" />
               </div>
             </div>
           </div>
@@ -232,7 +255,11 @@
 
         <div v-if="currentPage == 'games'" class="games-content">
           <div class="mobile-events-logo-wrapper">
-            <img src="images/Logo.webp" class="mobile-events-logo" />
+            <img
+              src="images/Logo.webp"
+              class="mobile-events-logo"
+              alt="Game Haven STG Logo"
+            />
           </div>
           <div class="games-content-wrapper">
             <div class="upcoming-events">
@@ -241,9 +268,17 @@
             <div class="promotions-container">
               <h2>Current Promotions</h2>
               <div class="promotions-list">
-                <div class="promotion-item" v-for="promo in featuredDeals" :key="promo.title">
+                <div
+                  class="promotion-item"
+                  v-for="promo in featuredDeals"
+                  :key="promo.title"
+                >
                   <div class="promotion-icon">
-                    <img :src="promo.iconUrl" alt="Promotion Icon" class="promo-icon-url">
+                    <img
+                      :src="promo.iconUrl"
+                      alt="Promotion Icon"
+                      class="promo-icon-url"
+                    />
                   </div>
                   <div class="promotion-details">
                     <h3>{{ promo.title }}</h3>
@@ -254,9 +289,15 @@
               </div>
             </div>
             <div class="games-game-container">
-              <div class="game-container" v-for="game in gamesToBuy" :key="game.title">
-                <div class="game-image-container"><img :src="game.imgURL" class="game-image"></div>
-                
+              <div
+                class="game-container"
+                v-for="game in gamesToBuy"
+                :key="game.title"
+              >
+                <div class="game-image-container">
+                  <img :src="game.imgURL" class="game-image" />
+                </div>
+
                 <div class="game-info">
                   <h3>{{ game.title }}</h3>
                   <p>Price: {{ game.price }}</p>
@@ -269,7 +310,11 @@
         </div>
         <div v-if="currentPage == 'rentals'" class="rental-content">
           <div class="mobile-events-logo-wrapper">
-            <img src="images/Logo.webp" class="mobile-events-logo" />
+            <img
+              src="images/Logo.webp"
+              class="mobile-events-logo"
+              alt="Game Haven STG Logo"
+            />
           </div>
           <h1>Rental Games</h1>
           <div class="rental-games-section">
@@ -285,9 +330,23 @@
                 class="rental-game-img"
               />
               <h3>{{ game.name }}</h3>
-              <p style="margin-top:0px;" >Copies in stock: {{ game.copies }}</p>
-              <button id="unreserve-button-id" class="rental-game-btn" v-if="game.isReserved" @click="toggleRentalDetail(game, true, false)">Unreserve</button>
-              <button id="unwaitlist-button-id" class="rental-game-btn" v-if="game.isWaitlisted" @click="toggleRentalDetail(game, false, true)">Unwaitlist</button>
+              <p style="margin-top: 0px">Copies in stock: {{ game.copies }}</p>
+              <button
+                id="unreserve-button-id"
+                class="rental-game-btn"
+                v-if="game.isReserved"
+                @click="toggleRentalDetail(game, true, false)"
+              >
+                Unreserve
+              </button>
+              <button
+                id="unwaitlist-button-id"
+                class="rental-game-btn"
+                v-if="game.isWaitlisted"
+                @click="toggleRentalDetail(game, false, true)"
+              >
+                Unwaitlist
+              </button>
               <button
                 class="rental-game-btn"
                 v-if="game.copies == 0 && !game.isReserved && !game.isWaitlisted"
@@ -309,7 +368,11 @@
                 class="rental-detail-container"
               >
                 <!-- <button @click="selectedGame = null">Close</button> -->
-                <span @click="closeRentalDetail(selectedGame)" style="cursor:pointer;" >x</span>
+                <span
+                  @click="closeRentalDetail(selectedGame)"
+                  style="cursor: pointer"
+                  >x</span
+                >
                 <h3 style="margin: 0">{{ selectedGame.name }}</h3>
                 <!-- <p>{{ selectedGame.description }}</p> -->
                 <p>
@@ -317,28 +380,48 @@
                   selectedGame.maxPlayers }}
                 </p>
                 <p>
-                  <strong>Play Time:</strong> {{ selectedGame.minPlaytime }} - {{
-                  selectedGame.maxPlaytime }} Minutes
+                  <strong>Play Time:</strong> {{ selectedGame.minPlaytime }} -
+                  {{ selectedGame.maxPlaytime }} Minutes
                 </p>
                 <p v-if="this.selectedGame.bestPlayerAge > 0">
-                  <strong>Best Player Age:</strong> {{ selectedGame.bestPlayerAge - 2 }} - {{
+                  <strong>Best Player Age:</strong> {{
+                  selectedGame.bestPlayerAge - 2 }} - {{
                   selectedGame.bestPlayerAge }}
                 </p>
-                <p style="margin-bottom: 0px;" v-if="this.selectedGame.bestPlayerAge <= 0">
-                  <strong>Best Player Age:</strong> {{ selectedGame.minAge }} - {{
-                  parseInt(selectedGame.minAge) + 2 }}
+                <p
+                  style="margin-bottom: 0px"
+                  v-if="this.selectedGame.bestPlayerAge <= 0"
+                >
+                  <strong>Best Player Age:</strong> {{ selectedGame.minAge }} -
+                  {{ parseInt(selectedGame.minAge) + 2 }}
                 </p>
                 <div id="detail-description-div">
                   <div id="detail-description-scroll-div">
                     <p>{{ selectedGame.description }}</p>
                   </div>
                 </div>
-                <p v-if="showPhoneNumberInput" style="color: #3f7d20;">Enter Phone Number</p>
-                <input v-if="showPhoneNumberInput" type="text" v-model="userPhoneNumber">
-                <button class="actualRentalBtn" v-if="game.copies == 0" id="rentalWaitlistButton" @click="actualRentalButton(game, false)">
+                <p v-if="showPhoneNumberInput" style="color: #3f7d20">
+                  Enter Phone Number
+                </p>
+                <input
+                  v-if="showPhoneNumberInput"
+                  type="text"
+                  v-model="userPhoneNumber"
+                />
+                <button
+                  class="actualRentalBtn"
+                  v-if="game.copies == 0"
+                  id="rentalWaitlistButton"
+                  @click="actualRentalButton(game, false)"
+                >
                   Waitlist
                 </button>
-                <button class="actualRentalBtn" v-if="game.copies > 0" id="rentalReserveButton" @click="actualRentalButton(game, true)">
+                <button
+                  class="actualRentalBtn"
+                  v-if="game.copies > 0"
+                  id="rentalReserveButton"
+                  @click="actualRentalButton(game, true)"
+                >
                   Reserve
                 </button>
               </div>
@@ -348,12 +431,15 @@
             </div> -->
           </div>
         </div>
-        <div v-if="currentPage == 'tcg'" class="tcg-content"></div>
 
         <!-- My senior project -->
         <div v-if="currentPage == 'events'" class="events-content">
           <div class="mobile-events-logo-wrapper">
-            <img src="images/Logo.webp" class="mobile-events-logo" />
+            <img
+              src="images/Logo.webp"
+              class="mobile-events-logo"
+              alt="Game Haven STG Logo"
+            />
           </div>
           <div class="upcoming-events">
             <h1>Upcoming Events</h1>
@@ -403,7 +489,7 @@
               <div class="event-main-info">
                 <div class="event-header">
                   <div class="event-title">
-                    <img :src="event.iconUrl" class="icon-url"/>
+                    <img :src="event.iconUrl" class="icon-url" />
 
                     <h2>{{ event.eventTitle }}</h2>
                     <!-- <img :src="event.iconUrl" class="icon-url"/> -->
@@ -439,7 +525,6 @@
                 >
                   Event Info &amp; Sign-Up
                 </button>
-
               </div>
             </div>
           </div>
@@ -447,59 +532,72 @@
 
         <div v-if="currentPage == 'viewEvent'" class="view-event-content">
           <div class="mobile-events-logo-wrapper">
-            <img src="images/Logo.webp" class="mobile-events-logo" />
+            <img
+              src="images/Logo.webp"
+              class="mobile-events-logo"
+              alt="Game Haven STG Logo"
+            />
           </div>
           <div class="event-header">
             <button class="btn" @click="navigatePage('events')">
               < Back to All Events
             </button>
-            <button class="btn"@click="copyActiveEventLink()">Copy Link</button>
-              <button
-                v-if="!isCheckedIn && !activeEvent.isPublished && activeEvent.maxPlayers > activeEvent.playerList.length"
-                @click="openCheckIn"
-                class="btn"
-              >
-                Sign Up
-              </button>
+            <button class="btn" @click="copyActiveEventLink()">
+              Copy Link
+            </button>
+            <button
+              v-if="!isCheckedIn && !activeEvent.isPublished && activeEvent.maxPlayers > activeEvent.playerList.length"
+              @click="openCheckIn"
+              class="btn"
+            >
+              Sign Up
+            </button>
 
-              <button
-                v-if="isCheckedIn && activeEvent && activeEvent._id && !activeEvent.isPublished"
-                @click="submitCheckOut(activeEvent._id)"
-                class="btn"
-              >
-                Sign Out
-              </button>
-
-
+            <button
+              v-if="isCheckedIn && activeEvent && activeEvent._id && !activeEvent.isPublished"
+              @click="submitCheckOut(activeEvent._id)"
+              class="btn"
+            >
+              Sign Out
+            </button>
           </div>
 
           <div class="event-container">
             <!-- Body Section -->
 
             <div class="event-body1">
-                <div class="event-header1">
-                  <img :src="activeEvent.iconUrl" class="event-icon1" />
-                  <div class="header-text1">
-                    <h1 class="event-title1">{{activeEvent.eventTitle}}</h1>
-                    <p class="event-date1">{{ getMonth(activeEvent.eventDate) }} - {{ getDay(activeEvent.eventDate) }}</p>
-                  </div>
-                </div>
-              
-                <div class="event-details1">
-                  <h3 class="event-game1">{{ activeEvent.eventGame }}</h3>
-                  <p class="event-day-time1">{{ activeEvent.eventDay }} - {{ activeEvent.eventTime }}</p>
-                  <p class="event-organizer1">
-                    <strong>Organizer:</strong> {{ activeEvent.eventOrganizer }} - {{ activeEvent.organizerContactInfo }}
+              <div class="event-header1">
+                <img :src="activeEvent.iconUrl" class="event-icon1" />
+                <div class="header-text1">
+                  <h1 class="event-title1">{{activeEvent.eventTitle}}</h1>
+                  <p class="event-date1">
+                    {{ getMonth(activeEvent.eventDate) }} - {{
+                    getDay(activeEvent.eventDate) }}
                   </p>
-                  <p class="player-count1">
-                    <strong>Players:</strong> {{ activeEvent.playerList.length }} / {{ activeEvent.maxPlayers }}
-                  </p>
-                  <div class="event-fee1">
-                    ENTRY FEE: {{ activeEvent.eventFee ? `$${activeEvent.eventFee}` : 'FREE ENTRY' }}
-                  </div>
-                  <p class="event-description1">{{ activeEvent.eventDescription }}</p>
                 </div>
-              
+              </div>
+
+              <div class="event-details1">
+                <h3 class="event-game1">{{ activeEvent.eventGame }}</h3>
+                <p class="event-day-time1">
+                  {{ activeEvent.eventDay }} - {{ activeEvent.eventTime }}
+                </p>
+                <p class="event-organizer1">
+                  <strong>Organizer:</strong> {{ activeEvent.eventOrganizer }} -
+                  {{ activeEvent.organizerContactInfo }}
+                </p>
+                <p class="player-count1">
+                  <strong>Players:</strong> {{ activeEvent.playerList.length }}
+                  / {{ activeEvent.maxPlayers }}
+                </p>
+                <div class="event-fee1">
+                  ENTRY FEE: {{ activeEvent.eventFee ?
+                  `$${activeEvent.eventFee}` : 'FREE ENTRY' }}
+                </div>
+                <p class="event-description1">
+                  {{ activeEvent.eventDescription }}
+                </p>
+              </div>
             </div>
             <div class="players-on-page">
               <div
@@ -538,8 +636,6 @@
                   </li>
                 </ul>
               </div>
-
-
             </div>
           </div>
           <!-- Footer Section with Check-In Button -->
@@ -578,6 +674,13 @@
           </div>
         </div>
         <div v-if="currentPage == 'login'" class="login-content">
+          <div class="mobile-events-logo-wrapper">
+            <img
+              src="images/Logo.webp"
+              class="mobile-events-logo"
+              alt="Game Haven STG Logo"
+            />
+          </div>
           <div class="login-container">
             <h2>Speak friend and enter:</h2>
             <input
@@ -590,7 +693,11 @@
         </div>
         <div v-if="currentPage == 'creation'" class="admin-event-content">
           <div class="mobile-events-logo-wrapper">
-            <img src="images/Logo.webp" class="mobile-events-logo" />
+            <img
+              src="images/Logo.webp"
+              class="mobile-events-logo"
+              alt="Game Haven STG Logo"
+            />
           </div>
           <div class="event-header">
             <button class="btn" @click="navigatePage('events')">
@@ -610,8 +717,9 @@
                   class="create-input"
                   type="text"
                 />
-                <div v-if="validationErrors.eventTitle" class="error-message">{{ validationErrors.eventTitle }}</div>
-
+                <div v-if="validationErrors.eventTitle" class="error-message">
+                  {{ validationErrors.eventTitle }}
+                </div>
               </div>
               <div>
                 <h2>Game</h2>
@@ -620,8 +728,9 @@
                   placeholder="Game"
                   type="text"
                 />
-                <div v-if="validationErrors.eventGame" class="error-message">{{ validationErrors.eventGame }}</div>
-
+                <div v-if="validationErrors.eventGame" class="error-message">
+                  {{ validationErrors.eventGame }}
+                </div>
               </div>
 
               <div>
@@ -632,20 +741,34 @@
                   class="description"
                   type="text"
                 ></textarea>
-                <div v-if="validationErrors.eventDescription" class="error-message">{{ validationErrors.eventDescription }}</div>
-
+                <div
+                  v-if="validationErrors.eventDescription"
+                  class="error-message"
+                >
+                  {{ validationErrors.eventDescription }}
+                </div>
               </div>
               <div>
                 <label for="icon-select">Select an Icon:</label>
                 <select id="icon-select" v-model="newEvent.iconUrl">
                   <option value="">Select an icon</option>
-                  <option v-for="icon in iconSelection" :key="icon.name" :value="icon.imageUrl">
+                  <option
+                    v-for="icon in iconSelection"
+                    :key="icon.name"
+                    :value="icon.imageUrl"
+                  >
                     {{ icon.name }}
                   </option>
                 </select>
-                <img v-if="newEvent.iconUrl" :src="newEvent.iconUrl" alt="Selected Icon" style="max-width: 50px; max-height: 50px;">
-                <div v-if="validationErrors.iconUrl" class="error-message">{{ validationErrors.iconUrl }}</div>
-
+                <img
+                  v-if="newEvent.iconUrl"
+                  :src="newEvent.iconUrl"
+                  alt="Selected Icon"
+                  style="max-width: 50px; max-height: 50px"
+                />
+                <div v-if="validationErrors.iconUrl" class="error-message">
+                  {{ validationErrors.iconUrl }}
+                </div>
               </div>
               <div>
                 <label for="max-players-select">Maximum Players:</label>
@@ -655,13 +778,15 @@
                     {{ n }}
                   </option>
                 </select>
-                <div v-if="validationErrors.maxPlayers" class="error-message">{{ validationErrors.maxPlayers }}</div>
+                <div v-if="validationErrors.maxPlayers" class="error-message">
+                  {{ validationErrors.maxPlayers }}
+                </div>
 
                 <!-- <p v-if="newEvent.maxPlayers === null">Maximum players: Unlimited</p> -->
                 <!-- <p v-else-if="newEvent.maxPlayers">Maximum players: {{ activeEvent.maxPlayers }}</p> -->
               </div>
 
-              <div >
+              <div>
                 <label for="event-fee-input">Event Fee:</label>
                 <div class="money-input-wrapper">
                   <span class="currency-symbol">$</span>
@@ -674,25 +799,39 @@
                     min="0"
                   />
                 </div>
-                <div v-if="validationErrors.eventFee" class="error-message">{{ validationErrors.eventFee }}</div>
-
+                <div v-if="validationErrors.eventFee" class="error-message">
+                  {{ validationErrors.eventFee }}
+                </div>
               </div>
 
               <div>
                 <label for="templates">Select a Template:</label>
-                <select id="templates" name="templates" @change="loadTemplate($event.target.value)">
-                  <option value=""  selected>Select a template...</option>
-                  <option v-for="template in templates" :key="template.id" :value="template.id">
+                <select
+                  id="templates"
+                  name="templates"
+                  @change="loadTemplate($event.target.value)"
+                >
+                  <option value="" selected>Select a template...</option>
+                  <option
+                    v-for="template in templates"
+                    :key="template.id"
+                    :value="template.id"
+                  >
                     {{ template.eventTitle }}
                   </option>
                 </select>
                 <div class="template-buttons">
-                <button @click="createTemplate()"class="btn">Create as template</button>
-                <button @click="editTemplate()"class="btn">Save template changes</button>
-                <button @click="deleteTemplate()" class="btn">Delete template</button>
+                  <button @click="createTemplate()" class="btn">
+                    Create as template
+                  </button>
+                  <button @click="editTemplate()" class="btn">
+                    Save template changes
+                  </button>
+                  <button @click="deleteTemplate()" class="btn">
+                    Delete template
+                  </button>
+                </div>
               </div>
-              </div>
-              
             </div>
             <div class="follow-up-creation">
               <div>
@@ -702,8 +841,12 @@
                   placeholder="Organizer"
                   type="text"
                 />
-                <div v-if="validationErrors.eventOrganizer" class="error-message">{{ validationErrors.eventOrganizer }}</div>
-
+                <div
+                  v-if="validationErrors.eventOrganizer"
+                  class="error-message"
+                >
+                  {{ validationErrors.eventOrganizer }}
+                </div>
               </div>
               <div>
                 <h2>Organizer Contact Info</h2>
@@ -712,8 +855,12 @@
                   placeholder="Organizer Contact"
                   type="text"
                 />
-                <div v-if="validationErrors.organizerContactInfo" class="error-message">{{ validationErrors.organizerContactInfo }}</div>
-
+                <div
+                  v-if="validationErrors.organizerContactInfo"
+                  class="error-message"
+                >
+                  {{ validationErrors.organizerContactInfo }}
+                </div>
               </div>
               <div>
                 <h2>Event Day</h2>
@@ -727,8 +874,9 @@
                   <option value="Saturday">Saturday</option>
                   <option value="Sunday">Sunday</option>
                 </select>
-                <div v-if="validationErrors.eventDay" class="error-message">{{ validationErrors.eventDay }}</div>
-
+                <div v-if="validationErrors.eventDay" class="error-message">
+                  {{ validationErrors.eventDay }}
+                </div>
               </div>
               <div>
                 <label for="event-date">Date:</label>
@@ -738,8 +886,9 @@
                   v-model="newEvent.eventDate"
                   type="date"
                 />
-                <div v-if="validationErrors.eventDate" class="error-message">{{ validationErrors.eventDate }}</div>
-
+                <div v-if="validationErrors.eventDate" class="error-message">
+                  {{ validationErrors.eventDate }}
+                </div>
               </div>
               <div>
                 <label for="event-time">Time:</label>
@@ -749,8 +898,9 @@
                   v-model="newEvent.eventTime"
                   type="time"
                 />
-                <div v-if="validationErrors.eventTime" class="error-message">{{ validationErrors.eventTime }}</div>
-
+                <div v-if="validationErrors.eventTime" class="error-message">
+                  {{ validationErrors.eventTime }}
+                </div>
               </div>
 
               <div>
@@ -761,7 +911,11 @@
         </div>
         <div v-if="currentPage == 'edit'" class="edit-page-content">
           <div class="mobile-events-logo-wrapper">
-            <img src="images/Logo.webp" class="mobile-events-logo" />
+            <img
+              src="images/Logo.webp"
+              class="mobile-events-logo"
+              alt="Game Haven STG Logo"
+            />
           </div>
           <div class="admin-event-content-wrapper">
             <div class="template-area-creation">
@@ -779,7 +933,9 @@
                 type="text"
                 @input="updateActiveEvent('eventTitle', $event.target.value)"
               />
-              <div v-if="validationErrors.eventTitle" class="error-message">{{ validationErrors.eventTitle }}</div>
+              <div v-if="validationErrors.eventTitle" class="error-message">
+                {{ validationErrors.eventTitle }}
+              </div>
 
               <p class="event-game">{{activeEvent.eventGame}}</p>
               <input
@@ -789,7 +945,9 @@
                 type="text"
                 @input="updateActiveEvent('eventGame', $event.target.value)"
               />
-              <div v-if="validationErrors.eventGame" class="error-message">{{ validationErrors.eventGame }}</div>
+              <div v-if="validationErrors.eventGame" class="error-message">
+                {{ validationErrors.eventGame }}
+              </div>
 
               <p class="event-description">{{activeEvent.eventDescription}}</p>
               <textarea
@@ -799,7 +957,12 @@
                 type="text"
                 @input="updateActiveEvent('eventDescription', $event.target.value)"
               ></textarea>
-              <div v-if="validationErrors.eventDescription" class="error-message">{{ validationErrors.eventDescription }}</div>
+              <div
+                v-if="validationErrors.eventDescription"
+                class="error-message"
+              >
+                {{ validationErrors.eventDescription }}
+              </div>
 
               <div>
                 <label for="icon-select">Select an Icon:</label>
@@ -813,7 +976,9 @@
                     {{ icon.name }}
                   </option>
                 </select>
-                <div v-if="validationErrors.iconUrl" class="error-message">{{ validationErrors.iconUrl }}</div>
+                <div v-if="validationErrors.iconUrl" class="error-message">
+                  {{ validationErrors.iconUrl }}
+                </div>
 
                 <img
                   v-if="activeEvent.iconUrl"
@@ -839,8 +1004,9 @@
                 <p v-else-if="activeEvent.maxPlayers">
                   Maximum players: {{ activeEvent.maxPlayers }}
                 </p>
-                <div v-if="validationErrors.maxPlayers" class="error-message">{{ validationErrors.maxPlayers }}</div>
-
+                <div v-if="validationErrors.maxPlayers" class="error-message">
+                  {{ validationErrors.maxPlayers }}
+                </div>
               </div>
               <div>
                 <label for="event-fee-input">Event Fee:</label>
@@ -854,11 +1020,11 @@
                     step="1.0"
                     min="0"
                   />
-                  <div v-if="validationErrors.eventFee" class="error-message">{{ validationErrors.eventFee }}</div>
-
+                  <div v-if="validationErrors.eventFee" class="error-message">
+                    {{ validationErrors.eventFee }}
+                  </div>
                 </div>
               </div>
-</div>
 
               <div class="follow-up-creation">
                 <p class="event-organizer">
@@ -871,7 +1037,12 @@
                   placeholder="organizer name.."
                   @input="updateActiveEvent('eventOrganizer', $event.target.value)"
                 />
-                <div v-if="validationErrors.eventOrganizer" class="error-message">{{ validationErrors.eventOrganizer }}</div>
+                <div
+                  v-if="validationErrors.eventOrganizer"
+                  class="error-message"
+                >
+                  {{ validationErrors.eventOrganizer }}
+                </div>
 
                 <p class="organizer-contact">
                   <strong>Organizer Contact Info:</strong>
@@ -884,7 +1055,12 @@
                   placeholder="organizer contact.."
                   @input="updateActiveEvent('organizerContactInfo', $event.target.value)"
                 />
-                <div v-if="validationErrors.organizerContactInfo" class="error-message">{{ validationErrors.organizerContactInfo }}</div>
+                <div
+                  v-if="validationErrors.organizerContactInfo"
+                  class="error-message"
+                >
+                  {{ validationErrors.organizerContactInfo }}
+                </div>
 
                 <p class="event-day">
                   {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
@@ -905,7 +1081,9 @@
                   <option value="Saturday">Saturday</option>
                   <option value="Sunday">Sunday</option>
                 </select>
-                <div v-if="validationErrors.eventDay" class="error-message">{{ validationErrors.eventDay }}</div>
+                <div v-if="validationErrors.eventDay" class="error-message">
+                  {{ validationErrors.eventDay }}
+                </div>
 
                 <label for="event-date">Date:</label>
                 <input
@@ -914,7 +1092,9 @@
                   v-model="activeEvent.date"
                   @change="updateActiveEvent('eventDate', $event.target.value)"
                 />
-                <div v-if="validationErrors.eventDate" class="error-message">{{ validationErrors.eventDate }}</div>
+                <div v-if="validationErrors.eventDate" class="error-message">
+                  {{ validationErrors.eventDate }}
+                </div>
 
                 <label for="event-time">Time:</label>
                 <input
@@ -923,8 +1103,9 @@
                   v-model="activeEvent.time"
                   @change="updateActiveEvent('eventTime', $event.target.value)"
                 />
-                <div v-if="validationErrors.eventTime" class="error-message">{{ validationErrors.eventTime }}</div>
-
+                <div v-if="validationErrors.eventTime" class="error-message">
+                  {{ validationErrors.eventTime }}
+                </div>
               </div>
             </div>
             <div class="admin-event-content-wrapper">
@@ -943,17 +1124,19 @@
                     >
                       <div class="edit-player-names">
                         {{player.playerName}} {{player.playerDiscordID}}
-                        <span v-if="pairedPlayerIds.has(player._id)" class="paired-indicator">
+                        <span
+                          v-if="pairedPlayerIds.has(player._id)"
+                          class="paired-indicator"
+                        >
                           ✅
                         </span>
                       </div>
-                      
+
                       <div class="edit-player-buttons">
                         <button
                           @click="togglePlayerSelection(player._id)"
                           class="btn"
                           :disabled="pairedPlayerIds.has(player._id)"
-
                         >
                           Select player
                         </button>
@@ -990,7 +1173,10 @@
                 <div id="edit-player-list">
                   <h2>Paired Players</h2>
                   <ul class="edit-players">
-                    <li v-for="(pair, index) in activeEvent.matches" :key="index">
+                    <li
+                      v-for="(pair, index) in activeEvent.matches"
+                      :key="index"
+                    >
                       <p>
                         {{ pair.player1.playerName }}
                         <span v-if="pair.player2">
@@ -1011,7 +1197,8 @@
                 Delete Event
               </button>
               <button @click="togglePublish(activeEvent._id)" class="btn">
-                {{ activeEvent.isPublished ? 'Unpublish Event' : 'Publish Event' }}
+                {{ activeEvent.isPublished ? 'Unpublish Event' : 'Publish Event'
+                }}
               </button>
               <button @click="saveEvent(activeEvent._id)" class="svbtn">
                 Save Event
@@ -1036,7 +1223,11 @@
                 <div class="store-footer-wrapper">
                   <div class="store-footer-text">
                     <p>
-                      <img src="images/location.webp" class="social-icon" />
+                      <img
+                        src="images/location.webp"
+                        class="social-icon"
+                        alt="Store Address"
+                      />
                       250 Red Cliffs Dr #32
                       <br />
                       St. George, UT 84790
@@ -1053,14 +1244,21 @@
               <br />
 
               <p>
-                <img src="images/clock.webp" class="social-icon" />Monday –
-                Saturday: 10 AM – 10 PM
+                <img
+                  src="images/clock.webp"
+                  class="social-icon"
+                  alt="Open/Close Times"
+                />Monday – Saturday: 10 AM – 10 PM
                 <br />
                 Sunday: Closed
               </p>
 
               <p>
-                <img src="images/phone.webp" class="social-icon" />(435) 627-0616
+                <img
+                  src="images/phone.webp"
+                  class="social-icon"
+                  alt="Phone Number for GameHaven"
+                />(435) 627-0616
               </p>
               <p>
                 <img
@@ -1083,6 +1281,7 @@
                   <img
                     src="images/discord-white-icon.webp"
                     class="social-icon"
+                    alt="Social Media Icons for GameHaven"
                   /> </a
                 >Discord
               </p>
@@ -1095,7 +1294,11 @@
                   rel="noopener noreferrer"
                   title="https://www.facebook.com/GameHavenSTG/"
                 >
-                  <img src="images/facebook.webp" class="social-icon" /> </a
+                  <img
+                    src="images/facebook.webp"
+                    class="social-icon"
+                    alt="Social Media Icons for GameHaven"
+                  /> </a
                 >Facebook
               </p>
               <p>
@@ -1106,7 +1309,11 @@
                   rel="noopener noreferrer"
                   title="https://www.instagram.com/gamehavenstg/"
                 >
-                  <img src="images/insta.webp" class="social-icon" /> </a
+                  <img
+                    src="images/insta.webp"
+                    class="social-icon"
+                    alt="Social Media Icons for GameHaven"
+                  /> </a
                 >Instagram
               </p>
             </div>
@@ -1117,9 +1324,10 @@
     </div>
   </body>
   <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
-  <script type="module" src="https://unpkg.com/vue@3/dist/vue.esm-browser.js"></script>
-  <script type="module" src="app.js"></script> 
+  <script
+    type="module"
+    src="https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+  ></script>
+  <script type="module" src="app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3/dist/js.cookie.min.js"></script>
-
-
 </html>
