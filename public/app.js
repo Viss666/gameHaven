@@ -41,15 +41,15 @@ const App = {
       checkedInEvents: [],
       selectedPlayers: [],
       pairedPlayers: [],
-      pairingsChanged: false, // Flag to track changes
+      pairingsChanged: false, 
 
       modifiedFields: {},
       maxPlayersOptions: [
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
         21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
         39, 40,
-      ], // Example player count options
-      // selectedMaxPlayers: null, // Default to unlimited
+      ], 
+
       loading: false,
       boardgames: [],
       selectedGame: "All Games",
@@ -248,7 +248,7 @@ const App = {
       this.events.forEach((event) => {
         uniqueGames.add(event.eventGame);
       });
-      return ["All Games", ...uniqueGames]; // Add 'all' option
+      return ["All Games", ...uniqueGames]; 
     },
     filteredEvents() {
       let filtered = this.events;
@@ -276,7 +276,7 @@ const App = {
     mainContent.addEventListener("touchstart", this.closeMenuOnClickOutside); // Mobile
     mainContent.addEventListener("click", this.closeMenuOnClickOutside); //Desktop
     this.fetchBoardGames();
-    this.checkInitialUrl(); // Call this method on mount
+    this.checkInitialUrl(); 
     const storedDarkMode = localStorage.getItem("darkMode");
     if (storedDarkMode === "true") {
       this.isDarkMode = true;
@@ -299,7 +299,6 @@ const App = {
       game.userRentalButtonClicks = 0;
       //console.log("rental detail ref: ", rentalDetail);
       rentalDetail.style.animation = "slideDownAnimation 1.5s";
-      // rentalDetail.classList.add("slide");
       setTimeout(() => {
         //rentalDetail.style.animation = 'slideDownAnimation 1.5s';
         this.selectedGame = null;
@@ -592,7 +591,7 @@ const App = {
       this.selectedGameEvent = "All Games";
     },
     convertToStandardTime(militaryTime) {
-      if (!militaryTime) return ""; // Handle null or empty time
+      if (!militaryTime) return ""; 
 
       const [hours, minutes] = militaryTime.split(":");
       let standardHours = parseInt(hours, 10);
@@ -605,7 +604,7 @@ const App = {
           standardHours -= 12;
         }
       } else if (standardHours === 0) {
-        standardHours = 12; // Midnight is 12 AM
+        standardHours = 12; // midnight is 12 AM
       }
 
       return `${standardHours}:${standardMinutes} ${period}`;
@@ -654,28 +653,7 @@ const App = {
       });
     },
 
-    // pairSelectedPlayers() {
-    //   if (this.selectedPlayers.length === 2) {
-    //     const player1 = this.activeEvent.playerList.find(
-    //       (p) => p._id === this.selectedPlayers[0]
-    //     );
-    //     const player2 = this.activeEvent.playerList.find(
-    //       (p) => p._id === this.selectedPlayers[1]
-    //     );
 
-    //     if (player1 && player2) {
-    //       this.pairedPlayers.push({
-    //         player1: player1,
-    //         player2: player2,
-    //       });
-    //       console.log("paired players: ", this.pairedPlayers);
-    //       this.pairingsChanged = true; // Set flag to true
-    //     }
-    //     console.log("post selected players: ", this.selectedPlayers);
-    //     this.selectedPlayers = [];
-    //     this.updatePairButtonState();
-    //   }
-    // },
 
     pairSelectedPlayers() {
       if (this.selectedPlayers.length === 2) {
@@ -691,7 +669,6 @@ const App = {
             player1: { ...player1 },
             player2: { ...player2 },
           };
-          // Update both arrays
           this.activeEvent.matches.push(newPair);
           this.pairedPlayers.push(newPair);
           this.pairingsChanged = true;
@@ -708,9 +685,8 @@ const App = {
           (p) => p._id === playerId
         );
         if (player1) {
-          // Store the full object so that the UI can display playerName
           this.activeEvent.matches.push({
-            player1: { ...player1 }, // entire object with playerName, etc.
+            player1: { ...player1 }, 
             player2: null,
             isBye: true,
           });
@@ -725,10 +701,7 @@ const App = {
       this.pairingsChanged = true;
     },
 
-    // removePair(index) {
-    //   this.pairedPlayers.splice(index, 1);
-    //   this.pairingsChanged = true; // Set flag to true
-    // },
+
 
     toggleDarkMode() {
       this.isDarkMode = !this.isDarkMode;
@@ -747,16 +720,14 @@ const App = {
           history.pushState(null, "Game Haven STG Events", newPath);
         }
       } else {
-        // Going to rentals or other pages
         if (window.location.pathname !== `/${page}`) {
           history.pushState(null, "", `/${page}`);
         }
-        this.activeEvent = null; // Clear selected event if coming from one
+        this.activeEvent = null; 
       }
 
       this.currentPage = page;
 
-      // Close dropdowns and menu
       Object.keys(this.dropdowns).forEach(
         (key) => (this.dropdowns[key] = false)
       );
@@ -813,14 +784,13 @@ const App = {
       this.scrollToTop();
       // console.log("i am clicked");
       fetch(`https://gamehavenstg.com/api/events/${eventId}`)
-        // fetch(`https://gamehaven-production.up.railway.app/api/events/${eventId}`)
         .then((response) => response.json())
         .then((eventFromServer) => {
           let formattedDate = eventFromServer.eventDate;
 
           let formattedTime = this.convertToStandardTime(
             eventFromServer.eventTime
-          ); // Convert time
+          );
 
           if (formattedDate) {
             formattedDate = formattedDate.split("T")[0];
@@ -830,7 +800,6 @@ const App = {
 
           const eventUrl = `https://gamehavenstg.com/events/${eventFromServer._id}`;
 
-          // console.log("Fetched Event:", eventFromServer);
 
           this.activeEvent = {
             _id: eventFromServer._id,
@@ -964,10 +933,10 @@ const App = {
               );
             }
 
-            return this.getEvents(); // Fetch updated event list
+            return this.getEvents(); 
           })
           .then(() => {
-            return this.viewEvent(eventId); // Load the event view while keeping loading active
+            return this.viewEvent(eventId); 
           })
           .catch((error) => {
             console.error("Error during check-in:", error);
@@ -992,25 +961,7 @@ const App = {
       return date.getDate();
     },
 
-    // giveBye() {
-    //   if (this.selectedPlayers.length === 1) {
-    //     const playerId = this.selectedPlayers[0];
-    //     const player1 = this.activeEvent.playerList.find(
-    //       (p) => p._id === playerId
-    //     );
 
-    //     if (player1) {
-    //       this.pairedPlayers.push({
-    //         player1: player1,
-    //         player2: null,
-    //         isBye: true, // Set isBye to true
-    //       });
-    //       this.pairingsChanged = true;
-    //     }
-
-    //     this.selectedPlayers = [];
-    //   }
-    // },
 
     submitCheckOut(eventId) {
       this.startLoading();
@@ -1113,11 +1064,10 @@ const App = {
     },
 
     removePlayerFromEvent(eventId, playerId) {
-      // console.log(eventId, playerId);
       fetch(`https://gamehavenstg.com/events/${eventId}/admin-remove-player`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ playerId }), // Correct key expected by backend
+        body: JSON.stringify({ playerId }), 
       })
         .then((response) => {
           if (!response.ok) throw new Error("Failed to remove player");
@@ -1215,96 +1165,35 @@ const App = {
         .catch((error) => console.error("Error fetching events:", error));
     },
 
-    // getEvents() {
-    //   return fetch("https://gamehavenstg.com/events")
-    //     .then((response) => response.json())
-    //     .then((eventsFromServer) => {
-    //       console.log("events from server: ", eventsFromServer);
-    //       this.events = eventsFromServer.map((event) => {
-    //         let formattedDate = event.eventDate;
-    //         let formattedTime = this.convertToStandardTime(event.eventTime);
-
-    //         if (formattedDate) {
-    //           formattedDate = formattedDate.split("T")[0]; // Split at "T" and take the date part
-    //         }
-
-    //         const eventUrl = `https://gamehavenstg.com/events/${event._id}`; // Generate the URL
-
-    //         return {
-    //           id: event._id,
-    //           eventTitle: event.eventTitle,
-    //           eventGame: event.eventGame,
-    //           eventType: event.eventType,
-    //           eventDescription: event.eventDescription,
-    //           eventOrganizer: event.eventOrganizer,
-    //           organizerContactInfo: event.organizerContactInfo,
-    //           playerList:
-    //             event.playerList.map((player) => ({
-    //               playerName: player.playerName,
-    //               playerDiscordID: player.playerDiscordID,
-    //               _id: player._id,
-    //             })) || [],
-    //           eventDay: event.eventDay,
-    //           eventDate: formattedDate, // Use the formatted date
-    //           eventTime: formattedTime,
-    //           matches: event.matches,
-    //           isPublished: event.isPublished,
-    //           maxPlayers: event.maxPlayers,
-    //           iconUrl: event.iconUrl,
-    //           eventUrl: eventUrl,
-    //           eventFee: event.eventFee,
-    //         };
-    //       });
-
-    //       this.$nextTick(() => {
-    //         this.updateCheckedInEvents();
-    //         console.log(this.events);
-    //       });
-    //     })
-    //     .catch((error) => console.error("Error fetching events:", error));
-    // },
-
     getTemplates() {
-      // Use the appropriate URL for your templates endpoint
-      const templatesUrl = "https://gamehavenstg.com/templates"; // Or your local development URL e.g., http://localhost:8080/templates
-      // const templatesUrl =
-      //   "https://gamehaven-production.up.railway.app/templates";
+      const templatesUrl = "https://gamehavenstg.com/templates"; 
+
       // console.log("Fetching templates from:", templatesUrl);
 
       return fetch(templatesUrl)
         .then((response) => {
-          // Check if the request was successful (status code 200-299)
           if (!response.ok) {
-            // Throw an error to be caught by the .catch block
             throw new Error(
               `HTTP error fetching templates! status: ${response.status}`
             );
           }
-          return response.json(); // Parse the response body as JSON
+          return response.json(); 
         })
         .then((templatesFromServer) => {
           // console.log("Raw templates from server: ", templatesFromServer);
 
-          // Assuming your templates have fields: _id, eventTitle, eventGame, eventDescription, iconUrl, maxPlayers
-          // Map the data from the server to a format suitable for your front-end state
           this.templates = templatesFromServer.map((template) => {
-            // No complex formatting needed here like dates/times for templates based on schema
             return {
-              id: template._id, // Map the database ID
+              id: template._id,
               eventTitle: template.eventTitle,
               eventGame: template.eventGame,
               eventDescription: template.eventDescription,
               iconUrl: template.iconUrl,
               maxPlayers: template.maxPlayers,
               eventFee: template.eventFee,
-              // Add any other fields if your template schema includes them
             };
           });
 
-          // console.log(
-          //   "Processed templates stored in this.templates:",
-          //   this.templates
-          // );
         })
         .catch((error) => {
           console.error("Error fetching templates:", error);
@@ -1350,7 +1239,7 @@ const App = {
           eventTime: selectedTemplate.eventTime,
           eventFee: selectedTemplate.eventFee,
         };
-        this.activeTemplate = selectedTemplate; // Store the entire template object
+        this.activeTemplate = selectedTemplate; 
 
         // console.log("active template", this.activeTemplate);
         // console.log("template id", activeTemplate._id);
@@ -1397,12 +1286,11 @@ const App = {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          return response.json(); // Or response.text(), depending on your API
+          return response.json(); 
         })
         .then((data) => {
           // console.log("Template updated:", data);
-          this.getTemplates(); // Refresh the template list
-          // Optionally provide user feedback (e.g., a success message)
+          this.getTemplates(); 
         })
         .catch((error) => {
           console.error("Error updating template:", error);
@@ -1461,11 +1349,11 @@ const App = {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json(); // Or response.text(), depending on your API response
+            return response.json();
           })
           .then((data) => {
-            this.getTemplates(); // Refresh the template list
-            this.activeTemplate = null; // Reset activeTemplate after deletion
+            this.getTemplates(); 
+            this.activeTemplate = null; 
             this.newEvent = {
               eventTitle: "",
               eventGame: "",
@@ -1526,9 +1414,8 @@ const App = {
         .then((createdEvent) => {
           // console.log("Event created:", createdEvent);
 
-          // Add the created event to the local events array
           this.events.push({
-            _id: createdEvent._id, // Assuming MongoDB returns _id
+            _id: createdEvent._id, 
             eventTitle: createdEvent.eventTitle,
             eventGame: createdEvent.eventGame,
             eventType: createdEvent.eventType,
@@ -1590,6 +1477,9 @@ const App = {
             this.events = this.events.filter((event) => event.id !== eventId);
             this.currentPage = "events";
           })
+          .finally(() => {
+            this.getEvents();
+          })
           .catch((error) => console.error("Error deleting event:", error));
       } else {
         return;
@@ -1627,7 +1517,7 @@ const App = {
       this.modifiedFields.iconUrl = this.activeEvent.iconUrl;
       this.modifiedFields.maxPlayers = this.activeEvent.maxPlayers;
       this.modifiedFields.eventFee = this.activeEvent.eventFee;
-      this.modifiedFields.isPublished = this.activeEvent.isPublished; //Include the isPublished value.
+      this.modifiedFields.isPublished = this.activeEvent.isPublished; 
 
       console.log(this.activeEvent);
 
@@ -1686,92 +1576,7 @@ const App = {
           });
         });
     },
-    // saveEvent(eventId) {
-    //   this.scrollToTop();
-    //   this.startLoading(); // Assuming you have a startLoading method
 
-    //   // Ensure modifiedFields is an object
-    //   this.modifiedFields = this.modifiedFields || {};
-
-    //   if (this.pairingsChanged) {
-    //     const matchesToSend = this.activeEvent.matches.map((pair) => ({
-    //       player1:
-    //         typeof pair.player1 === "object" ? pair.player1._id : pair.player1,
-    //       player2: pair.player2
-    //         ? typeof pair.player2 === "object"
-    //           ? pair.player2._id
-    //           : pair.player2
-    //         : null,
-    //     }));
-    //     this.modifiedFields.matches = matchesToSend;
-    //   }
-
-    //   // Add other modified fields
-    //   this.modifiedFields.iconUrl = this.activeEvent.iconUrl;
-    //   this.modifiedFields.maxPlayers = this.activeEvent.maxPlayers;
-    //   this.modifiedFields.eventFee = this.activeEvent.eventFee;
-
-    //   console.log(this.activeEvent);
-
-    //   return fetch(`https://gamehavenstg.com/events/${eventId}`, {
-    //     method: "PUT",
-    //     credentials: "include",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(this.modifiedFields),
-    //   })
-    //     .then((response) => {
-    //       if (!response.ok) {
-    //         throw new Error("Failed to update event");
-    //       }
-    //       return response.json();
-    //     })
-    //     .then((data) => {
-    //       console.log("saved event: ", data);
-
-    //       // Ensure playerList is fully shaped
-    //       data.playerList = data.playerList.map((player) => ({
-    //         playerName: player.playerName,
-    //         playerDiscordID: player.playerDiscordID,
-    //         _id: player._id,
-    //       }));
-
-    //       // Make sure matches are fully hydrated with objects, not just ids
-    //       data.matches = data.matches.map((pair) => ({
-    //         player1:
-    //           typeof pair.player1 === "object"
-    //             ? pair.player1
-    //             : { _id: pair.player1 },
-    //         player2: pair.player2
-    //           ? typeof pair.player2 === "object"
-    //             ? pair.player2
-    //             : { _id: pair.player2 }
-    //           : null,
-    //       }));
-
-    //       // Normalize for frontend consistency
-    //       data.id = data._id;
-
-    //       this.activeEvent = data;
-
-    //       const index = this.events.findIndex((event) => event.id === eventId);
-    //       if (index !== -1) {
-    //         this.events[index] = data;
-    //       }
-
-    //       this.modifiedFields = {};
-    //       this.pairingsChanged = false;
-    //     })
-
-    //     .catch((error) => console.error("Error updating event:", error))
-    //     .finally(() => {
-    //       return new Promise((resolve) => {
-    //         setTimeout(() => {
-    //           this.stopLoading(); // Assuming you have a stopLoading method
-    //           resolve();
-    //         }, 4500);
-    //       });
-    //     });
-    // },
 
     sendEventToBot() {
       if (confirm("Are you sure you want to send this event to the discord")) {
