@@ -41,14 +41,14 @@ const App = {
       checkedInEvents: [],
       selectedPlayers: [],
       pairedPlayers: [],
-      pairingsChanged: false, 
+      pairingsChanged: false,
 
       modifiedFields: {},
       maxPlayersOptions: [
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
         21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
         39, 40,
-      ], 
+      ],
 
       loading: false,
       boardgames: [],
@@ -248,7 +248,7 @@ const App = {
       this.events.forEach((event) => {
         uniqueGames.add(event.eventGame);
       });
-      return ["All Games", ...uniqueGames]; 
+      return ["All Games", ...uniqueGames];
     },
     filteredEvents() {
       let filtered = this.events;
@@ -276,7 +276,7 @@ const App = {
     mainContent.addEventListener("touchstart", this.closeMenuOnClickOutside); // Mobile
     mainContent.addEventListener("click", this.closeMenuOnClickOutside); //Desktop
     this.fetchBoardGames();
-    this.checkInitialUrl(); 
+    this.checkInitialUrl();
     const storedDarkMode = localStorage.getItem("darkMode");
     if (storedDarkMode === "true") {
       this.isDarkMode = true;
@@ -591,7 +591,7 @@ const App = {
       this.selectedGameEvent = "All Games";
     },
     convertToStandardTime(militaryTime) {
-      if (!militaryTime) return ""; 
+      if (!militaryTime) return "";
 
       const [hours, minutes] = militaryTime.split(":");
       let standardHours = parseInt(hours, 10);
@@ -653,8 +653,6 @@ const App = {
       });
     },
 
-
-
     pairSelectedPlayers() {
       if (this.selectedPlayers.length === 2) {
         const player1 = this.activeEvent.playerList.find(
@@ -686,7 +684,7 @@ const App = {
         );
         if (player1) {
           this.activeEvent.matches.push({
-            player1: { ...player1 }, 
+            player1: { ...player1 },
             player2: null,
             isBye: true,
           });
@@ -700,8 +698,6 @@ const App = {
       this.activeEvent.matches.splice(index, 1);
       this.pairingsChanged = true;
     },
-
-
 
     toggleDarkMode() {
       this.isDarkMode = !this.isDarkMode;
@@ -723,7 +719,7 @@ const App = {
         if (window.location.pathname !== `/${page}`) {
           history.pushState(null, "", `/${page}`);
         }
-        this.activeEvent = null; 
+        this.activeEvent = null;
       }
 
       this.currentPage = page;
@@ -799,7 +795,6 @@ const App = {
           }
 
           const eventUrl = `https://gamehavenstg.com/events/${eventFromServer._id}`;
-
 
           this.activeEvent = {
             _id: eventFromServer._id,
@@ -933,10 +928,10 @@ const App = {
               );
             }
 
-            return this.getEvents(); 
+            return this.getEvents();
           })
           .then(() => {
-            return this.viewEvent(eventId); 
+            return this.viewEvent(eventId);
           })
           .catch((error) => {
             console.error("Error during check-in:", error);
@@ -960,8 +955,6 @@ const App = {
       const date = new Date(dateString);
       return date.getDate();
     },
-
-
 
     submitCheckOut(eventId) {
       this.startLoading();
@@ -1067,7 +1060,7 @@ const App = {
       fetch(`https://gamehavenstg.com/events/${eventId}/admin-remove-player`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ playerId }), 
+        body: JSON.stringify({ playerId }),
       })
         .then((response) => {
           if (!response.ok) throw new Error("Failed to remove player");
@@ -1109,7 +1102,7 @@ const App = {
     },
 
     getEvents() {
-      return fetch("https://gamehavenstg.com/events")
+      return fetch("https://gamehavenstg.com/api/events")
         .then((response) => response.json())
         .then((eventsFromServer) => {
           // console.log("events from server: ", eventsFromServer);
@@ -1166,7 +1159,7 @@ const App = {
     },
 
     getTemplates() {
-      const templatesUrl = "https://gamehavenstg.com/templates"; 
+      const templatesUrl = "https://gamehavenstg.com/templates";
 
       // console.log("Fetching templates from:", templatesUrl);
 
@@ -1177,7 +1170,7 @@ const App = {
               `HTTP error fetching templates! status: ${response.status}`
             );
           }
-          return response.json(); 
+          return response.json();
         })
         .then((templatesFromServer) => {
           // console.log("Raw templates from server: ", templatesFromServer);
@@ -1193,7 +1186,6 @@ const App = {
               eventFee: template.eventFee,
             };
           });
-
         })
         .catch((error) => {
           console.error("Error fetching templates:", error);
@@ -1239,7 +1231,7 @@ const App = {
           eventTime: selectedTemplate.eventTime,
           eventFee: selectedTemplate.eventFee,
         };
-        this.activeTemplate = selectedTemplate; 
+        this.activeTemplate = selectedTemplate;
 
         // console.log("active template", this.activeTemplate);
         // console.log("template id", activeTemplate._id);
@@ -1286,11 +1278,11 @@ const App = {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          return response.json(); 
+          return response.json();
         })
         .then((data) => {
           // console.log("Template updated:", data);
-          this.getTemplates(); 
+          this.getTemplates();
         })
         .catch((error) => {
           console.error("Error updating template:", error);
@@ -1352,8 +1344,8 @@ const App = {
             return response.json();
           })
           .then((data) => {
-            this.getTemplates(); 
-            this.activeTemplate = null; 
+            this.getTemplates();
+            this.activeTemplate = null;
             this.newEvent = {
               eventTitle: "",
               eventGame: "",
@@ -1415,7 +1407,7 @@ const App = {
           // console.log("Event created:", createdEvent);
 
           this.events.push({
-            _id: createdEvent._id, 
+            _id: createdEvent._id,
             eventTitle: createdEvent.eventTitle,
             eventGame: createdEvent.eventGame,
             eventType: createdEvent.eventType,
@@ -1517,7 +1509,7 @@ const App = {
       this.modifiedFields.iconUrl = this.activeEvent.iconUrl;
       this.modifiedFields.maxPlayers = this.activeEvent.maxPlayers;
       this.modifiedFields.eventFee = this.activeEvent.eventFee;
-      this.modifiedFields.isPublished = this.activeEvent.isPublished; 
+      this.modifiedFields.isPublished = this.activeEvent.isPublished;
 
       console.log(this.activeEvent);
 
@@ -1576,7 +1568,6 @@ const App = {
           });
         });
     },
-
 
     sendEventToBot() {
       if (confirm("Are you sure you want to send this event to the discord")) {

@@ -14,7 +14,7 @@ var session = require("express-session");
 
 const app = express();
 
-const publicDirectoryPath = path.join(__dirname, "/public"); 
+const publicDirectoryPath = path.join(__dirname, "/public");
 app.use(express.static(publicDirectoryPath));
 
 const allowedOrigins = [
@@ -69,7 +69,7 @@ app.use(
   })
 );
 
-app.get("/events", async function (request, response) {
+app.get("/api/events", async function (request, response) {
   try {
     const events = await model.Event.find()
       .populate("playerList")
