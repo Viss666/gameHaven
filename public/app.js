@@ -738,33 +738,31 @@ const App = {
     // Explanatory
     navigatePage(page) {
       if (page === "events" || page === "home") {
-        this.getEvents(); // Fetch events when navigating to these pages
-        this.activeEvent = null; // Clear the active event when leaving the viewEvent page
-        if (page === "events") {
-          // Optionally, push the / or /events URL to history if not already there
-          if (
-            window.location.pathname !== "/" &&
-            window.location.pathname !== "/events"
-          ) {
-            history.pushState(null, "Game Haven STG Events", "/"); // Or '/events'
-          }
+        this.getEvents();
+        this.activeEvent = null;
+
+        const newPath = page === "home" ? "/" : "/events";
+
+        if (window.location.pathname !== newPath) {
+          history.pushState(null, "Game Haven STG Events", newPath);
         }
+      } else {
+        // Going to rentals or other pages
+        if (window.location.pathname !== `/${page}`) {
+          history.pushState(null, "", `/${page}`);
+        }
+        this.activeEvent = null; // Clear selected event if coming from one
       }
 
-      if (page === "rentals") {
-        //this.fetchBoardGameInfo();
-      }
       this.currentPage = page;
-      // Close all dropdowns on navigation
 
+      // Close dropdowns and menu
       Object.keys(this.dropdowns).forEach(
         (key) => (this.dropdowns[key] = false)
       );
-      if (this.menuOpen) {
-        this.menuOpen = false;
-      }
-      // this.setActiveLink();
-      this.mobileSubmenuOpen = null; // Close mobile submenu on page navigation
+      if (this.menuOpen) this.menuOpen = false;
+
+      this.mobileSubmenuOpen = null;
     },
 
     verifyAdmin() {
