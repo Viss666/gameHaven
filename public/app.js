@@ -1365,7 +1365,6 @@ const App = {
       }
     },
 
-
     pushEvent() {
       this.scrollToTop();
 
@@ -1402,19 +1401,11 @@ const App = {
         errors.maxPlayers = "Maximum Players must be at least 1.";
       }
 
-
-      if (
-        this.newEvent.iconUrl &&
-        !/^(ftp|http|https):\/\/[^ "]+$/.test(this.newEvent.iconUrl)
-      ) {
-        errors.iconUrl = "Icon URL must be a valid URL.";
-      }
       if (this.newEvent.eventFee && isNaN(parseFloat(this.newEvent.eventFee))) {
         errors.eventFee = "Event Fee must be a number.";
       }
 
       if (Object.keys(errors).length > 0) {
-
         this.validationErrors = errors;
         console.error("Validation errors:", errors);
         return;
@@ -1441,9 +1432,9 @@ const App = {
         eventTime: this.newEvent.eventTime,
         playerList: [],
         matches: [],
-        maxPlayers: parseInt(this.newEvent.maxPlayers, 10), 
+        maxPlayers: parseInt(this.newEvent.maxPlayers, 10),
         iconUrl: this.newEvent.iconUrl,
-        eventFee: parseFloat(this.newEvent.eventFee) || 0, 
+        eventFee: parseFloat(this.newEvent.eventFee) || 0,
       };
 
       fetch("https://gamehavenstg.com/events", {
@@ -1580,12 +1571,6 @@ const App = {
         errors.maxPlayers = "Maximum Players must be at least 1 or Unlimited.";
       }
 
-      if (
-        this.activeEvent.iconUrl &&
-        !/^(ftp|http|https):\/\/[^ "]+$/.test(this.activeEvent.iconUrl)
-      ) {
-        errors.iconUrl = "Icon URL must be a valid URL.";
-      }
       if (
         this.activeEvent.eventFee !== null &&
         isNaN(parseFloat(this.activeEvent.eventFee))
