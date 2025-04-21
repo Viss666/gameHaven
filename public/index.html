@@ -450,7 +450,7 @@
                 @click="openCheckIn"
                 class="btn"
               >
-                Check In
+                Sign up
               </button>
 
               <button
@@ -458,7 +458,7 @@
                 @click="submitCheckOut(activeEvent._id)"
                 class="btn"
               >
-                Check Out
+                Sign out
               </button>
 
 
@@ -539,7 +539,7 @@
               <!-- Pop-up modal -->
               <div v-if="showCheckInForm" class="modal-overlay">
                 <div class="modal">
-                  <h2>Check In</h2>
+                  <h2>Sign Up</h2>
                   <input
                     v-model="firstName"
                     type="text"
@@ -766,7 +766,7 @@
               <input
                 class="event-title"
                 v-model="activeEvent.eventTitle"
-                placeholder="activeEvent.eventTitle"
+                placeholder="event title.."
                 type="text"
                 @input="updateActiveEvent('eventTitle', $event.target.value)"
               />
@@ -775,7 +775,7 @@
               <p class="event-game">{{activeEvent.eventGame}}</p>
               <input
                 v-model="activeEvent.eventGame"
-                placeholder="activeEvent.eventGame"
+                placeholder="event game.."
                 class="event-game"
                 type="text"
                 @input="updateActiveEvent('eventGame', $event.target.value)"
@@ -785,7 +785,7 @@
               <p class="event-description">{{activeEvent.eventDescription}}</p>
               <textarea
                 v-model="activeEvent.eventDescription"
-                placeholder="activeEvent.eventDescription"
+                placeholder="event description.."
                 class="description"
                 type="text"
                 @input="updateActiveEvent('eventDescription', $event.target.value)"
@@ -859,7 +859,7 @@
                   class="event-organizer"
                   type="text"
                   v-model="activeEvent.eventOrganizer"
-                  placeholder="activeEvent.eventOrganizer"
+                  placeholder="organizer name.."
                   @input="updateActiveEvent('eventOrganizer', $event.target.value)"
                 />
                 <div v-if="validationErrors.eventOrganizer" class="error-message">{{ validationErrors.eventOrganizer }}</div>
@@ -872,7 +872,7 @@
                   class="organizer-contact"
                   type="text"
                   v-model="activeEvent.organizerContactInfo"
-                  placeholder="activeEvent.organizerContactInfo"
+                  placeholder="organizer contact.."
                   @input="updateActiveEvent('organizerContactInfo', $event.target.value)"
                 />
                 <div v-if="validationErrors.organizerContactInfo" class="error-message">{{ validationErrors.organizerContactInfo }}</div>
