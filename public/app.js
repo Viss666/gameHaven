@@ -49,7 +49,7 @@ const App = {
         21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
         39, 40,
       ],
-
+      validationErrors: {},
       loading: false,
       boardgames: [],
       selectedGame: "All Games",
@@ -730,6 +730,7 @@ const App = {
       if (this.menuOpen) this.menuOpen = false;
 
       this.mobileSubmenuOpen = null;
+      this.scrollToTop();
     },
 
     verifyAdmin() {
@@ -741,7 +742,7 @@ const App = {
         this.isAdmin = true;
         this.currentPage = "events";
       } else {
-        alert("wrong password you are not admin");
+        alert("Incorrect password, try again");
         this.adminPassword = "";
       }
     },
@@ -1362,8 +1363,153 @@ const App = {
           });
       }
     },
+    // pushEvent() {
+    //   this.scrollToTop();
+
+    //   Cookies.set("organizerName", this.newEvent.eventOrganizer, {
+    //     expires: 999,
+    //   });
+    //   Cookies.set("organizerContact", this.newEvent.organizerContactInfo, {
+    //     expires: 999,
+    //   });
+
+    //   const newEvent = {
+    //     eventTitle: this.newEvent.eventTitle,
+    //     eventGame: this.newEvent.eventGame,
+    //     eventType: this.newEvent.eventType,
+    //     eventDescription: this.newEvent.eventDescription,
+    //     eventOrganizer: this.newEvent.eventOrganizer,
+    //     organizerContactInfo: this.newEvent.organizerContactInfo,
+    //     eventDate: this.newEvent.eventDate,
+    //     eventDay: this.newEvent.eventDay,
+    //     eventTime: this.newEvent.eventTime,
+    //     playerList: [],
+    //     matches: [],
+    //     maxPlayers: this.newEvent.maxPlayers,
+    //     iconUrl: this.newEvent.iconUrl,
+    //     eventFee: this.newEvent.eventFee,
+    //   };
+    //   // console.log("New Event: ", newEvent);
+
+    //   fetch("https://gamehavenstg.com/events", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(newEvent),
+    //   })
+    //     .then((response) => {
+    //       if (!response.ok) {
+    //         throw new Error("Failed to create event");
+    //       }
+    //       return response.json();
+    //     })
+    //     .then((createdEvent) => {
+    //       // console.log("Event created:", createdEvent);
+
+    //       this.events.push({
+    //         _id: createdEvent._id,
+    //         eventTitle: createdEvent.eventTitle,
+    //         eventGame: createdEvent.eventGame,
+    //         eventType: createdEvent.eventType,
+    //         eventDescription: createdEvent.eventDescription,
+    //         eventOrganizer: createdEvent.eventOrganizer,
+    //         organizerContactInfo: createdEvent.organizerContactInfo,
+    //         playerList: createdEvent.playerList || [],
+    //         matches: createdEvent.matches || [],
+    //         eventDay: createdEvent.eventDay,
+    //         eventDate: createdEvent.eventDate,
+    //         eventTime: createdEvent.eventTime,
+    //         maxPlayers: createdEvent.maxPlayers,
+    //         iconUrl: createdEvent.iconUrl,
+    //         eventFee: createdEvent.eventFee,
+    //       });
+
+    //       // Reset form fields
+    //       this.newEvent = {
+    //         eventTitle: "",
+    //         eventGame: "",
+    //         eventType: "",
+    //         eventDescription: "",
+    //         eventOrganizer: "",
+    //         organizerContactInfo: "",
+    //         eventDay: "",
+    //         eventDate: "",
+    //         eventTime: "",
+    //         maxPlayers: 1,
+    //         iconUrl: "",
+    //         eventFee: "",
+    //       };
+    //     })
+    //     .finally(() => {
+    //       this.getEvents();
+    //       this.currentPage = "events";
+    //     })
+    //     .catch((error) => console.error("Error creating event:", error));
+    // },
+
     pushEvent() {
       this.scrollToTop();
+
+      const errors = {};
+
+      // Basic validation for required fields
+      if (!this.newEvent.eventTitle) {
+        errors.eventTitle = "Event Title is required.";
+      }
+      if (!this.newEvent.eventGame) {
+        errors.eventGame = "Game is required.";
+      }
+      if (!this.newEvent.eventType) {
+        errors.eventType = "Event Type is required.";
+      }
+      if (!this.newEvent.eventDescription) {
+        errors.eventDescription = "Description is required.";
+      }
+      if (!this.newEvent.eventOrganizer) {
+        errors.eventOrganizer = "Organizer Name is required.";
+      }
+      if (!this.newEvent.organizerContactInfo) {
+        errors.organizerContactInfo = "Contact Info is required.";
+      }
+      if (!this.newEvent.eventDate) {
+        errors.eventDate = "Date is required.";
+      }
+      if (!this.newEvent.eventDay) {
+        errors.eventDay = "Day is required.";
+      }
+      if (!this.newEvent.eventTime) {
+        errors.eventTime = "Time is required.";
+      }
+      if (!this.newEvent.maxPlayers || this.newEvent.maxPlayers < 1) {
+        errors.maxPlayers = "Maximum Players must be at least 1.";
+      }
+
+      // You can add more specific validation rules here, for example:
+      // - Validate the format of eventDate and eventTime.
+      // - Check if organizerContactInfo is a valid email or phone number format (you might want to use a regular expression for this).
+      // - Validate the URL format for iconUrl if it's required.
+      if (
+        this.newEvent.iconUrl &&
+        !/^(ftp|http|https):\/\/[^ "]+$/.test(this.newEvent.iconUrl)
+      ) {
+        errors.iconUrl = "Icon URL must be a valid URL.";
+      }
+      if (this.newEvent.eventFee && isNaN(parseFloat(this.newEvent.eventFee))) {
+        errors.eventFee = "Event Fee must be a number.";
+      }
+
+      // If there are any errors, prevent the API call and display the errors
+      if (Object.keys(errors).length > 0) {
+        // You'll need to have a way to display these errors to the user.
+        // This might involve updating a state property that your template can bind to.
+        this.validationErrors = errors;
+        console.error("Validation errors:", errors);
+        return;
+      }
+
+      // Clear any previous validation errors if the current input is valid
+      this.validationErrors = {};
 
       Cookies.set("organizerName", this.newEvent.eventOrganizer, {
         expires: 999,
@@ -1384,9 +1530,9 @@ const App = {
         eventTime: this.newEvent.eventTime,
         playerList: [],
         matches: [],
-        maxPlayers: this.newEvent.maxPlayers,
+        maxPlayers: parseInt(this.newEvent.maxPlayers, 10), // Ensure it's a number
         iconUrl: this.newEvent.iconUrl,
-        eventFee: this.newEvent.eventFee,
+        eventFee: parseFloat(this.newEvent.eventFee) || 0, // Ensure it's a number, default to 0 if empty/invalid
       };
       // console.log("New Event: ", newEvent);
 
