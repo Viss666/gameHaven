@@ -252,6 +252,12 @@ nav ul li a.active {
   justify-content: center;
   /* overflow: hidden; */
 }
+
+.error-message {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 0.2em;
+}
 .promotions-container h2 {
   margin-top: 0;
 }
@@ -641,11 +647,21 @@ h4 {
 }
 
 @keyframes horizontal-shaking {
-  0% { transform: translateX(0) }
-  25% { transform: translateX(3px) }
-  50% { transform: translateX(-3px) }
-  75% { transform: translateX(3px) }
-  100% { transform: translateX(0) }
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(3px);
+  }
+  50% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 .shake {
   animation: horizontal-shaking 0.3s ease-in-out;

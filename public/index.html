@@ -601,6 +601,8 @@
                   class="create-input"
                   type="text"
                 />
+                <div v-if="validationErrors.eventTitle" class="error-message">{{ validationErrors.eventTitle }}</div>
+
               </div>
               <div>
                 <h2>Game</h2>
@@ -609,6 +611,8 @@
                   placeholder="Game"
                   type="text"
                 />
+                <div v-if="validationErrors.eventGame" class="error-message">{{ validationErrors.eventGame }}</div>
+
               </div>
 
               <div>
@@ -619,6 +623,8 @@
                   class="description"
                   type="text"
                 ></textarea>
+                <div v-if="validationErrors.eventDescription" class="error-message">{{ validationErrors.eventDescription }}</div>
+
               </div>
               <div>
                 <label for="icon-select">Select an Icon:</label>
@@ -629,6 +635,8 @@
                   </option>
                 </select>
                 <img v-if="newEvent.iconUrl" :src="newEvent.iconUrl" alt="Selected Icon" style="max-width: 50px; max-height: 50px;">
+                <div v-if="validationErrors.iconUrl" class="error-message">{{ validationErrors.iconUrl }}</div>
+
               </div>
               <div>
                 <label for="max-players-select">Maximum Players:</label>
@@ -638,6 +646,8 @@
                     {{ n }}
                   </option>
                 </select>
+                <div v-if="validationErrors.maxPlayers" class="error-message">{{ validationErrors.maxPlayers }}</div>
+
                 <!-- <p v-if="newEvent.maxPlayers === null">Maximum players: Unlimited</p> -->
                 <!-- <p v-else-if="newEvent.maxPlayers">Maximum players: {{ activeEvent.maxPlayers }}</p> -->
               </div>
@@ -655,6 +665,8 @@
                     min="0"
                   />
                 </div>
+                <div v-if="validationErrors.eventFee" class="error-message">{{ validationErrors.eventFee }}</div>
+
               </div>
 
               <div>
@@ -681,6 +693,8 @@
                   placeholder="Organizer"
                   type="text"
                 />
+                <div v-if="validationErrors.eventOrganizer" class="error-message">{{ validationErrors.eventOrganizer }}</div>
+
               </div>
               <div>
                 <h2>Organizer Contact Info</h2>
@@ -689,6 +703,8 @@
                   placeholder="Organizer Contact"
                   type="text"
                 />
+                <div v-if="validationErrors.organizerContactInfo" class="error-message">{{ validationErrors.organizerContactInfo }}</div>
+
               </div>
               <div>
                 <h2>Event Day</h2>
@@ -702,6 +718,8 @@
                   <option value="Saturday">Saturday</option>
                   <option value="Sunday">Sunday</option>
                 </select>
+                <div v-if="validationErrors.eventDay" class="error-message">{{ validationErrors.eventDay }}</div>
+
               </div>
               <div>
                 <label for="event-date">Date:</label>
@@ -711,6 +729,8 @@
                   v-model="newEvent.eventDate"
                   type="date"
                 />
+                <div v-if="validationErrors.eventDate" class="error-message">{{ validationErrors.eventDate }}</div>
+
               </div>
               <div>
                 <label for="event-time">Time:</label>
@@ -720,6 +740,8 @@
                   v-model="newEvent.eventTime"
                   type="time"
                 />
+                <div v-if="validationErrors.eventTime" class="error-message">{{ validationErrors.eventTime }}</div>
+
               </div>
 
               <div>
