@@ -770,6 +770,7 @@
                 type="text"
                 @input="updateActiveEvent('eventTitle', $event.target.value)"
               />
+              <div v-if="validationErrors.eventTitle" class="error-message">{{ validationErrors.eventTitle }}</div>
 
               <p class="event-game">{{activeEvent.eventGame}}</p>
               <input
@@ -779,6 +780,8 @@
                 type="text"
                 @input="updateActiveEvent('eventGame', $event.target.value)"
               />
+              <div v-if="validationErrors.eventGame" class="error-message">{{ validationErrors.eventGame }}</div>
+
               <p class="event-description">{{activeEvent.eventDescription}}</p>
               <textarea
                 v-model="activeEvent.eventDescription"
@@ -787,6 +790,8 @@
                 type="text"
                 @input="updateActiveEvent('eventDescription', $event.target.value)"
               ></textarea>
+              <div v-if="validationErrors.eventDescription" class="error-message">{{ validationErrors.eventDescription }}</div>
+
               <div>
                 <label for="icon-select">Select an Icon:</label>
                 <select id="icon-select" v-model="activeEvent.iconUrl">
@@ -799,6 +804,8 @@
                     {{ icon.name }}
                   </option>
                 </select>
+                <div v-if="validationErrors.iconUrl" class="error-message">{{ validationErrors.iconUrl }}</div>
+
                 <img
                   v-if="activeEvent.iconUrl"
                   :src="activeEvent.iconUrl"
@@ -823,6 +830,8 @@
                 <p v-else-if="activeEvent.maxPlayers">
                   Maximum players: {{ activeEvent.maxPlayers }}
                 </p>
+                <div v-if="validationErrors.maxPlayers" class="error-message">{{ validationErrors.maxPlayers }}</div>
+
               </div>
               <div>
                 <label for="event-fee-input">Event Fee:</label>
@@ -836,6 +845,8 @@
                     step="1.0"
                     min="0"
                   />
+                  <div v-if="validationErrors.eventFee" class="error-message">{{ validationErrors.eventFee }}</div>
+
                 </div>
               </div>
 </div>
@@ -851,6 +862,8 @@
                   placeholder="activeEvent.eventOrganizer"
                   @input="updateActiveEvent('eventOrganizer', $event.target.value)"
                 />
+                <div v-if="validationErrors.eventOrganizer" class="error-message">{{ validationErrors.eventOrganizer }}</div>
+
                 <p class="organizer-contact">
                   <strong>Organizer Contact Info:</strong>
                   {{activeEvent.organizerContactInfo}}
@@ -862,6 +875,8 @@
                   placeholder="activeEvent.organizerContactInfo"
                   @input="updateActiveEvent('organizerContactInfo', $event.target.value)"
                 />
+                <div v-if="validationErrors.organizerContactInfo" class="error-message">{{ validationErrors.organizerContactInfo }}</div>
+
                 <p class="event-day">
                   {{activeEvent.eventDay}} - {{activeEvent.eventTime}} -
                   {{activeEvent.eventDate}}
@@ -881,6 +896,7 @@
                   <option value="Saturday">Saturday</option>
                   <option value="Sunday">Sunday</option>
                 </select>
+                <div v-if="validationErrors.eventDay" class="error-message">{{ validationErrors.eventDay }}</div>
 
                 <label for="event-date">Date:</label>
                 <input
@@ -889,6 +905,7 @@
                   v-model="activeEvent.date"
                   @change="updateActiveEvent('eventDate', $event.target.value)"
                 />
+                <div v-if="validationErrors.eventDate" class="error-message">{{ validationErrors.eventDate }}</div>
 
                 <label for="event-time">Time:</label>
                 <input
@@ -897,6 +914,8 @@
                   v-model="activeEvent.time"
                   @change="updateActiveEvent('eventTime', $event.target.value)"
                 />
+                <div v-if="validationErrors.eventTime" class="error-message">{{ validationErrors.eventTime }}</div>
+
               </div>
             </div>
             <div class="admin-event-content-wrapper">
