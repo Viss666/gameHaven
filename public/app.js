@@ -1637,9 +1637,66 @@ const App = {
       this.scrollToTop();
       this.startLoading();
 
+      const errors = {};
+
+      if (!this.activeEvent.eventTitle) {
+        errors.eventTitle = "Title is required.";
+      }
+      if (!this.activeEvent.eventGame) {
+        errors.eventGame = "Game is required.";
+      }
+      if (!this.activeEvent.eventDescription) {
+        errors.eventDescription = "Description is required.";
+      }
+      if (!this.activeEvent.eventOrganizer) {
+        errors.eventOrganizer = "Organizer is required.";
+      }
+      if (!this.activeEvent.organizerContactInfo) {
+        errors.organizerContactInfo = "Organizer Contact Info is required.";
+      }
+      if (!this.activeEvent.eventDate) {
+        errors.eventDate = "Date is required.";
+      }
+      if (!this.activeEvent.eventDay) {
+        errors.eventDay = "Day is required.";
+      }
+      if (!this.activeEvent.eventTime) {
+        errors.eventTime = "Time is required.";
+      }
+      if (
+        this.activeEvent.maxPlayers === null ||
+        this.activeEvent.maxPlayers < 1
+      ) {
+        errors.maxPlayers = "Maximum Players must be at least 1 or Unlimited.";
+      }
+
+      if (
+        this.activeEvent.iconUrl &&
+        !/^(ftp|http|https):\/\/[^ "]+$/.test(this.activeEvent.iconUrl)
+      ) {
+        errors.iconUrl = "Icon URL must be a valid URL.";
+      }
+      if (
+        this.activeEvent.eventFee !== null &&
+        isNaN(parseFloat(this.activeEvent.eventFee))
+      ) {
+        errors.eventFee = "Event Fee must be a number.";
+      } else if (this.activeEvent.eventFee < 0) {
+        errors.eventFee = "Event Fee cannot be negative.";
+      }
+
+   
+      if (Object.keys(errors).length > 0) {
+        this.validationErrors = errors; 
+        console.error("Validation errors:", errors);
+        this.stopLoading(); 
+        return Promise.reject(); 
+      }
+
+      this.validationErrors = {};
+
       this.modifiedFields = this.modifiedFields || {};
 
-      // Always include matches in modifiedFields
       const matchesToSend = this.activeEvent.matches.map((pair) => ({
         player1:
           typeof pair.player1 === "object" ? pair.player1._id : pair.player1,
