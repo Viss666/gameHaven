@@ -1376,9 +1376,6 @@ const App = {
       if (!this.newEvent.eventGame) {
         errors.eventGame = "Game is required.";
       }
-      if (!this.newEvent.eventType) {
-        errors.eventType = "Event Type is required.";
-      }
       if (!this.newEvent.eventDescription) {
         errors.eventDescription = "Description is required.";
       }
