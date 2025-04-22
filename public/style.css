@@ -192,10 +192,10 @@ nav ul li a.active {
 /* Responsive adjustments for smaller screens (optional, refine as needed) */
 @media (max-width: 600px) {
   .games-game-container {
-    grid-template-columns: repeat(
+    /* grid-template-columns: repeat(
       auto-fit,
       minmax(150px, 1fr)
-    ); /* Adjust min width for smaller screens */
+    );  */
   }
   .game-image-container {
     overflow: visible;
