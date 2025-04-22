@@ -146,7 +146,7 @@ nav ul li a.active {
 .games-game-container {
   display: grid;
   gap: 20px;
-  padding: 20px;
+  /* padding: 20px; */
   /* Default for smaller screens (adjust as needed) */
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
@@ -214,7 +214,7 @@ nav ul li a.active {
 }
 
 .promotions-container {
-  padding: 20px;
+  /* padding: 20px; */
   /* margin: 0 20%; */
 }
 
