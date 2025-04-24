@@ -14,12 +14,12 @@ var session = require("express-session");
 
 const app = express();
 
-const publicDirectoryPath = path.join(__dirname, "/public"); 
+const publicDirectoryPath = path.join(__dirname, "/public");
 app.use(express.static(publicDirectoryPath));
 
 const allowedOrigins = [
   "https://gamehavenstg.com", // live site
-  "http://127.0.0.1:5500", // Local development (VS Code Live Server)
+  "http://127.0.0.1:5500", // Local development 
   "https://gamehaven-production.up.railway.app",
 ];
 
@@ -65,11 +65,11 @@ app.use(
       }
       return callback(null, true);
     },
-    credentials: true, // if you need to allow credentials (cookies, auth headers, etc.)
+    credentials: true,
   })
 );
 
-app.get("/events", async function (request, response) {
+app.get("/api/events", async function (request, response) {
   try {
     const events = await model.Event.find()
       .populate("playerList")
@@ -96,28 +96,6 @@ app.get("/templates", async function (request, response) {
   }
 });
 
-//get singular event
-// app.get("/events/:eventId", async function (request, response) {
-//   try {
-//     const event = await model.Event.findById(request.params.eventId)
-//       .populate("playerList") // ✅ Populate referenced players
-//       .populate({
-//         path: "matches",
-//         populate: { path: "player1 player2", model: "Player" }, // ✅ Populate player1 and player2 inside eventMatches
-//       });
-
-//     // console.log("** Fetched event:", event);
-
-//     if (!event) {
-//       return response.status(404).json({ message: "Event not found" });
-//     }
-
-//     response.status(200).json(event);
-//   } catch (error) {
-//     console.error("Error fetching event:", error);
-//     response.status(500).json({ message: "Internal Server Error" });
-//   }
-// });
 app.get("/api/events/:eventId", async function (request, response) {
   // Consider prefixing API routes
   try {
@@ -140,7 +118,6 @@ app.get("/api/events/:eventId", async function (request, response) {
 });
 
 // Create an event
-// Tested and functional
 app.post("/events", async function (request, response) {
   console.log("Received request body:", request.body);
 
@@ -190,26 +167,21 @@ app.post("/templates", async function (request, response) {
 });
 
 // Delete an event
-// Tested and functional
 app.delete("/events/:eventId", async function (request, response) {
   console.log("API route /events/:eventId hit:", request.params.eventId);
 
   try {
     const eventId = request.params.eventId;
-
-    // 1. Find the event
     const event = await model.Event.findById(eventId).populate("playerList");
 
     if (!event) {
       return response.status(404).json({ message: "Event not found" });
     }
 
-    // 2. Delete associated players
     for (const player of event.playerList) {
       await model.Player.findByIdAndDelete(player._id);
     }
 
-    // 3. Delete the event
     await model.Event.findByIdAndDelete(eventId);
 
     response
@@ -221,7 +193,6 @@ app.delete("/events/:eventId", async function (request, response) {
   }
 });
 
-// app.js (or wherever your Express routes are)
 
 app.put("/events/:eventId/give-bye", async (req, res) => {
   try {
@@ -262,7 +233,6 @@ app.put("/events/:eventId/add-player", async (req, res) => {
 
     // console.log("Received request body:", req.body);
 
-    // Check if player exists, or create new
     let player = await Player.findOne({ playerDiscordID });
     if (!player) {
       player = await Player.create({ playerName, playerDiscordID });
@@ -397,7 +367,7 @@ app.put("/events/:eventId", async (req, res) => {
     updatedEvent = await model.Event.findById(eventId)
       .populate({
         path: "playerList",
-        model: "Player", // Assuming your player model is named "Player"
+        model: "Player", 
       })
       .populate({
         path: "matches",
@@ -424,94 +394,68 @@ app.put("/templates/:templateId", async (req, res) => {
     const templateId = req.params.templateId;
     const templateBody = req.body; // Contains fields like eventTitle, eventGame etc.
 
-    // --- Optional but Recommended: Validate ID format ---
     if (!mongoose.Types.ObjectId.isValid(templateId)) {
       return res.status(400).json({ message: "Invalid template ID format" });
     }
-    // --- End Validation ---
 
-    // --- Use the CORRECT model: model.Template ---
-    // Also add options:
-    // { new: true } - returns the *updated* document instead of the original one
-    // { runValidators: true } - ensures your schema validations run on the update
     let updatedTemplate = await model.Template.findByIdAndUpdate(
       templateId,
       templateBody,
-      { new: true, runValidators: true } // Added options
+      { new: true, runValidators: true } 
     );
-    // --- End Correct Model Usage ---
 
     if (!updatedTemplate) {
-      // If the ID format was valid but it wasn't found, send 404
       return res
         .status(404)
         .json({ message: "Template not found with that ID" });
     }
 
-    // Send back the updated template data
     res.status(200).json(updatedTemplate);
   } catch (error) {
     console.error("Error updating template:", error);
 
-    // Handle potential casting errors specifically if validation didn't catch it
     if (error.name === "CastError" && error.path === "_id") {
       return res.status(400).json({
         message: "Invalid template ID format provided.",
         error: error.message,
       });
     }
-    // Handle validation errors from the schema
     if (error.name === "ValidationError") {
       return res
         .status(400)
         .json({ message: "Validation failed.", errors: error.errors });
     }
 
-    // General server error
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
   }
 });
 
-// Delete a specific template by ID
 app.delete("/templates/:templateId", async (req, res) => {
   console.log("Attempting to delete template with ID:", req.params.templateId);
 
   try {
     const templateId = req.params.templateId;
 
-    // --- Optional but Recommended: Validate ID format ---
     if (!mongoose.Types.ObjectId.isValid(templateId)) {
       return res.status(400).json({ message: "Invalid template ID format" });
     }
-    // --- End Validation ---
-
-    // --- Use the CORRECT model and findByIdAndDelete ---
-    // findByIdAndDelete finds the document by ID and removes it.
-    // It returns the document if found and deleted, or null if not found.
     const deletedTemplate = await model.Template.findByIdAndDelete(templateId);
-    // --- End Correct Model Usage ---
 
     if (!deletedTemplate) {
-      // If the ID format was valid but it wasn't found, send 404
       return res
         .status(404)
         .json({ message: "Template not found with that ID" });
     }
-
-    // Send a success confirmation message
-    // You can optionally include the data of the deleted template if needed
     res.status(200).json({
       message: "Template deleted successfully",
-      deletedTemplate: deletedTemplate, // Optional: send back the deleted data
+      deletedTemplate: deletedTemplate, 
     });
-    // Alternatively, for a successful deletion, you could just send status 204 (No Content)
-    // res.status(204).send();
+ 
   } catch (error) {
     console.error("Error deleting template:", error);
 
-    // Handle potential casting errors specifically if validation didn't catch it
     if (error.name === "CastError" && error.path === "_id") {
       return res.status(400).json({
         message: "Invalid template ID format provided.",
@@ -519,7 +463,6 @@ app.delete("/templates/:templateId", async (req, res) => {
       });
     }
 
-    // General server error
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
@@ -527,11 +470,11 @@ app.delete("/templates/:templateId", async (req, res) => {
 });
 
 //Player match request
-//Requires testing, cookies fuck
+//Unused
 app.post("/events/:eventId/request-match", async (req, res) => {
   try {
     const eventId = req.params.eventId;
-    const playerId = req.cookies.playerId; // Get player ID from cookie
+    const playerId = req.cookies.playerId; 
 
     if (!playerId) {
       return res.status(400).json({ error: "Player ID not found in cookie" });
@@ -544,7 +487,6 @@ app.post("/events/:eventId/request-match", async (req, res) => {
         .json({ error: "Event not found or not a pairing event" });
     }
 
-    // Check if player is already in a match
     const alreadyMatched = event.matches.some(
       (match) =>
         match.player1.toString() === playerId ||
@@ -554,14 +496,11 @@ app.post("/events/:eventId/request-match", async (req, res) => {
       return res.status(400).json({ error: "Player is already in a match" });
     }
 
-    // Find an open match (player2 is null)
     const openMatch = event.matches.find((match) => !match.player2);
 
     if (openMatch) {
-      // Assign this player to an existing open match
       openMatch.player2 = playerId;
     } else {
-      // Create a new match where this player is waiting for an opponent
       event.matches.push({ player1: playerId });
     }
 
@@ -574,7 +513,7 @@ app.post("/events/:eventId/request-match", async (req, res) => {
 });
 
 //Player request removal from match
-//Requires testing cookeies fuck
+//Unused
 app.delete("/events/:eventId/unmatch", async (req, res) => {
   try {
     const eventId = req.params.eventId;
@@ -591,7 +530,6 @@ app.delete("/events/:eventId/unmatch", async (req, res) => {
         .json({ error: "Event not found or not a pairing event" });
     }
 
-    // Find the match where this player is involved
     const matchIndex = event.matches.findIndex(
       (match) =>
         match.player1.toString() === playerId ||
@@ -605,16 +543,13 @@ app.delete("/events/:eventId/unmatch", async (req, res) => {
     const match = event.matches[matchIndex];
 
     if (match.player1.toString() === playerId) {
-      // If player1 is leaving, make player2 the new player1
       if (match.player2) {
         match.player1 = match.player2;
         match.player2 = null;
       } else {
-        // If no player2, remove the match completely
         event.matches.splice(matchIndex, 1);
       }
     } else {
-      // If player2 is leaving, just set player2 to null
       match.player2 = null;
     }
 
@@ -635,24 +570,3 @@ app.listen(PORT, function () {
   console.log(`Server is running on port ${PORT}...`);
 });
 
-// Example Event
-// {
-//   "eventTitle": "Thursday Night Firefights",
-//   "eventGame": "Warhammer 40,001",
-//   "eventDescription": "Blah Here is a description...",
-//   "eventOrganizer": "Grant",
-//   "organizerContactInfo": "bistral9546@gmail.com",
-//   "eventDate": "2026-03-26",
-//   "eventDay": "Whursday",
-//   "eventTime": "1900",
-//   "playerList": [
-//     {
-//       "playerName": "Gwant",
-//       "playerDiscordID": "Wammerhammer"
-//     },
-//     {
-//       "playerName": "Wadrian",
-//       "playerDiscordID": "WWOTH"
-//     }
-//   ]
-// }

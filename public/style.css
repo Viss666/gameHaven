@@ -146,7 +146,7 @@ nav ul li a.active {
 .games-game-container {
   display: grid;
   gap: 20px;
-  padding: 20px;
+  /* padding: 20px; */
   /* Default for smaller screens (adjust as needed) */
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
@@ -159,6 +159,7 @@ nav ul li a.active {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 20px;
   text-align: center;
 }
 
@@ -192,10 +193,10 @@ nav ul li a.active {
 /* Responsive adjustments for smaller screens (optional, refine as needed) */
 @media (max-width: 600px) {
   .games-game-container {
-    grid-template-columns: repeat(
+    /* grid-template-columns: repeat(
       auto-fit,
       minmax(150px, 1fr)
-    ); /* Adjust min width for smaller screens */
+    );  */
   }
   .game-image-container {
     overflow: visible;
@@ -251,6 +252,12 @@ nav ul li a.active {
   align-items: center;
   justify-content: center;
   /* overflow: hidden; */
+}
+
+.error-message {
+  color: red;
+  font-size: 1em;
+  margin: 0;
 }
 .promotions-container h2 {
   margin-top: 0;
@@ -1231,7 +1238,7 @@ h4 {
 }
 
 .placeholder {
-  max-width: 60%;
+  max-width: 90%;
 }
 
 .spinner-text {
@@ -1495,6 +1502,10 @@ body.dark-mode {
       0.85
     ); /* Optional: differentiate submenu background */
     width: 100%;
+  }
+
+  .login-content {
+    flex-direction: column;
   }
 
   .card-list-div {
