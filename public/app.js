@@ -311,7 +311,7 @@ const App = {
       this.showRentalDetail = true;
     },
     toggleRentalDetail(game, isUnreserve, isWaitlisted) {
-      if (isUnreserve){
+      if (isUnreserve) {
         let unreserveButton = document.getElementById("unreserve-button-id");
         unreserveButton.innerHTML = "Reserve";
         game.isReserved = false;
@@ -336,7 +336,7 @@ const App = {
       this.fetchBoardGameInfo(game);
     },
     isValidPhoneNumber(num) {
-      const phoneRegex = /^\d{10}$/; 
+      const phoneRegex = /^\d{10}$/;
       return phoneRegex.test(num);
     },
     actualRentalButton(game, isReserve) {
@@ -347,13 +347,13 @@ const App = {
       //also change the inner html of the outer button
       // to reflect if the user has already reserved it, also
       // subtract one from copies
-      let theGame = this.boardgames.find(obj => obj.id === game.id);
+      let theGame = this.boardgames.find((obj) => obj.id === game.id);
       let reserveButton = document.getElementById("rentalReserveButton");
-      if (game.isReserved == true && theGame.userRentalButtonClicks < 2){
+      if (game.isReserved == true && theGame.userRentalButtonClicks < 2) {
         reserveButton.innerHTML = "Unreserve";
         theGame.isWaitlisted = false;
-      } 
-      if (game.isReserved == true && theGame.userRentalButtonClicks >= 2){
+      }
+      if (game.isReserved == true && theGame.userRentalButtonClicks >= 2) {
         reserveButton.innerHTML = "Unreserve";
         theGame.copies += 1;
         theGame.isReserved = false;
@@ -361,26 +361,29 @@ const App = {
         theGame.isWaitlisted = false;
       }
 
-      console.log("game: ", theGame)
+      console.log("game: ", theGame);
       theGame.userRentalButtonClicks += 1;
       let waitlistButton = document.getElementById("rentalWaitlistButton");
       theGame.isWaitlisted = false;
-      
+
       let description = document.getElementById("detail-description-div");
       description.style.height = "20%";
       this.showPhoneNumberInput = true;
 
-      if(isReserve && theGame.userRentalButtonClicks < 2){
+      if (isReserve && theGame.userRentalButtonClicks < 2) {
         reserveButton.innerHTML = "Submit";
         theGame.isWaitlisted = false;
-      } 
-      if (!isReserve && theGame.userRentalButtonClicks < 2){
+      }
+      if (!isReserve && theGame.userRentalButtonClicks < 2) {
         waitlistButton.innerHTML = "Submit";
         theGame.isWaitlisted = false;
       }
 
       if (isReserve && theGame.userRentalButtonClicks >= 2) {
-        if(this.userPhoneNumber != "" && this.isValidPhoneNumber(this.userPhoneNumber)){
+        if (
+          this.userPhoneNumber != "" &&
+          this.isValidPhoneNumber(this.userPhoneNumber)
+        ) {
           theGame.copies -= 1;
           reserveButton.innerHTML = "Reserved";
           theGame.isReserved = true;
@@ -390,12 +393,16 @@ const App = {
         } else {
           reserveButton.classList.add("shake");
           setTimeout(() => {
-              reserveButton.classList.remove("shake");
+            reserveButton.classList.remove("shake");
           }, 300);
           return;
         }
-      } if (!isReserve && theGame.userRentalButtonClicks >= 2) {
-        if(this.userPhoneNumber != "" && this.isValidPhoneNumber(this.userPhoneNumber)){
+      }
+      if (!isReserve && theGame.userRentalButtonClicks >= 2) {
+        if (
+          this.userPhoneNumber != "" &&
+          this.isValidPhoneNumber(this.userPhoneNumber)
+        ) {
           waitlistButton.innerHTML = "Waitlisted";
           theGame.isWaitlisted = true;
           theGame.waitlistPhoneNumber = this.userPhoneNumber;
@@ -403,15 +410,15 @@ const App = {
         } else {
           waitlistButton.classList.add("shake");
           setTimeout(() => {
-              waitlistButton.classList.remove("shake");
+            waitlistButton.classList.remove("shake");
           }, 300);
           return;
         }
       }
     },
     getRandomCopiesAmount() {
-      const min = Math.ceil(0);
-      const max = Math.floor(9);
+      const min = Math.ceil(1);
+      const max = Math.floor(6);
       return Math.floor(Math.random() * (max - min)) + min;
     },
     fetchBoardGames() {
@@ -420,34 +427,36 @@ const App = {
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
-          return response.text(); 
+          return response.text();
         })
         .then((str) => {
           const parser = new DOMParser();
           const xml = parser.parseFromString(str, "application/xml");
           const items = xml.querySelectorAll("item");
 
-          this.boardgames = Array.from(items).slice(0, 48).map((item) => ({
-            id: item.getAttribute("id"),
-            rank: item.getAttribute("rank"),
-            name:
-              item.querySelector("name")?.getAttribute("value") || "Unknown",
-            yearPublished:
-              item.querySelector("yearpublished")?.getAttribute("value") ||
-              "Unknown",
-            thumbnail:
-              item.querySelector("thumbnail")?.getAttribute("value") || "",
-            copies: this.getRandomCopiesAmount(),
-            detailShow: false,
-            isReserved: false,
-            reservedPhoneNumber: "",
-            userRentalButtonClicks: 0,
-            isWaitlisted: false,
-            waitlistPhoneNumber: ""
-          }));
+          this.boardgames = Array.from(items)
+            .slice(0, 48)
+            .map((item) => ({
+              id: item.getAttribute("id"),
+              rank: item.getAttribute("rank"),
+              name:
+                item.querySelector("name")?.getAttribute("value") || "Unknown",
+              yearPublished:
+                item.querySelector("yearpublished")?.getAttribute("value") ||
+                "Unknown",
+              thumbnail:
+                item.querySelector("thumbnail")?.getAttribute("value") || "",
+              copies: this.getRandomCopiesAmount(),
+              detailShow: false,
+              isReserved: false,
+              reservedPhoneNumber: "",
+              userRentalButtonClicks: 0,
+              isWaitlisted: false,
+              waitlistPhoneNumber: "",
+            }));
 
           this.loading = false;
-          console.log("boardgames from api: ", this.boardgames)
+          console.log("boardgames from api: ", this.boardgames);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -480,6 +489,8 @@ const App = {
         .replace(/&amp;/g, "&")
         .replace(/&quot;/g, '"')
         .replace(/&apos;/g, "'")
+        .replace(/&gt;/g, "")
+        .replace(/&nbsp;/g, " ")
         .trim();
       const gameData = {
         id: item.getAttribute("id"),
