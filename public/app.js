@@ -1018,17 +1018,18 @@ const App = {
         return;
       }
 
-      if (!this.checkedInEvents.includes(eventId)) {
-        alert("You are not checked in to this event.");
-        return;
-      }
+      // **No need to check this global array here.**
+      // if (!this.checkedInEvents.includes(eventId)) {
+      //   alert("You are not checked in to this event.");
+      //   return;
+      // }
 
       const player = this.activeEvent.playerList.find(
         (p) => p.playerDiscordID === this.discordId
       );
 
       if (!player) {
-        alert("Player not found.");
+        alert("Player not found in this event.");
         return;
       }
 
@@ -1045,6 +1046,7 @@ const App = {
         .then((data) => {
           // console.log("Check-out successful:", data);
 
+          // **Only update the checkedInEvents array if the checkout was successful for THIS event.**
           const index = this.checkedInEvents.indexOf(eventId);
           if (index > -1) {
             this.checkedInEvents.splice(index, 1);
@@ -1055,7 +1057,10 @@ const App = {
             );
           }
 
-          this.isCheckedIn = false;
+          // **Update isCheckedIn based on whether the user is still in the playerList of the current event.**
+          this.isCheckedIn = this.activeEvent.playerList.some(
+            (p) => p.playerDiscordID === this.discordId
+          );
         })
         .catch((error) => {
           console.error("Error during check-out:", error);
@@ -1063,7 +1068,6 @@ const App = {
         })
         .finally(() => {
           this.stopLoading();
-
           this.viewEvent(eventId);
         });
     },
