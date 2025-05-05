@@ -915,7 +915,6 @@ const App = {
     closeCheckIn() {
       this.showCheckInForm = false;
     },
-
     submitCheckIn(eventId) {
       this.startLoading();
 
@@ -924,16 +923,12 @@ const App = {
         this.stopLoading();
         return;
       }
-      const now = new Date();
-      // console.log(now);
 
       if (this.checkedInEvents.includes(eventId)) {
         alert("You are already checked in to this event.");
         this.stopLoading();
         return;
       }
-
-      // console.log("first name and discord id:", this.firstName, this.discordId);
 
       if (this.firstName && this.discordId) {
         Cookies.set("firstName", this.firstName, { expires: 999 });
@@ -953,12 +948,7 @@ const App = {
             return response.json();
           })
           .then((data) => {
-            // console.log("Check-in successful:", data);
-
-            if (!Array.isArray(this.checkedInEvents)) {
-              this.checkedInEvents = [];
-            }
-
+            // **Update the cookie ONLY on successful check-in.**
             this.checkedInEvents = [...this.checkedInEvents, eventId];
             Cookies.set(
               "checkedInEvents",
@@ -991,15 +981,98 @@ const App = {
           .catch((error) => {
             console.error("Error during check-in:", error);
             alert("Failed to check in. Please try again.");
-            // this.loading = false;
             this.stopLoading();
           });
       } else {
         alert("Please enter both your name and Discord ID.");
-        // this.loading = false;
         this.stopLoading();
       }
     },
+
+    // submitCheckIn(eventId) {
+    //   this.startLoading();
+
+    //   if (!eventId || typeof eventId !== "string") {
+    //     console.error("Invalid event ID:", eventId);
+    //     this.stopLoading();
+    //     return;
+    //   }
+    //   const now = new Date();
+    //   // console.log(now);
+
+    //   if (this.checkedInEvents.includes(eventId)) {
+    //     alert("You are already checked in to this event.");
+    //     this.stopLoading();
+    //     return;
+    //   }
+
+    //   // console.log("first name and discord id:", this.firstName, this.discordId);
+
+    //   if (this.firstName && this.discordId) {
+    //     Cookies.set("firstName", this.firstName, { expires: 999 });
+    //     Cookies.set("discordId", this.discordId, { expires: 999 });
+
+    //     fetch(`https://gamehavenstg.com/events/${eventId}/add-player`, {
+    //       method: "PUT",
+    //       credentials: "include",
+    //       headers: { "Content-Type": "application/json" },
+    //       body: JSON.stringify({
+    //         playerName: this.firstName,
+    //         playerDiscordID: this.discordId,
+    //       }),
+    //     })
+    //       .then((response) => {
+    //         if (!response.ok) throw new Error("Failed to check in.");
+    //         return response.json();
+    //       })
+    //       .then((data) => {
+    //         // console.log("Check-in successful:", data);
+
+    //         if (!Array.isArray(this.checkedInEvents)) {
+    //           this.checkedInEvents = [];
+    //         }
+
+    //         this.checkedInEvents = [...this.checkedInEvents, eventId];
+    //         Cookies.set(
+    //           "checkedInEvents",
+    //           JSON.stringify(this.checkedInEvents),
+    //           { expires: 999 }
+    //         );
+
+    //         this.isCheckedIn = true;
+    //         this.showCheckInForm = false;
+
+    //         if (
+    //           this.activeEvent &&
+    //           Array.isArray(this.activeEvent.playerList)
+    //         ) {
+    //           this.activeEvent.playerList.push({
+    //             playerName: this.firstName,
+    //             playerDiscordID: this.discordId,
+    //           });
+    //         } else {
+    //           console.warn(
+    //             "activeEvent or playerList is not properly initialized."
+    //           );
+    //         }
+
+    //         return this.getEvents();
+    //       })
+    //       .then(() => {
+    //         return this.viewEvent(eventId);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error during check-in:", error);
+    //         alert("Failed to check in. Please try again.");
+    //         // this.loading = false;
+    //         this.stopLoading();
+    //       });
+    //   } else {
+    //     alert("Please enter both your name and Discord ID.");
+    //     // this.loading = false;
+    //     this.stopLoading();
+    //   }
+    // },
 
     getMonth(dateString) {
       const date = new Date(dateString);
@@ -1011,18 +1084,73 @@ const App = {
       return date.getUTCDate();
     },
 
+    // submitCheckOut(eventId) {
+    //   this.startLoading();
+    //   if (!eventId || typeof eventId !== "string") {
+    //     console.error("Invalid event ID:", eventId);
+    //     return;
+    //   }
+
+    //   // **No need to check this global array here.**
+    //   // if (!this.checkedInEvents.includes(eventId)) {
+    //   //   alert("You are not checked in to this event.");
+    //   //   return;
+    //   // }
+
+    //   const player = this.activeEvent.playerList.find(
+    //     (p) => p.playerDiscordID === this.discordId
+    //   );
+
+    //   if (!player) {
+    //     alert("Player not found in this event.");
+    //     return;
+    //   }
+
+    //   fetch(`https://gamehavenstg.com/events/${eventId}/remove-player`, {
+    //     method: "DELETE",
+    //     credentials: "include",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({ playerId: player._id }),
+    //   })
+    //     .then((response) => {
+    //       if (!response.ok) throw new Error("Failed to check out.");
+    //       return response.json();
+    //     })
+    //     .then((data) => {
+    //       // console.log("Check-out successful:", data);
+
+    //       // **Only update the checkedInEvents array if the checkout was successful for THIS event.**
+    //       const index = this.checkedInEvents.indexOf(eventId);
+    //       if (index > -1) {
+    //         this.checkedInEvents.splice(index, 1);
+    //         Cookies.set(
+    //           "checkedInEvents",
+    //           JSON.stringify(this.checkedInEvents),
+    //           { expires: 999 }
+    //         );
+    //       }
+
+    //       // **Update isCheckedIn based on whether the user is still in the playerList of the current event.**
+    //       this.isCheckedIn = this.activeEvent.playerList.some(
+    //         (p) => p.playerDiscordID === this.discordId
+    //       );
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error during check-out:", error);
+    //       alert("Failed to check out. Please try again.");
+    //     })
+    //     .finally(() => {
+    //       this.stopLoading();
+    //       this.viewEvent(eventId);
+    //     });
+    // },
+
     submitCheckOut(eventId) {
       this.startLoading();
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
         return;
       }
-
-      // **No need to check this global array here.**
-      // if (!this.checkedInEvents.includes(eventId)) {
-      //   alert("You are not checked in to this event.");
-      //   return;
-      // }
 
       const player = this.activeEvent.playerList.find(
         (p) => p.playerDiscordID === this.discordId
@@ -1044,12 +1172,12 @@ const App = {
           return response.json();
         })
         .then((data) => {
-          // console.log("Check-out successful:", data);
-
-          // **Only update the checkedInEvents array if the checkout was successful for THIS event.**
+          // **Update the cookie ONLY on successful check-out.**
           const index = this.checkedInEvents.indexOf(eventId);
           if (index > -1) {
-            this.checkedInEvents.splice(index, 1);
+            const updatedCheckedInEvents = [...this.checkedInEvents]; // Create a copy
+            updatedCheckedInEvents.splice(index, 1);
+            this.checkedInEvents = updatedCheckedInEvents;
             Cookies.set(
               "checkedInEvents",
               JSON.stringify(this.checkedInEvents),
@@ -1057,7 +1185,6 @@ const App = {
             );
           }
 
-          // **Update isCheckedIn based on whether the user is still in the playerList of the current event.**
           this.isCheckedIn = this.activeEvent.playerList.some(
             (p) => p.playerDiscordID === this.discordId
           );
