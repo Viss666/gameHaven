@@ -18,8 +18,17 @@ body {
 } */
 
 .description {
-  width: 75%;
-  height: 200px;
+  text-align: left;
+  align-content: center;
+  white-space: pre-wrap;
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: sans-serif;
 }
 
 #app {
@@ -1011,6 +1020,10 @@ h4 {
 .event-details1 h3 {
   margin-top: 0;
   color: #2c3e50;
+}
+
+.event-description {
+  text-align: left;
 }
 
 .event-day-time1,

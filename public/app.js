@@ -37,7 +37,22 @@ const App = {
         iconUrl: "",
         eventFee: "",
       },
-      activeEvent: null,
+      activeEvent: {
+        _id: null, // Or a default ID if applicable
+        eventTitle: "",
+        eventGame: "",
+        eventDescription: "",
+        eventOrganizer: "",
+        organizerContactInfo: "",
+        eventDate: null,
+        eventDay: "",
+        eventTime: "",
+        maxPlayers: null,
+        eventFee: null,
+        isPublished: false,
+        matches: [],
+        iconUrl: "",
+      },
       checkedInEvents: [],
       selectedPlayers: [],
       pairedPlayers: [],
@@ -622,6 +637,42 @@ const App = {
       this.activeEvent[field] = value;
       this.modifiedFields[field] = value;
     },
+    handleEnter(event) {
+      this.$nextTick(() => {
+        const descriptionDiv = this.$refs.description;
+        if (!descriptionDiv) {
+          console.warn("Description ref not available.");
+          return;
+        }
+
+        // Save the current selection
+        const selection = window.getSelection();
+        let range;
+        if (selection.rangeCount > 0) {
+          range = selection.getRangeAt(0).cloneRange();
+        }
+
+        // Save the current scroll position
+        const scrollTop = descriptionDiv.scrollTop;
+
+        // Perform the insertion
+        if (range) {
+          range.deleteContents();
+          const newline = document.createTextNode("\n");
+          range.insertNode(newline);
+          range.collapse(false);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+
+        const updatedDescription = descriptionDiv.innerHTML;
+        this.updateActiveEvent("eventDescription", updatedDescription);
+
+        // Restore the scroll position
+        descriptionDiv.scrollTop = scrollTop;
+      });
+      event.preventDefault();
+    },
     checkInitialUrl() {
       const pathSegments = window.location.pathname.split("/");
       if (pathSegments[1] === "events" && pathSegments[2]) {
@@ -957,7 +1008,7 @@ const App = {
     },
     getDay(dateString) {
       const date = new Date(dateString);
-      return date.getDate();
+      return date.getUTCDate();
     },
 
     submitCheckOut(eventId) {
@@ -1366,6 +1417,16 @@ const App = {
           });
       }
     },
+    linkify(text) {
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(urlRegex, (url) => {
+        const cleanUrl = url.replace(/<\/?[^>]+(>|$)/g, ""); // avoid tag injection
+        return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer">${cleanUrl}</a>`;
+      });
+    },
+    sanitizeAndLinkify(text) {
+      return DOMPurify.sanitize(this.linkify(text));
+    },
 
     pushEvent() {
       this.scrollToTop();
@@ -1409,6 +1470,10 @@ const App = {
         console.error("Validation errors:", errors);
         return;
       }
+
+      this.newEvent.eventDescription = this.sanitizeAndLinkify(
+        this.newEvent.eventDescription
+      );
 
       this.validationErrors = {};
 
@@ -1495,7 +1560,9 @@ const App = {
     editEvent(eventId) {
       this.currentPage = "edit";
       this.scrollToTop();
-      this.activeEvent = this.events.find((event) => event._id === eventId);
+      this.activeEvent = this.events.find((event) => event._id === eventId) || {
+        eventDescription: "",
+      }; // Ensure activeEvent is not undefined
       // console.log("active event: ", this.activeEvent);
       // this.viewEvent(eventId);
     },
@@ -1589,6 +1656,12 @@ const App = {
       this.validationErrors = {};
 
       this.modifiedFields = this.modifiedFields || {};
+
+      const cleanDescription = this.sanitizeAndLinkify(
+        this.activeEvent.eventDescription
+      );
+      this.activeEvent.eventDescription = cleanDescription;
+      this.modifiedFields.eventDescription = cleanDescription;
 
       const matchesToSend = this.activeEvent.matches.map((pair) => ({
         player1:

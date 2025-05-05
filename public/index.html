@@ -139,7 +139,7 @@
           </div>
           <div class="main-card-div">
             <div class="main-card">
-              <h2 @click="navigatePage('rentals')">Featured Rentals</h2>
+              <!-- <h2 @click="navigatePage('rentals')">Featured Rentals</h2>
               <hr />
               <div class="card-list-div" style="margin-left: 0">
                 <div v-if="loading">Loading board games...</div>
@@ -161,7 +161,7 @@
                     </button>
                   </li>
                 </ul>
-              </div>
+              </div> -->
             </div>
             <div class="main-card">
               <h2 @click="navigatePage('tcg')">Trading Card Games</h2>
@@ -317,7 +317,7 @@
           </div>
         </div>
         <div v-if="currentPage == 'rentals'" class="rental-content">
-          <div class="mobile-events-logo-wrapper">
+          <!-- <div class="mobile-events-logo-wrapper">
             <img
               src="images/Logo.webp"
               class="mobile-events-logo"
@@ -375,14 +375,12 @@
                 v-if="selectedGame && selectedGame.id === game.id"
                 class="rental-detail-container"
               >
-                <!-- <button @click="selectedGame = null">Close</button> -->
                 <span
                   @click="closeRentalDetail(selectedGame)"
                   style="cursor: pointer"
                   >x</span
                 >
                 <h3 style="margin: 0">{{ selectedGame.name }}</h3>
-                <!-- <p>{{ selectedGame.description }}</p> -->
                 <p>
                   <strong>Players:</strong> {{ selectedGame.minPlayers }} - {{
                   selectedGame.maxPlayers }}
@@ -434,10 +432,8 @@
                 </button>
               </div>
             </div>
-            <!-- <div v-if="showRentalDetail" class="retail-detail-container">
 
-            </div> -->
-          </div>
+          </div> -->
         </div>
 
         <!-- My senior project -->
@@ -569,6 +565,8 @@
               Sign Out
             </button>
           </div>
+          
+
 
           <div class="event-container">
             <!-- Body Section -->
@@ -602,9 +600,8 @@
                   ENTRY FEE: {{ activeEvent.eventFee ?
                   `$${activeEvent.eventFee}` : 'FREE ENTRY' }}
                 </div>
-                <p class="event-description1">
-                  {{ activeEvent.eventDescription }}
-                </p>
+                <div class="event-description1" v-html="activeEvent.eventDescription"></div>
+
               </div>
             </div>
             <div class="players-on-page">
@@ -744,11 +741,13 @@
               <div>
                 <h2>Description</h2>
                 <textarea
-                  v-model="newEvent.eventDescription"
-                  placeholder="Description"
-                  class="description"
-                  type="text"
-                ></textarea>
+                ref="newEventDescription"
+                placeholder="Description"
+                class="description"
+                @input="newEvent.eventDescription = $event.target.value"
+                v-model="newEvent.eventDescription"
+                style="white-space: pre-wrap;"
+              ></textarea>
                 <div
                   v-if="validationErrors.eventDescription"
                   class="error-message"
@@ -956,15 +955,16 @@
               <div v-if="validationErrors.eventGame" class="error-message">
                 {{ validationErrors.eventGame }}
               </div>
+              <h3>Description</h3>
 
-              <p class="event-description">{{activeEvent.eventDescription}}</p>
               <textarea
-                v-model="activeEvent.eventDescription"
-                placeholder="event description.."
-                class="description"
-                type="text"
-                @input="updateActiveEvent('eventDescription', $event.target.value)"
-              ></textarea>
+              ref="description"
+              placeholder="event description.."
+              class="description"
+              @input="updateActiveEvent('eventDescription', $event.target.value)"
+              v-model="activeEvent.eventDescription"
+              style="white-space: pre-wrap;" 
+            ></textarea>
               <div
                 v-if="validationErrors.eventDescription"
                 class="error-message"
@@ -1344,4 +1344,6 @@
   ></script>
   <script type="module" src="app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3/dist/js.cookie.min.js"></script>
+  <script src="https://unpkg.com/dompurify@3.0.2/dist/purify.min.js"></script>
+
 </html>
