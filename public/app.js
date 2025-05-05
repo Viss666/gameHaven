@@ -1418,10 +1418,11 @@ const App = {
       }
     },
     linkify(text) {
-      const urlRegex = /(https?:\/\/[^\s]+)/g;
-      return text.replace(urlRegex, (url) => {
-        const cleanUrl = url.replace(/<\/?[^>]+(>|$)/g, ""); // avoid tag injection
-        return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer">${cleanUrl}</a>`;
+      const urlRegex = /(https?:\/\/)(www\.)?([^\s]+)/g;
+      return text.replace(urlRegex, (match, protocol, www, restOfUrl) => {
+        const cleanUrl = match.replace(/<\/?[^>]+(>|$)/g, ""); // Avoid tag injection
+        const displayedUrl = restOfUrl; // Display everything after https:// or https://www.
+        return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer">${displayedUrl}</a>`;
       });
     },
     sanitizeAndLinkify(text) {
