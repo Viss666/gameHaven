@@ -19,7 +19,7 @@ app.use(express.static(publicDirectoryPath));
 
 const allowedOrigins = [
   "https://gamehavenstg.com", // live site
-  "http://127.0.0.1:5500", // Local development 
+  "http://127.0.0.1:5500", // Local development
   "https://gamehaven-production.up.railway.app",
 ];
 
@@ -193,7 +193,6 @@ app.delete("/events/:eventId", async function (request, response) {
   }
 });
 
-
 app.put("/events/:eventId/give-bye", async (req, res) => {
   try {
     const eventId = req.params.eventId;
@@ -288,6 +287,50 @@ app.put("/events/:eventId/admin-remove-player", async (req, res) => {
 
 // Remove a player from an event player side
 
+// app.delete("/events/:eventId/remove-player", async (req, res) => {
+//   try {
+//     const eventId = req.params.eventId;
+//     const playerId = req.body.playerId;
+
+//     if (!playerId) {
+//       return res.status(400).json({ error: "Player ID not provided" });
+//     }
+
+//     const event = await model.Event.findById(eventId);
+//     if (!event) {
+//       return res.status(404).json({ error: "Event not found" });
+//     }
+
+//     // Convert playerId to ObjectId
+//     const playerObjectId = new mongoose.Types.ObjectId(playerId);
+
+//     // Find the index of the player's ObjectId in the event's playerList
+//     const playerIndex = event.playerList.findIndex((player) =>
+//       player.equals(playerObjectId)
+//     );
+
+//     if (playerIndex === -1) {
+//       return res
+//         .status(404)
+//         .json({ error: "Player not registered for this event" });
+//     }
+
+//     // Remove the player's ObjectId from the playerList
+//     event.playerList.splice(playerIndex, 1);
+//     await event.save();
+
+//     // Delete the player document
+//     await model.Player.findByIdAndDelete(playerId);
+
+//     res
+//       .status(200)
+//       .json({ message: "Player successfully removed from event and deleted" });
+//   } catch (error) {
+//     console.error("Error removing player:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
 app.delete("/events/:eventId/remove-player", async (req, res) => {
   try {
     const eventId = req.params.eventId;
@@ -302,10 +345,7 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    // Convert playerId to ObjectId
     const playerObjectId = new mongoose.Types.ObjectId(playerId);
-
-    // Find the index of the player's ObjectId in the event's playerList
     const playerIndex = event.playerList.findIndex((player) =>
       player.equals(playerObjectId)
     );
@@ -316,16 +356,10 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
         .json({ error: "Player not registered for this event" });
     }
 
-    // Remove the player's ObjectId from the playerList
     event.playerList.splice(playerIndex, 1);
-    await event.save();
+    await event.save(); // Player is NOT deleted here
 
-    // Delete the player document
-    await model.Player.findByIdAndDelete(playerId);
-
-    res
-      .status(200)
-      .json({ message: "Player successfully removed from event and deleted" });
+    res.status(200).json({ message: "Player removed from event" }); // Updated response
   } catch (error) {
     console.error("Error removing player:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -367,7 +401,7 @@ app.put("/events/:eventId", async (req, res) => {
     updatedEvent = await model.Event.findById(eventId)
       .populate({
         path: "playerList",
-        model: "Player", 
+        model: "Player",
       })
       .populate({
         path: "matches",
@@ -401,7 +435,7 @@ app.put("/templates/:templateId", async (req, res) => {
     let updatedTemplate = await model.Template.findByIdAndUpdate(
       templateId,
       templateBody,
-      { new: true, runValidators: true } 
+      { new: true, runValidators: true }
     );
 
     if (!updatedTemplate) {
@@ -450,9 +484,8 @@ app.delete("/templates/:templateId", async (req, res) => {
     }
     res.status(200).json({
       message: "Template deleted successfully",
-      deletedTemplate: deletedTemplate, 
+      deletedTemplate: deletedTemplate,
     });
- 
   } catch (error) {
     console.error("Error deleting template:", error);
 
@@ -474,7 +507,7 @@ app.delete("/templates/:templateId", async (req, res) => {
 app.post("/events/:eventId/request-match", async (req, res) => {
   try {
     const eventId = req.params.eventId;
-    const playerId = req.cookies.playerId; 
+    const playerId = req.cookies.playerId;
 
     if (!playerId) {
       return res.status(400).json({ error: "Player ID not found in cookie" });
@@ -569,4 +602,3 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, function () {
   console.log(`Server is running on port ${PORT}...`);
 });
-

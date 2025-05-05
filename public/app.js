@@ -1147,17 +1147,22 @@ const App = {
 
     submitCheckOut(eventId) {
       this.startLoading();
+
+      // Validate eventId
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
+        this.stopLoading();
         return;
       }
 
+      // Find player in current event
       const player = this.activeEvent.playerList.find(
         (p) => p.playerDiscordID === this.discordId
       );
 
       if (!player) {
         alert("Player not found in this event.");
+        this.stopLoading();
         return;
       }
 
@@ -1168,26 +1173,37 @@ const App = {
         body: JSON.stringify({ playerId: player._id }),
       })
         .then((response) => {
-          if (!response.ok) throw new Error("Failed to check out.");
+          if (!response.ok) {
+            throw new Error("Failed to check out.");
+          }
           return response.json();
         })
         .then((data) => {
-          // **Update the cookie ONLY on successful check-out.**
-          const index = this.checkedInEvents.indexOf(eventId);
-          if (index > -1) {
-            const updatedCheckedInEvents = [...this.checkedInEvents]; // Create a copy
-            updatedCheckedInEvents.splice(index, 1);
-            this.checkedInEvents = updatedCheckedInEvents;
-            Cookies.set(
-              "checkedInEvents",
-              JSON.stringify(this.checkedInEvents),
-              { expires: 999 }
-            );
-          }
-
-          this.isCheckedIn = this.activeEvent.playerList.some(
-            (p) => p.playerDiscordID === this.discordId
+          // Update checkedInEvents by filtering out just this event
+          const updatedCheckedInEvents = this.checkedInEvents.filter(
+            (id) => id !== eventId
           );
+
+          // Update both component state and cookie
+          this.checkedInEvents = updatedCheckedInEvents;
+          Cookies.set(
+            "checkedInEvents",
+            JSON.stringify(updatedCheckedInEvents),
+            { expires: 999 }
+          );
+
+          // Update isCheckedIn status for the current event
+          this.isCheckedIn = false;
+
+          // Update the activeEvent's playerList locally
+          if (this.activeEvent && Array.isArray(this.activeEvent.playerList)) {
+            const playerIndex = this.activeEvent.playerList.findIndex(
+              (p) => p.playerDiscordID === this.discordId
+            );
+            if (playerIndex > -1) {
+              this.activeEvent.playerList.splice(playerIndex, 1);
+            }
+          }
         })
         .catch((error) => {
           console.error("Error during check-out:", error);
@@ -1195,6 +1211,7 @@ const App = {
         })
         .finally(() => {
           this.stopLoading();
+          // Refresh the event view
           this.viewEvent(eventId);
         });
     },
