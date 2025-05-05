@@ -1337,7 +1337,7 @@ const App = {
             });
 
           this.$nextTick(() => {
-            this.updateCheckedInEvents();
+            // this.updateCheckedInEvents();
             // console.log(this.events);
           });
         })
