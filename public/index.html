@@ -564,8 +564,11 @@
             >
               Sign Out
             </button>
+
           </div>
-          
+          <div v-if="isCheckedIn && activeEvent && activeEvent._id && activeEvent.eventFee > '0'" class="fee-reminder">
+            <span style=" font-weight: bold; ">Remember to pay the event fee at the front counter before sitting down!</span>
+          </div>
 
 
           <div class="event-container">
@@ -655,12 +658,16 @@
                     type="text"
                     placeholder="Enter your player name..."
                     class="input"
+                    maxlength="10"
+
                   />
                   <input
                     v-model="discordId"
                     type="text"
                     placeholder="Enter discord or phone number..."
                     class="input"
+                    maxlength="10"
+
                   />
                   <div class="button-container">
                     <button

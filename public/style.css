@@ -1191,6 +1191,17 @@ h4 {
   margin: 2%;
 }
 
+.fee-reminder {
+  background-color: lightcoral; /* A softer red tone */
+  padding: 10px;
+  border: 1px solid orange; /* Optional border for more emphasis */
+  border-radius: 5px; /* Optional rounded corners */
+  margin-top: 15px; /* Add some space above */
+  margin-bottom: 15px; /* Add some space below */
+  text-align: center; /* Center the text */
+  font-size: 1.1em; /* Slightly larger font size */
+}
+
 #edit-player-list .edit-players li {
   display: flex;
   justify-content: space-between;
@@ -1635,6 +1646,7 @@ body.dark-mode {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 3%;
   }
 
   .upcoming-events {
@@ -1798,6 +1810,10 @@ body.dark-mode {
     justify-content: center;
     flex-direction: column;
     padding: 3%;
+  }
+
+  .fee-reminder {
+    margin: 0 3%;
   }
 
   .edit-buttons button {
