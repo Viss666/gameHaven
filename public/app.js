@@ -75,29 +75,29 @@ const App = {
       error: null,
       featuredDeals: [
         {
-          title: "BOGO Board Games",
-          description: "Buy one board game get one free!",
+          title: "BQSE Sale!",
+          description: "Buy one BQSE game get ANY expansion 25% off!",
           iconUrl: "images/boardgame.webp",
-          goodUntil: "March",
+          goodUntil: "July",
         },
-        {
-          title: "Dice Discount",
-          description: "20% off all dice!",
-          iconUrl: "images/dice.webp",
-          goodUntil: "April",
-        },
-        {
-          title: "Card Game Sale",
-          description: "Buy two card games, get the third 50% off!",
-          iconUrl: "images/cards.webp",
-          goodUntil: "May",
-        },
-        {
-          title: "Free Shipping on Orders Over $50",
-          description: "Get free shipping on any in-store order over $50!",
-          iconUrl: "images/boardgame.webp", // Or a more generic icon
-          goodUntil: "June",
-        },
+        // {
+        //   title: "Dice Discount",
+        //   description: "20% off all dice!",
+        //   iconUrl: "images/dice.webp",
+        //   goodUntil: "April",
+        // },
+        // {
+        //   title: "Card Game Sale",
+        //   description: "Buy two card games, get the third 50% off!",
+        //   iconUrl: "images/cards.webp",
+        //   goodUntil: "May",
+        // },
+        // {
+        //   title: "Free Shipping on Orders Over $50",
+        //   description: "Get free shipping on any in-store order over $50!",
+        //   iconUrl: "images/boardgame.webp", // Or a more generic icon
+        //   goodUntil: "June",
+        // },
       ],
       gamesToBuy: [
         {
