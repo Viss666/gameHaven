@@ -242,7 +242,7 @@ const App = {
   },
   computed: {
     gamesToDisplay() {
-      const is4K = window.innerWidth >= 2550;
+      const is4K = window.innerWidth >= 2040;
       return this.gamesToBuy.slice(0, is4K ? 4 : 3);
     },
 
