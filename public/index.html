@@ -183,19 +183,20 @@
 
             </div>
             </div> -->
-            <div class="popular-games-list">
-              <div v-for="game in gamesToBuy.slice(0,2)">
-                <div class="game-image-container">
-                  <img :src="game.imgURL" class="game-image" />
+            <div class="games-showcase">
+              <div v-for="game in gamesToBuy.slice(0,3)" class="game-card">
+                <div class="game-img-wrapper">
+                  <img :src="game.imgURL" class="game-img" />
                 </div>
-
-                <div class="game-info">
+            
+                <div class="game-details">
                   <h3>{{ game.title }}</h3>
                   <p>Price: {{ game.price }}</p>
                   <p>Players: {{ game.recommended_players }}</p>
                 </div>
               </div>
             </div>
+            
             </div>
             <div class="main-card">
               <h2 @click="navigatePage('tcg')">Trading Card Games</h2>
