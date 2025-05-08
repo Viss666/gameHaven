@@ -1408,7 +1408,7 @@ h4 {
 @media (min-width: 2040px) {
   .otherplaceholder {
     /* width: 220px; smaller on ultra-wide screens */
-    width: 50%;
+    width: 60%;
   }
 }
 
