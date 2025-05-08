@@ -1395,7 +1395,7 @@ h4 {
 @media (min-width: 2040px) {
   .placeholder {
     /* width: 220px; smaller on ultra-wide screens */
-    width: 70%;
+    width: 90%;
   }
 }
 
@@ -1408,7 +1408,7 @@ h4 {
 @media (min-width: 2040px) {
   .otherplaceholder {
     /* width: 220px; smaller on ultra-wide screens */
-    width: 60%;
+    width: 75%;
   }
 }
 
