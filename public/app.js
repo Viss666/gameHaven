@@ -237,7 +237,7 @@ const App = {
       selectedGameEvent: "All Games",
       showPhoneNumberInput: false,
       userPhoneNumber: "",
-      isWideScreen: window.innerWidth >= 2550, // Only checked once on load
+      isWideScreen: window.innerWidth >= 2500, // Only checked once on load
     };
   },
   computed: {
