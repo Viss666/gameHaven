@@ -192,7 +192,7 @@ nav ul li a.active {
   margin-bottom: 5px;
 }
 
-.promotions-list {
+.promotions-list1 {
   display: flex;
   gap: 1rem;
   justify-content: center;
@@ -200,7 +200,7 @@ nav ul li a.active {
   padding: 1% 0;
 }
 
-.promotions-list > div {
+.promotions-list1 > div {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -215,11 +215,11 @@ nav ul li a.active {
   transition: transform 0.2s ease;
 }
 
-.promotions-list > div:hover {
+.promotions-list1 > div:hover {
   transform: translateY(-3px);
 }
 
-.promo-icon-url {
+.promo-icon-url1 {
   width: 80px;
   height: 80px;
   object-fit: contain;
@@ -230,21 +230,21 @@ nav ul li a.active {
   margin-bottom: 0;
 }
 
-.promotions-list h3 {
+.promotions-list1 h3 {
   font-size: 1rem;
   margin: 0;
   color: #333;
   text-align: left;
 }
 
-.promotions-list p {
+.promotions-list1 p {
   font-size: 0.85rem;
   color: #666;
   margin: 2px 0;
   text-align: left;
 }
 
-.promotions-list > div > div:last-child {
+.promotions-list1 > div > div:last-child {
   display: flex;
   flex-direction: column;
   justify-content: center;
