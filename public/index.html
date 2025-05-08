@@ -20,9 +20,9 @@
     <link rel="canonical" href="https://gamehavenstg.com/" />
 
     <!-- uncomment/comment these 2 lines when working in local, last link is local, /style is production -->
-    <!-- <base href="/" />
-    <link rel="stylesheet" href="/style.css" /> -->
-    <link rel="stylesheet" href="style.css">
+    <base href="/" />
+    <link rel="stylesheet" href="/style.css" />
+    <!-- <link rel="stylesheet" href="style.css"> -->
 
     <link rel="icon" href="images/Logo.webp" type="image/icon type" />
 
@@ -92,14 +92,14 @@
                 >Events</a
               >
             </li>
-            <li>
+            <!-- <li>
               <a
                 href="#"
                 @click.prevent="navigatePage('rentals')"
                 :class="{ active: currentPage === 'rentals' }"
                 >Rentals</a
               >
-            </li>
+            </li> -->
             <li>
               <a
                 href="#"
@@ -174,7 +174,7 @@
               </div>
 
               <div class="game-text-home">
-                We offer a curated selection of popular board games from publishers like Stonemaier and Asmodee — available for both rental and purchase in-store.
+                We offer a curated selection of popular board games from publishers like Stonemaier and Asmodee — available for both rental and purchase in-store
               </div>
               
               
@@ -225,21 +225,20 @@
                 </div>
               </div>
               <br>
-              <p>
-                Dive into the multiverse with Magic: The Gathering, catch 'em
-                all with Pokémon, or battle with honor in Flesh and Blood!
-              </p>
+              <div class="game-text-home">
+                Explore the diverse worlds of Magic: The Gathering, engage in the strategic collecting of Pokémon, or engage in heroic duels in Flesh and Blood
+              </div>
               <img
                 class="placeholder"
                 src="images/tarkirdragonstorm.webp"
                 alt="Players Playing Many Games"
               />
 
-              <p>
+              <div class="game-text-home">
                 We’ve got a wide range of trading card products, including
                 booster packs, singles, sleeves, deck boxes, and accessories,
-                all designed to enhance your game.
-              </p>
+                all designed to enhance your game
+              </div>
             </div>
             <div class="main-card">
               <h2 @click="navigatePage('events')">Events</h2>
@@ -270,7 +269,7 @@
                 </button>
               </div>
               
-              
+              <div class="game-text-home">
                 <ul>
                   <li>
                     <p>
@@ -278,7 +277,7 @@
 
                       At GameHaven, we bring players together with board game
                       rentals, exciting events, and a thriving community for
-                      trading card games, tabletop RPGs, and board games.
+                      trading card games, tabletop RPGs, and board games
                     </p>
                   </li>
                   <li>
@@ -289,6 +288,7 @@
                     </p>
                   </li>
                 </ul>
+              </div>
                 <img
                   class="otherplaceholder"
                   src="images/playing.webp"
@@ -1331,52 +1331,55 @@
             <div class="social">
               <div class="footer-header">CONNECT</div>
               <br />
-              <p>
-                <a
-                  href="https://discord.gg/ZvvbE3e4Sp"
-                  class="icon-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="https://discord.gg/GkBxQasQ"
-                >
-                  <img
-                    src="images/discord-white-icon.webp"
-                    class="social-icon"
-                    alt="Social Media Icons for GameHaven"
-                  /> </a
-                >Discord
-              </p>
+              <div class="socials">
 
-              <p>
-                <a
-                  href="https://www.facebook.com/GameHavenSTG/"
-                  class="icon-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="https://www.facebook.com/GameHavenSTG/"
-                >
-                  <img
-                    src="images/facebook.webp"
-                    class="social-icon"
-                    alt="Social Media Icons for GameHaven"
-                  /> </a
-                >Facebook
-              </p>
-              <p>
-                <a
-                  href="https://www.instagram.com/gamehavenstg/"
-                  class="icon-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="https://www.instagram.com/gamehavenstg/"
-                >
-                  <img
-                    src="images/insta.webp"
-                    class="social-icon"
-                    alt="Social Media Icons for GameHaven"
-                  /> </a
-                >Instagram
-              </p>
+              
+              <a
+              href="https://discord.gg/ZvvbE3e4Sp"
+              class="social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Join us on Discord"
+            >
+              <img
+                src="images/discord-white-icon.webp"
+                class="social-icon"
+                alt="Discord Icon"
+              />
+              <span>Discord</span>
+            </a>
+            
+            <a
+              href="https://www.facebook.com/GameHavenSTG/"
+              class="social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Visit us on Facebook"
+            >
+              <img
+                src="images/facebook.webp"
+                class="social-icon"
+                alt="Facebook Icon"
+              />
+              <span>Facebook</span>
+            </a>
+            
+              <a
+              href="https://www.instagram.com/gamehavenstg/"
+              class="social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Follow us on Instagram"
+            >
+              <img
+                src="images/insta.webp"
+                class="social-icon"
+                alt="Instagram Icon"
+              />
+              <span>Instagram</span>
+            </a>
+          </div>
+            
             </div>
           </div>
           <div class="copyright">©️ 2025 Gamehaven St. George</div>
