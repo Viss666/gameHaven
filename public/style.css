@@ -192,7 +192,7 @@ nav ul li a.active {
 .game-card {
   background-color: #ffffff;
   border: 1px solid #ddd;
-  border-radius: 6px;
+  border-radius: 3px;
   width: 100%;
   max-height: 275px;
   overflow: hidden;
@@ -1387,7 +1387,29 @@ h4 {
 }
 
 .placeholder {
-  max-width: 90%;
+  max-width: 100%;
+  width: 100%; /* default size for standard screens */
+  /* height: auto; */
+}
+
+@media (min-width: 2560px) {
+  .placeholder {
+    /* width: 220px; smaller on ultra-wide screens */
+    width: 70%;
+  }
+}
+
+.otherplaceholder {
+  max-width: 100%;
+  width: 100%; /* default size for standard screens */
+  /* height: auto; */
+}
+
+@media (min-width: 2560px) {
+  .otherplaceholder {
+    /* width: 220px; smaller on ultra-wide screens */
+    width: 70%;
+  }
 }
 
 .spinner-text {

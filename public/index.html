@@ -184,7 +184,7 @@
             </div>
             </div> -->
             <div class="games-showcase">
-              <div v-for="game in gamesToBuy.slice(0,3)" class="game-card">
+              <div v-for="game in gamesToDisplay" :key="game.title" class="game-card">
                 <div class="game-img-wrapper">
                   <img :src="game.imgURL" class="game-img" />
                 </div>
@@ -196,6 +196,7 @@
                 </div>
               </div>
             </div>
+            
             
             </div>
             <div class="main-card">
@@ -244,30 +245,31 @@
               <hr />
               <div class="see-us-list-div">
                 <div
-                  class="home-event-card"
-                  v-for="event in filteredEvents.slice(0, 3)"
-                  :key="event._id"
-                >
-                  <div class="home-event-title">
-                    <img
-                      :src="event.iconUrl"
-                      class="icon-url-home"
-                      alt="event.iconUrl"
-                    />
-
-                    <h3>{{ event.eventTitle }}</h3>
-                  </div>
-                  <div class="event-game"><p>{{event.eventGame}}</p></div>
-                  <div class="home-event-date">{{ event.eventDate }}</div>
-
-                  <button
-                    href="#"
-                    class="btn"
-                    @click.prevent="viewEvent(event._id)"
-                  >
-                    Event Info &amp; Sign-Up
-                  </button>
+                class="home-event-card"
+                v-for="event in visibleEvents"
+                :key="event._id"
+              >
+                <div class="home-event-title">
+                  <img
+                    :src="event.iconUrl"
+                    class="icon-url-home"
+                    alt="event.iconUrl"
+                  />
+                  <h3>{{ event.eventTitle }}</h3>
                 </div>
+                <div class="event-game"><p>{{ event.eventGame }}</p></div>
+                <div class="home-event-date">{{ event.eventDate }}</div>
+              
+                <button
+                  href="#"
+                  class="btn"
+                  @click.prevent="viewEvent(event._id)"
+                >
+                  Event Info &amp; Sign-Up
+                </button>
+              </div>
+              
+              
                 <ul>
                   <li>
                     <p>
@@ -604,7 +606,7 @@
 
           </div>
           <div v-if="isCheckedIn && activeEvent && activeEvent._id && activeEvent.eventFee > '0'" class="fee-reminder">
-            <span style=" font-weight: bold; ">Remember to pay the event fee at the front counter before sitting down!</span>
+            <span style=" font-weight: bold; ">Remember to pay the entry fee at the front counter before sitting down!</span>
           </div>
 
 

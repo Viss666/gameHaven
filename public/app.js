@@ -237,9 +237,19 @@ const App = {
       selectedGameEvent: "All Games",
       showPhoneNumberInput: false,
       userPhoneNumber: "",
+      isWideScreen: window.innerWidth >= 2550, // Only checked once on load
     };
   },
   computed: {
+    gamesToDisplay() {
+      const is4K = window.innerWidth >= 2550;
+      return this.gamesToBuy.slice(0, is4K ? 4 : 3);
+    },
+
+    visibleEvents() {
+      return this.filteredEvents.slice(0, this.isWideScreen ? 4 : 3);
+    },
+
     saveButtonDisabled() {
       return (
         Object.keys(this.modifiedFields).length === 0 && !this.pairingsChanged
