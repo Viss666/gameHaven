@@ -368,11 +368,11 @@ nav ul li a.active {
 
 /* Calendar wrapper */
 .calendar-wrapper {
-  width: 95%; /* More breathing room on mobile */
+  width: 100%; /* More breathing room on mobile */
   margin: 0 auto;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
   overflow-x: auto; /* Allows horizontal scrolling if needed */
 }
 
