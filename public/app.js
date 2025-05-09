@@ -928,6 +928,11 @@ const App = {
     submitCheckIn(eventId) {
       this.startLoading();
 
+      if (this.firstName == "") {
+        this.stopLoading();
+        alert("Please enter your first name and last initial");
+      }
+
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
         this.stopLoading();
@@ -940,9 +945,13 @@ const App = {
         return;
       }
 
-      if (this.firstName && this.discordId) {
+      if (this.firstName) {
         Cookies.set("firstName", this.firstName, { expires: 999 });
-        Cookies.set("discordId", this.discordId, { expires: 999 });
+        if (this.discordId) {
+          Cookies.set("discordId", this.discordId, { expires: 999 });
+        } else {
+          this.discordId = "";
+        }
 
         fetch(`https://gamehavenstg.com/events/${eventId}/add-player`, {
           method: "PUT",
@@ -994,7 +1003,6 @@ const App = {
             this.stopLoading();
           });
       } else {
-        alert("Please enter both your name and Discord ID.");
         this.stopLoading();
       }
     },
