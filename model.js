@@ -35,7 +35,7 @@ const playerSchema = new mongoose.Schema(
     },
     playerDiscordID: {
       type: String,
-      required: [true, "please enter a Discord ID"],
+      // required: [true, "please enter a Discord ID"],
     },
   },
   { _id: true }
