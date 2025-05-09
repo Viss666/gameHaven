@@ -363,6 +363,9 @@ nav ul li a.active {
 .fc-daygrid-day-number {
   font-size: 1rem;
 }
+.fc .fc-daygrid-day-number {
+  font-size: 1rem;
+}
 
 /* Calendar header */
 .fc-toolbar-title {
