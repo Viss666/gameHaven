@@ -394,6 +394,9 @@ nav ul li a.active {
   .fc {
     font-size: 1rem;
   }
+  .toggle-cal {
+    display: none;
+  }
 
   .fc-event,
   .c-daygrid-event {
@@ -409,12 +412,16 @@ nav ul li a.active {
   .calendar-wrapper {
     width: 100%;
     max-width: 1200px;
+    display: none;
   }
 }
 
 /* Force FullCalendar to respect mobile sizes */
 .fc .fc-view-harness {
   min-height: 400px; /* Prevent squishing on mobile */
+}
+.fc-event:hover {
+  background-color: #00852a;
 }
 
 .fc-daygrid-day-frame {
