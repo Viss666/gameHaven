@@ -356,6 +356,10 @@ nav ul li a.active {
   font-size: 0.7rem; /* Explicit small size for mobile */
 }
 
+.fc .fc-daygrid-day-frame {
+  min-height: 100px;
+}
+
 /* Calendar header */
 .fc-toolbar-title {
   font-size: 1rem; /* Smaller for mobile */
