@@ -409,7 +409,7 @@ const App = {
             // Configure the toolbar
             left: "prev,next today", // Buttons on the left: previous, next, today
             center: "title", // Title in the center (current month/year)
-            right: "dayGridMonth,timeGridWeek,timeGridDay", // Buttons on the right for view selection
+            right: "dayGridMonth", // Buttons on the right for view selection
           },
         });
 
