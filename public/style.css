@@ -377,6 +377,9 @@ nav ul li a.active {
   .fc {
     font-size: 0.85rem;
   }
+  .toggle-cal {
+    display: none;
+  }
 
   .fc-event,
   .fc-daygrid-event {
@@ -385,17 +388,15 @@ nav ul li a.active {
   }
 
   .calendar-wrapper {
-    width: 90%;
+    width: 100%;
+    display: none;
   }
 }
 
 /* Desktop styles (768px and up) */
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .fc {
     font-size: 1rem;
-  }
-  .toggle-cal {
-    display: none;
   }
 
   .fc-event,
@@ -412,7 +413,6 @@ nav ul li a.active {
   .calendar-wrapper {
     width: 100%;
     max-width: 1200px;
-    display: none;
   }
 }
 
