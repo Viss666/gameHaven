@@ -360,6 +360,10 @@ nav ul li a.active {
   min-height: 100px;
 }
 
+.fc-daygrid-day-number {
+  font-size: 1rem;
+}
+
 /* Calendar header */
 .fc-toolbar-title {
   font-size: 1rem; /* Smaller for mobile */
