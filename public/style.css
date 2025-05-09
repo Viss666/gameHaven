@@ -317,13 +317,114 @@ nav ul li a.active {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-/* For screens wider than a certain breakpoint (e.g., 768px) */
-@media (min-width: 768px) {
-  .games-game-container {
-    grid-template-columns: repeat(4, 1fr); /* Force 4 equal-width columns */
+.toggle-cal {
+  text-align: center;
+  justify-content: center;
+  margin: 5px;
+}
+
+/* Base styles for FullCalendar container */
+/* Mobile-first base styles (applies to all screens) */
+.fc {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.75rem;
+  background-color: #fff;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+/* Event styles */
+.fc-event,
+.fc-daygrid-event {
+  background-color: #4caf50;
+  color: white;
+  padding: 4px 6px; /* Smaller padding for mobile */
+  border-radius: 2px;
+  margin-bottom: 2px;
+  font-size: 0.65rem; /* Smaller font for mobile */
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.fc-event-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.7rem; /* Explicit small size for mobile */
+}
+
+/* Calendar header */
+.fc-toolbar-title {
+  font-size: 1rem; /* Smaller for mobile */
+  font-weight: 600;
+}
+
+/* Calendar wrapper */
+.calendar-wrapper {
+  width: 95%; /* More breathing room on mobile */
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  overflow-x: auto; /* Allows horizontal scrolling if needed */
+}
+
+/* Tablet styles (600px and up) */
+@media (min-width: 600px) {
+  .fc {
+    font-size: 0.85rem;
+  }
+
+  .fc-event,
+  .fc-daygrid-event {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+
+  .calendar-wrapper {
+    width: 90%;
   }
 }
 
+/* Desktop styles (768px and up) */
+@media (min-width: 768px) {
+  .fc {
+    font-size: 1rem;
+  }
+
+  .fc-event,
+  .c-daygrid-event {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+
+  .fc-toolbar-title {
+    font-size: 1.4rem;
+  }
+
+  .calendar-wrapper {
+    width: 100%;
+    max-width: 1200px;
+  }
+}
+
+/* Force FullCalendar to respect mobile sizes */
+.fc .fc-view-harness {
+  min-height: 400px; /* Prevent squishing on mobile */
+}
+
+.fc-daygrid-day-frame {
+  padding: 2px; /* Tighter spacing on mobile */
+}
+
+.fc-daygrid-day-number {
+  font-size: 0.7rem; /* Smaller day numbers */
+  padding: 1px 3px;
+}
 /* Responsive adjustments for smaller screens (optional, refine as needed) */
 @media (max-width: 600px) {
   .games-game-container {

@@ -6,6 +6,7 @@ const App = {
       currentPage: "home",
       menuOpen: false,
       isDarkMode: false,
+      showCalendarTab: false,
 
       dropdowns: {
         tcg: false,
@@ -238,9 +239,14 @@ const App = {
       showPhoneNumberInput: false,
       userPhoneNumber: "",
       isWideScreen: window.innerWidth >= 2040, // Only checked once on load
+      calendar: null,
     };
   },
+
   computed: {
+    formattedEvents() {
+      return this.formatEvents(this.events);
+    },
     gamesToDisplay() {
       const is4K = window.innerWidth >= 2040;
       return this.gamesToBuy.slice(0, is4K ? 4 : 3);
@@ -306,7 +312,9 @@ const App = {
     if (storedDarkMode === "true") {
       this.isDarkMode = true;
     }
-
+    // this.initializeCalendar();
+    console.log("FullCalendar version:", window.FullCalendar.version);
+    console.log("Available plugins:", Object.keys(window.FullCalendar));
     // console.log(this.events);
   },
   beforeUnmount() {
@@ -315,7 +323,164 @@ const App = {
     mainContent.removeEventListener("click", this.closeMenuOnClickOutside);
   },
 
+  watch: {
+    showCalendarTab(newValue, oldValue) {
+      if (newValue) {
+        // Wait for the DOM to update after the v-if becomes true
+        this.$nextTick(() => {
+          this.initializeCalendar();
+        });
+      } else if (this.calendar) {
+        // Optionally destroy the calendar if the tab is hidden
+        this.calendar.destroy();
+        this.calendar = null;
+      }
+    },
+
+    formattedEvents(newEvents) {
+      if (this.calendar && this.showCalendarTab) {
+        this.calendar.removeAllEvents();
+        this.calendar.addEventSource(newEvents);
+      }
+    },
+  },
+
   methods: {
+    parseEventDate(dateString) {
+      // If your dates are already in ISO format (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)
+      if (typeof dateString === "string" && dateString.includes("T")) {
+        return dateString;
+      }
+
+      // If your dates are in a different format, parse them here
+      // Example for "MM/DD/YYYY" format:
+      if (typeof dateString === "string" && dateString.includes("/")) {
+        const [month, day, year] = dateString.split("/");
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+      }
+
+      // Fallback to current date if invalid
+      console.warn("Invalid date format:", dateString);
+      return new Date().toISOString();
+    },
+    initializeCalendar() {
+      // Destroy existing calendar if it exists
+      if (this.calendar) {
+        this.calendar.destroy();
+        this.calendar = null;
+      }
+
+      const formattedEvents = this.formatEvents(this.events); // If you have a separate formatting function
+      console.log("Formatted events for calendar:", formattedEvents);
+
+      const calendarEl = document.getElementById("calendar");
+      if (!calendarEl) {
+        console.error("Calendar element not found!");
+        return;
+      }
+
+      try {
+        // First verify FullCalendar and plugins are available
+        if (!window.FullCalendar) {
+          throw new Error("FullCalendar not loaded");
+        }
+
+        console.log(
+          "Available FullCalendar plugins:",
+          Object.keys(window.FullCalendar)
+        );
+
+        this.calendar = new window.FullCalendar.Calendar(calendarEl, {
+          initialView: "dayGridMonth",
+
+          events: this.formattedEvents,
+          eventClick: (info) => {
+            console.log("Clicked event:", info.event);
+            // this.handleEventClick(info.event);
+            this.viewEvent(info.event._def.publicId);
+          },
+          // Optional: customize event appearance
+          eventContent: (arg) => {
+            return {
+              html: `<div class="fc-event-title">${arg.event.title}</div>`,
+            };
+          },
+          headerToolbar: {
+            // Configure the toolbar
+            left: "prev,next today", // Buttons on the left: previous, next, today
+            center: "title", // Title in the center (current month/year)
+            right: "dayGridMonth,timeGridWeek,timeGridDay", // Buttons on the right for view selection
+          },
+        });
+
+        this.calendar.render();
+      } catch (error) {
+        console.error("Failed to initialize calendar:", error);
+        // Fallback to basic calendar if plugins fail
+        this.calendar = new window.FullCalendar.Calendar(calendarEl, {
+          initialView: "dayGridMonth",
+          events: [],
+        });
+        this.calendar.render();
+      }
+    },
+    toggleCalendar() {
+      if (this.showCalendarTab == true) {
+        this.showCalendarTab = false;
+      } else {
+        this.showCalendarTab = true;
+      }
+    },
+    handleEventClick(info) {
+      console.log("Clicked event info:", info.event);
+
+      const eventId = info.event?.id;
+
+      if (!eventId) {
+        console.error("No event ID found in:", info.event);
+        return;
+      }
+
+      this.viewEvent(eventId);
+    },
+    formattedEvents() {
+      try {
+        const events = this.formatEvents(this.events);
+        return Array.isArray(events) ? events : [];
+      } catch (error) {
+        console.error("Error formatting events:", error);
+        return [];
+      }
+    },
+    formatEvents(rawEvents) {
+      if (!Array.isArray(rawEvents)) return [];
+
+      return rawEvents.map((event) => {
+        let startDate = event.eventDate; // Assuming eventDate holds the date
+        let startTime = event.eventTime; // Assuming eventTime holds the time
+        let start = null;
+
+        if (startDate) {
+          startDate = startDate.split("T")[0]; // Basic date part extraction
+          if (startTime) {
+            start =
+              startDate + "T" + this.convertToStandardTime(startTime) + ":00Z";
+          } else {
+            start = startDate; // Just the date if no time
+          }
+        }
+
+        return {
+          id: event._id,
+          title: event.eventTitle || "No title",
+          start: start,
+          // ... other properties
+        };
+      });
+    },
+    validateEvent(event) {
+      return event && typeof event === "object" && event.title && event.start;
+    },
     closeRentalDetail(game) {
       let rentalDetail = document.querySelector(".rental-detail-container"); //this.$refs.rentalDetailContainer;
       this.showRentalDetail = false;
@@ -617,24 +782,20 @@ const App = {
       this.searchInput = "";
       this.selectedGameEvent = "All Games";
     },
-    convertToStandardTime(militaryTime) {
-      if (!militaryTime) return "";
+    convertToStandardTime(time12h) {
+      if (!time12h) return null;
+      const [time, modifier] = time12h.split(" ");
+      let [hours, minutes] = time.split(":");
 
-      const [hours, minutes] = militaryTime.split(":");
-      let standardHours = parseInt(hours, 10);
-      const standardMinutes = minutes;
-      let period = "AM";
-
-      if (standardHours >= 12) {
-        period = "PM";
-        if (standardHours > 12) {
-          standardHours -= 12;
-        }
-      } else if (standardHours === 0) {
-        standardHours = 12; // midnight is 12 AM
+      if (hours === "12") {
+        hours = "00";
       }
 
-      return `${standardHours}:${standardMinutes} ${period}`;
+      if (modifier === "PM") {
+        hours = parseInt(hours, 10) + 12;
+      }
+
+      return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
     },
     //get cookie
     getCookie(name) {
@@ -785,7 +946,20 @@ const App = {
         }
         this.activeEvent = null;
       }
-
+      if (page === "events") {
+        this.showCalendarTab = true;
+        this.$nextTick(() => {
+          // Small timeout to ensure DOM is fully ready
+          setTimeout(() => this.initializeCalendar(), 50);
+        });
+      } else {
+        this.showCalendarTab = false;
+        // Clean up calendar when leaving events page
+        if (this.calendar) {
+          this.calendar.destroy();
+          this.calendar = null;
+        }
+      }
       this.currentPage = page;
 
       Object.keys(this.dropdowns).forEach(
@@ -1331,7 +1505,7 @@ const App = {
           this.events = eventsFromServer
             .map((event) => {
               let formattedDate = event.eventDate;
-              let formattedTime = this.convertToStandardTime(event.eventTime);
+              let formattedTime = this.convertToStandardTime(event.eventTime); // Converted time is in formattedTime
 
               if (formattedDate) {
                 formattedDate = formattedDate.split("T")[0];
@@ -1339,8 +1513,17 @@ const App = {
 
               const eventUrl = `https://gamehavenstg.com/events/${event._id}`;
 
+              let start = null;
+              if (formattedDate && formattedTime) {
+                // Use formattedTime here
+                start = `${formattedDate}T${formattedTime}:00Z`; // Assuming UTC, adjust 'Z' if needed
+              } else if (formattedDate) {
+                start = formattedDate; // Just the date if no time
+              }
+
               return {
                 _id: event._id,
+                start: start,
                 eventTitle: event.eventTitle,
                 eventGame: event.eventGame,
                 eventType: event.eventType,
@@ -1374,6 +1557,7 @@ const App = {
           this.$nextTick(() => {
             // this.updateCheckedInEvents();
             // console.log(this.events);
+            console.log("this.events:", this.events);
           });
         })
         .catch((error) => console.error("Error fetching events:", error));
