@@ -76,8 +76,8 @@ const App = {
       error: null,
       featuredDeals: [
         {
-          title: "BQSE Sale!",
-          description: "Buy one BQSE game get ANY expansion 25% off!",
+          title: "Base Game Sale!",
+          description: "Buy one base game get ANY expansion 25% off!",
           iconUrl: "images/boardgame.webp",
           goodUntil: "July",
         },
