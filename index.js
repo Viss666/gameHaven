@@ -178,10 +178,6 @@ app.delete("/events/:eventId", async function (request, response) {
       return response.status(404).json({ message: "Event not found" });
     }
 
-    for (const player of event.playerList) {
-      await model.Player.findByIdAndDelete(player._id);
-    }
-
     await model.Event.findByIdAndDelete(eventId);
 
     response
