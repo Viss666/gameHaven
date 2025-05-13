@@ -224,19 +224,13 @@ app.put("/events/:eventId/give-bye", async (req, res) => {
 
 app.put("/events/:eventId/add-player", async (req, res) => {
   try {
-    const { playerName, playerDiscordID } = req.body;
-
-    let player;
-    if (playerDiscordID) {
-      // If Discord ID provided, find/create by Discord ID
-      player = await Player.findOne({ playerDiscordID });
-      if (!player) {
-        player = await Player.create({ playerName, playerDiscordID });
-      }
-    } else {
-      // If no Discord ID, always create a new player
-      player = await Player.create({ playerName });
+    const { playerName } = req.body;
+    if (!playerName) {
+      return res.status(400).json({ error: "Player name is required." });
     }
+
+    // Always create a new player based on name
+    const player = await Player.create({ playerName });
 
     const event = await Event.findByIdAndUpdate(
       req.params.eventId,
@@ -244,7 +238,7 @@ app.put("/events/:eventId/add-player", async (req, res) => {
       { new: true }
     );
 
-    res.json(event);
+    res.json({ event, playerId: player._id });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -333,16 +327,14 @@ app.put("/events/:eventId/admin-remove-player", async (req, res) => {
 
 app.delete("/events/:eventId/remove-player", async (req, res) => {
   try {
-    const eventId = req.params.eventId;
-    const playerId = req.body.playerId;
-
+    const { playerId } = req.body;
     if (!playerId) {
-      return res.status(400).json({ error: "Player ID not provided" });
+      return res.status(400).json({ error: "Player ID not provided." });
     }
 
-    const event = await model.Event.findById(eventId);
+    const event = await Event.findById(req.params.eventId);
     if (!event) {
-      return res.status(404).json({ error: "Event not found" });
+      return res.status(404).json({ error: "Event not found." });
     }
 
     const playerObjectId = new mongoose.Types.ObjectId(playerId);
@@ -351,18 +343,16 @@ app.delete("/events/:eventId/remove-player", async (req, res) => {
     );
 
     if (playerIndex === -1) {
-      return res
-        .status(404)
-        .json({ error: "Player not registered for this event" });
+      return res.status(404).json({ error: "Player not in event." });
     }
 
     event.playerList.splice(playerIndex, 1);
-    await event.save(); // Player is NOT deleted here
+    await event.save();
 
-    res.status(200).json({ message: "Player removed from event" }); // Updated response
+    res.json({ message: "Player removed from event." });
   } catch (error) {
     console.error("Error removing player:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 

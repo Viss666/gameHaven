@@ -32,6 +32,7 @@ const playerSchema = new mongoose.Schema(
     playerName: {
       type: String,
       required: [true, "please enter a name"],
+      unique: true,
     },
     playerDiscordID: {
       type: String,

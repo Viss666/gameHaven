@@ -1101,11 +1101,11 @@ const App = {
     },
     submitCheckIn(eventId) {
       this.startLoading();
-      console.log("before server request checkin:", this.firstName);
 
-      if (this.firstName == "") {
+      if (!this.firstName) {
         this.stopLoading();
         alert("Please enter your first name and last initial");
+        return;
       }
 
       if (!eventId || typeof eventId !== "string") {
@@ -1120,67 +1120,47 @@ const App = {
         return;
       }
 
-      if (this.firstName) {
-        Cookies.set("firstName", this.firstName, { expires: 999 });
-        if (this.discordId) {
-          Cookies.set("discordId", this.discordId, { expires: 999 });
-        } else {
-          this.discordId = "";
-        }
+      Cookies.set("firstName", this.firstName, { expires: 999 });
 
-        fetch(`https://gamehavenstg.com/events/${eventId}/add-player`, {
-          method: "PUT",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            playerName: this.firstName,
-            playerDiscordID: this.discordId,
-          }),
+      fetch(`https://gamehavenstg.com/events/${eventId}/add-player`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playerName: this.firstName,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("Failed to check in.");
+          return response.json();
         })
-          .then((response) => {
-            if (!response.ok) throw new Error("Failed to check in.");
-            return response.json();
-          })
-          .then((data) => {
-            console.log("data received from server:", data);
-            // **Update the cookie ONLY on successful check-in.**
-            this.checkedInEvents = [...this.checkedInEvents, eventId];
-            Cookies.set(
-              "checkedInEvents",
-              JSON.stringify(this.checkedInEvents),
-              { expires: 999 }
-            );
-
-            this.isCheckedIn = true;
-            this.showCheckInForm = false;
-
-            if (
-              this.activeEvent &&
-              Array.isArray(this.activeEvent.playerList)
-            ) {
-              this.activeEvent.playerList.push({
-                playerName: this.firstName,
-                playerDiscordID: this.discordId,
-              });
-            } else {
-              console.warn(
-                "activeEvent or playerList is not properly initialized."
-              );
-            }
-
-            return this.getEvents();
-          })
-          .then(() => {
-            return this.viewEvent(eventId);
-          })
-          .catch((error) => {
-            console.error("Error during check-in:", error);
-            alert("Failed to check in. Please try again.");
-            this.stopLoading();
+        .then((data) => {
+          this.checkedInEvents = [...this.checkedInEvents, eventId];
+          Cookies.set("checkedInEvents", JSON.stringify(this.checkedInEvents), {
+            expires: 999,
           });
-      } else {
-        this.stopLoading();
-      }
+
+          this.isCheckedIn = true;
+          this.showCheckInForm = false;
+
+          if (this.activeEvent && Array.isArray(this.activeEvent.playerList)) {
+            this.activeEvent.playerList.push({
+              playerName: this.firstName,
+            });
+          }
+
+          return this.getEvents();
+        })
+        .then(() => {
+          return this.viewEvent(eventId);
+        })
+        .catch((error) => {
+          console.error("Error during check-in:", error);
+          alert("Failed to check in. Please try again.");
+        })
+        .finally(() => {
+          this.stopLoading();
+        });
     },
 
     // submitCheckIn(eventId) {
@@ -1342,16 +1322,14 @@ const App = {
     submitCheckOut(eventId) {
       this.startLoading();
 
-      // Validate eventId
       if (!eventId || typeof eventId !== "string") {
         console.error("Invalid event ID:", eventId);
         this.stopLoading();
         return;
       }
 
-      // Find player in current event
       const player = this.activeEvent.playerList.find(
-        (p) => p.playerDiscordID === this.discordId
+        (p) => p.playerName === this.firstName
       );
 
       if (!player) {
@@ -1367,36 +1345,24 @@ const App = {
         body: JSON.stringify({ playerId: player._id }),
       })
         .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to check out.");
-          }
+          if (!response.ok) throw new Error("Failed to check out.");
           return response.json();
         })
-        .then((data) => {
-          // Update checkedInEvents by filtering out just this event
-          const updatedCheckedInEvents = this.checkedInEvents.filter(
+        .then(() => {
+          this.checkedInEvents = this.checkedInEvents.filter(
             (id) => id !== eventId
           );
+          Cookies.set("checkedInEvents", JSON.stringify(this.checkedInEvents), {
+            expires: 999,
+          });
 
-          // Update both component state and cookie
-          this.checkedInEvents = updatedCheckedInEvents;
-          Cookies.set(
-            "checkedInEvents",
-            JSON.stringify(updatedCheckedInEvents),
-            { expires: 999 }
-          );
-
-          // Update isCheckedIn status for the current event
           this.isCheckedIn = false;
 
-          // Update the activeEvent's playerList locally
-          if (this.activeEvent && Array.isArray(this.activeEvent.playerList)) {
-            const playerIndex = this.activeEvent.playerList.findIndex(
-              (p) => p.playerDiscordID === this.discordId
-            );
-            if (playerIndex > -1) {
-              this.activeEvent.playerList.splice(playerIndex, 1);
-            }
+          const playerIndex = this.activeEvent.playerList.findIndex(
+            (p) => p.playerName === this.firstName
+          );
+          if (playerIndex > -1) {
+            this.activeEvent.playerList.splice(playerIndex, 1);
           }
         })
         .catch((error) => {
@@ -1405,7 +1371,6 @@ const App = {
         })
         .finally(() => {
           this.stopLoading();
-          // Refresh the event view
           this.viewEvent(eventId);
         });
     },
