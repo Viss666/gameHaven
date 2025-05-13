@@ -226,14 +226,18 @@ app.put("/events/:eventId/add-player", async (req, res) => {
   try {
     const { playerName, playerDiscordID } = req.body;
 
-    // console.log("Received request body:", req.body);
-
-    let player = await Player.findOne({ playerDiscordID });
-    if (!player) {
-      player = await Player.create({ playerName, playerDiscordID });
+    let player;
+    if (playerDiscordID) {
+      // If Discord ID provided, find/create by Discord ID
+      player = await Player.findOne({ playerDiscordID });
+      if (!player) {
+        player = await Player.create({ playerName, playerDiscordID });
+      }
+    } else {
+      // If no Discord ID, always create a new player
+      player = await Player.create({ playerName });
     }
 
-    // Update the event with player's ID
     const event = await Event.findByIdAndUpdate(
       req.params.eventId,
       { $push: { playerList: player._id } },

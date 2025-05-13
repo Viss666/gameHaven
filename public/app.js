@@ -1101,6 +1101,7 @@ const App = {
     },
     submitCheckIn(eventId) {
       this.startLoading();
+      console.log("before server request checkin:", this.firstName);
 
       if (this.firstName == "") {
         this.stopLoading();
@@ -1141,6 +1142,7 @@ const App = {
             return response.json();
           })
           .then((data) => {
+            console.log("data received from server:", data);
             // **Update the cookie ONLY on successful check-in.**
             this.checkedInEvents = [...this.checkedInEvents, eventId];
             Cookies.set(
