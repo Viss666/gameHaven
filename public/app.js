@@ -281,8 +281,21 @@ const App = {
       });
       return ["All Games", ...uniqueGames];
     },
+
     filteredEvents() {
       let filtered = this.events;
+
+      // Get today's date as a YYYY-MM-DD string
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      const todayStr = `${yyyy}-${mm}-${dd}`;
+
+      // Filter: keep events where eventDate is today or in the future
+      filtered = filtered.filter((event) => {
+        return event.eventDate >= todayStr;
+      });
 
       if (this.selectedGameEvent !== "All Games") {
         filtered = filtered.filter(

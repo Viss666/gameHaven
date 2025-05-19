@@ -208,7 +208,7 @@
             
             </div>
             <div class="main-card">
-              <h2 @click="navigatePage('tcg')">Trading Card Games</h2>
+              <h2 @click="redirectTo('https://gamehavenstgeorge.tcgplayerpro.com/')">Trading Card Games</h2>
               <hr />
               <div class="card-list-div">
                 <!-- <ul>
@@ -625,6 +625,13 @@
               class="btn"
             >
               Sign Out
+            </button>
+            <button
+              v-if="isAdmin == true"
+              class="btn"
+              @click="editEvent(activeEvent._id)"
+            >
+            Edit Event
             </button>
 
           </div>

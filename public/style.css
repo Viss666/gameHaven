@@ -358,7 +358,7 @@ nav ul li a.active {
 }
 
 .fc .fc-daygrid-day-frame {
-  min-height: 100px;
+  min-height: 85px;
 }
 
 .fc-daygrid-day-number {
