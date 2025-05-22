@@ -359,6 +359,20 @@ const App = {
   },
 
   methods: {
+    formatToStandardTime(militaryTime) {
+      if (!militaryTime) return "";
+
+      const [hourStr, minuteStr] = militaryTime.split(":");
+      let hour = parseInt(hourStr, 10);
+      const minute = minuteStr || "00";
+
+      const ampm = hour >= 12 ? "PM" : "AM";
+      hour = hour % 12;
+      hour = hour === 0 ? 12 : hour;
+
+      return `${hour}:${minute.padStart(2, "0")} ${ampm}`;
+    },
+
     parseEventDate(dateString) {
       // If your dates are already in ISO format (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)
       if (typeof dateString === "string" && dateString.includes("T")) {

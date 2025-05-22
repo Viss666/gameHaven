@@ -565,7 +565,7 @@
                   <div class="event-game"><h3>{{event.eventGame}}</h3></div>
 
                   <div class="event-time">
-                    {{event.eventDay}} - {{ event.eventTime }}
+                    {{event.eventDay}} - {{ formatToStandardTime(event.eventTime) }}
                   </div>
                   <div class="event-players-signed">
                     Current Player Count: {{ event.playerList.length}}/ {{
@@ -658,7 +658,7 @@
               <div class="event-details1">
                 <h3 class="event-game1">{{ activeEvent.eventGame }}</h3>
                 <p class="event-day-time1">
-                  {{ activeEvent.eventDay }} - {{ activeEvent.eventTime }}
+                  {{ activeEvent.eventDay }} - {{ formatToStandardTime(activeEvent.eventTime) }}
                 </p>
                 <p class="event-organizer1">
                   <strong>Organizer:</strong> {{ activeEvent.eventOrganizer }} -
