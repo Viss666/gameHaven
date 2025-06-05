@@ -157,6 +157,11 @@ app.post("/templates", async function (request, response) {
       maxPlayers: request.body.maxPlayers,
       iconUrl: request.body.iconUrl,
       eventFee: request.body.eventFee,
+      eventOrganizer: request.body.eventOrganizer,
+      organizerContactInfo: request.body.organizerContactInfo,
+      eventDay: request.body.eventDay,
+      eventTime: request.body.eventTime,
+      
     });
     let savedTemplate = await newTemplate.save();
     response.status(201).json(savedTemplate);

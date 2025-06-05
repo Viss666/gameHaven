@@ -509,7 +509,7 @@
 
 
           <div class="search-filter">
-            <div class="input-search">
+            <!-- <div class="input-search">
               <form id="search-form">
                 <input
                   type="text"
@@ -526,7 +526,7 @@
               >
                 Clear
               </button>
-            </div>
+            </div> -->
 
             <div class="dropdown-filter">
               <select v-model="selectedGameEvent">
@@ -1285,12 +1285,13 @@
                 {{ activeEvent.isPublished ? 'Unpublish Event' : 'Publish Event'
                 }}
               </button>
+
+              <button @click="sendEventToBot()" class="btn">
+                Send Event To Bot
+              </button>
               <button @click="saveEvent(activeEvent._id)" class="svbtn">
                 Save Event
                 <!-- :disabled="saveButtonDisabled" -->
-              </button>
-              <button @click="sendEventToBot()" class="btn">
-                Send Event To Bot
               </button>
             </div>
           </div>
@@ -1321,7 +1322,7 @@
                     <img
                       src="images/map.webp"
                       class="footer-map"
-                      alt="Gamehaven's Map"
+                      alt="Game Haven's Map"
                     />
                   </div>
                 </div>
@@ -1337,9 +1338,11 @@
                   src="images/clock.webp"
                   class="social-icon"
                   alt="Open/Close Times"
-                />Monday – Saturday: 10 AM – 10 PM
+                />Mon – Thurs: 10 AM – 10 PM
                 <br />
-                Sunday: Closed
+                Fri - Sat: 10 AM - Midnight
+                <br>
+                Sun: 2 PM - 8 PM
               </p>
 
               <p>
@@ -1411,7 +1414,7 @@
             
             </div>
           </div>
-          <div class="copyright">©️ 2025 Gamehaven St. George</div>
+          <div class="copyright">©️ 2025 Game Haven St. George</div>
         </div>
       </div>
     </div>

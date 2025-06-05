@@ -434,9 +434,9 @@ const App = {
           },
           headerToolbar: {
             // Configure the toolbar
-            left: "prev,next", // Buttons on the left: previous, next, today
+            left: "prev", // Buttons on the left: previous, next, today
             center: "title", // Title in the center (current month/year)
-            right: "dayGridMonth", // Buttons on the right for view selection
+            right: "next", // Buttons on the right for view selection
           },
         });
 
@@ -1583,6 +1583,10 @@ const App = {
               iconUrl: template.iconUrl,
               maxPlayers: template.maxPlayers,
               eventFee: template.eventFee,
+              eventOrganizer: template.eventOrganizer,
+              organizerContactInfo: template.organizerContactInfo,
+              eventDay: template.eventDay,
+              eventTime: template.eventTime,
             };
           });
         })
@@ -1612,12 +1616,12 @@ const App = {
     loadTemplate(selectedTemplateId) {
       // console.log("hello");
       // console.log("selected template id", selectedTemplateId);
-
+      this.validationErrors = {};
       const selectedTemplate = this.templates.find(
         (template) => template.id === selectedTemplateId
       );
 
-      // console.log(selectedTemplate);
+      console.log(selectedTemplate);
 
       if (selectedTemplate) {
         this.newEvent = {
@@ -1629,6 +1633,8 @@ const App = {
           eventDay: selectedTemplate.eventDay,
           eventTime: selectedTemplate.eventTime,
           eventFee: selectedTemplate.eventFee,
+          eventOrganizer: selectedTemplate.eventOrganizer,
+          organizerContactInfo: selectedTemplate.organizerContactInfo,
         };
         this.activeTemplate = selectedTemplate;
 
@@ -1655,6 +1661,46 @@ const App = {
         return;
       }
 
+      const errors = {};
+
+      if (!this.newEvent.eventTitle) {
+        errors.eventTitle = "Event Title is required.";
+      }
+      if (!this.newEvent.eventGame) {
+        errors.eventGame = "Game is required.";
+      }
+      if (!this.newEvent.eventDescription) {
+        errors.eventDescription = "Description is required.";
+      }
+      if (!this.newEvent.eventOrganizer) {
+        errors.eventOrganizer = "Organizer Name is required.";
+      }
+      if (!this.newEvent.organizerContactInfo) {
+        errors.organizerContactInfo = "Contact Info is required.";
+      }
+      if (!this.newEvent.eventDay) {
+        errors.eventDay = "Day is required.";
+      }
+      if (!this.newEvent.eventTime) {
+        errors.eventTime = "Time is required.";
+      }
+      if (!this.newEvent.maxPlayers || this.newEvent.maxPlayers < 1) {
+        errors.maxPlayers = "Maximum Players must be at least 1.";
+      }
+      if (!this.newEvent.iconUrl) {
+        errors.iconUrl = "Icon is required";
+      }
+
+      if (this.newEvent.eventFee && isNaN(parseFloat(this.newEvent.eventFee))) {
+        errors.eventFee = "Event Fee must be a number.";
+      }
+
+      if (Object.keys(errors).length > 0) {
+        this.validationErrors = errors;
+        console.error("Validation errors:", errors);
+        return;
+      }
+
       const updatedTemplate = {
         eventTitle: this.newEvent.eventTitle,
         eventGame: this.newEvent.eventGame,
@@ -1664,6 +1710,9 @@ const App = {
         eventDay: this.newEvent.eventDay,
         eventTime: this.newEvent.eventTime,
         eventFee: this.newEvent.eventFee,
+        eventOrganizer: this.newEvent.eventOrganizer,
+        organizerContactInfo: this.newEvent.organizerContactInfo,
+        eventDay: this.newEvent.eventDay,
       };
 
       fetch(`https://gamehavenstg.com/templates/${this.activeTemplate.id}`, {
@@ -1682,6 +1731,7 @@ const App = {
         .then((data) => {
           // console.log("Template updated:", data);
           this.getTemplates();
+          this.validationErrors = {};
         })
         .catch((error) => {
           console.error("Error updating template:", error);
@@ -1690,6 +1740,46 @@ const App = {
     },
 
     async createTemplate() {
+      const errors = {};
+
+      if (!this.newEvent.eventTitle) {
+        errors.eventTitle = "Event Title is required.";
+      }
+      if (!this.newEvent.eventGame) {
+        errors.eventGame = "Game is required.";
+      }
+      if (!this.newEvent.eventDescription) {
+        errors.eventDescription = "Description is required.";
+      }
+      if (!this.newEvent.eventOrganizer) {
+        errors.eventOrganizer = "Organizer Name is required.";
+      }
+      if (!this.newEvent.organizerContactInfo) {
+        errors.organizerContactInfo = "Contact Info is required.";
+      }
+      if (!this.newEvent.eventDay) {
+        errors.eventDay = "Day is required.";
+      }
+      if (!this.newEvent.eventTime) {
+        errors.eventTime = "Time is required.";
+      }
+      if (!this.newEvent.maxPlayers || this.newEvent.maxPlayers < 1) {
+        errors.maxPlayers = "Maximum Players must be at least 1.";
+      }
+      if (!this.newEvent.iconUrl) {
+        errors.iconUrl = "Icon is required";
+      }
+
+      if (this.newEvent.eventFee && isNaN(parseFloat(this.newEvent.eventFee))) {
+        errors.eventFee = "Event Fee must be a number.";
+      }
+
+      if (Object.keys(errors).length > 0) {
+        this.validationErrors = errors;
+        console.error("Validation errors:", errors);
+        return;
+      }
+
       this.newTemplate = {
         eventTitle: this.newEvent.eventTitle,
         eventGame: this.newEvent.eventGame,
@@ -1699,7 +1789,10 @@ const App = {
         eventDay: this.newEvent.eventDay,
         eventTime: this.newEvent.eventTime,
         eventFee: this.newEvent.eventFee,
+        eventOrganizer: this.newEvent.eventOrganizer,
+        organizerContactInfo: this.newEvent.organizerContactInfo,
       };
+      console.log(this.newTemplate);
       try {
         const response = await fetch("https://gamehavenstg.com/templates", {
           method: "POST",
@@ -1722,7 +1815,10 @@ const App = {
           eventDay: "",
           eventTime: "",
           eventFee: "",
+          eventOrganizer: "",
+          organizerContactInfo: "",
         };
+        this.validationErrors = {};
         this.getTemplates();
       } catch (error) {
         console.error("Error creating template:", error);
@@ -1754,6 +1850,8 @@ const App = {
               eventDay: "",
               eventTime: "",
               eventFee: "",
+              eventOrganizer: "",
+              organizerContactInfo: "",
             };
           })
           .catch((error) => {
@@ -1805,6 +1903,9 @@ const App = {
       if (!this.newEvent.maxPlayers || this.newEvent.maxPlayers < 1) {
         errors.maxPlayers = "Maximum Players must be at least 1.";
       }
+      if (!this.newEvent.iconUrl) {
+        errors.iconUrl = "Icon is required";
+      }
 
       if (this.newEvent.eventFee && isNaN(parseFloat(this.newEvent.eventFee))) {
         errors.eventFee = "Event Fee must be a number.";
@@ -1832,7 +1933,6 @@ const App = {
       const newEvent = {
         eventTitle: this.newEvent.eventTitle,
         eventGame: this.newEvent.eventGame,
-        eventType: this.newEvent.eventType,
         eventDescription: this.newEvent.eventDescription,
         eventOrganizer: this.newEvent.eventOrganizer,
         organizerContactInfo: this.newEvent.organizerContactInfo,
@@ -1866,7 +1966,6 @@ const App = {
             _id: createdEvent._id,
             eventTitle: createdEvent.eventTitle,
             eventGame: createdEvent.eventGame,
-            eventType: createdEvent.eventType,
             eventDescription: createdEvent.eventDescription,
             eventOrganizer: createdEvent.eventOrganizer,
             organizerContactInfo: createdEvent.organizerContactInfo,
@@ -1884,7 +1983,6 @@ const App = {
           this.newEvent = {
             eventTitle: "",
             eventGame: "",
-            eventType: "",
             eventDescription: "",
             eventOrganizer: "",
             organizerContactInfo: "",
@@ -1980,6 +2078,9 @@ const App = {
         this.activeEvent.maxPlayers < 1
       ) {
         errors.maxPlayers = "Maximum Players must be at least 1 or Unlimited.";
+      }
+      if (!this.newEvent.iconUrl) {
+        errors.iconUrl = "Icon is required";
       }
 
       if (

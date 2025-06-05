@@ -60,6 +60,13 @@ const templateSchema = new mongoose.Schema(
       nullable: true, //Added to explicitly say it is nullable
     },
     eventFee: { type: String },
+    eventOrganizer: { type: String },
+    organizerContactInfo: { type: String },
+    eventDay: { type: String },
+    eventTime: {
+      type: String,
+      match: [/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:MM)"],
+    },
   },
   { _id: true }
 );
