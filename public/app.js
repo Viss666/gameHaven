@@ -1939,6 +1939,7 @@ const App = {
         eventDate: this.newEvent.eventDate,
         eventDay: this.newEvent.eventDay,
         eventTime: this.newEvent.eventTime,
+        isPublished: false,
         playerList: [],
         matches: [],
         maxPlayers: parseInt(this.newEvent.maxPlayers, 10),
