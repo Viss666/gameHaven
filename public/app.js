@@ -2079,9 +2079,6 @@ const App = {
       ) {
         errors.maxPlayers = "Maximum Players must be at least 1 or Unlimited.";
       }
-      if (!this.newEvent.iconUrl) {
-        errors.iconUrl = "Icon is required";
-      }
 
       if (
         this.activeEvent.eventFee !== null &&
