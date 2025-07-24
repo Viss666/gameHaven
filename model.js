@@ -47,11 +47,11 @@ const templateSchema = new mongoose.Schema(
     eventTitle: { type: String, required: [true, "event title is required"] },
     eventGame: { type: String, required: [true, "game is required"] },
     eventDescription: { type: String, required: [true, "add a description"] },
-    iconUrl: {
-      // Added iconUrl field
-      type: String,
-      required: true, // Optional: Make it required if needed
-    },
+    // iconUrl: {
+    //   // Added iconUrl field
+    //   // type: String,
+    //   // required: true, // Optional: Make it required if needed
+    // },
     maxPlayers: {
       type: Number,
       min: 1, // Optional: Set a minimum value
