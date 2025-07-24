@@ -92,10 +92,9 @@ const eventSchema = new mongoose.Schema(
     playerList: [{ type: mongoose.Schema.Types.ObjectId, ref: "Player" }], // ✅ Store as ObjectId references
 
     matches: [{ type: mongoose.Schema.Types.ObjectId, ref: "Match" }], // ✅ Store as ObjectId references
-    // isPublished: {
-    //   type: Boolean,
-    //   required: [true, "event publishing required"],
-    // },
+    isPublished: {
+      type: Boolean,
+    },
     maxPlayers: {
       type: Number,
       min: 1, // Optional: Set a minimum value
@@ -106,7 +105,7 @@ const eventSchema = new mongoose.Schema(
     iconUrl: {
       // Added iconUrl field
       type: String,
-      required: true, // Optional: Make it required if needed
+      // required: true, // Optional: Make it required if needed
     },
     eventFee: {
       type: String,
