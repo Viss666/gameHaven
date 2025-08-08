@@ -125,8 +125,10 @@ app.post("/events", async function (request, response) {
     let newEvent = new model.Event({
       eventTitle: request.body.eventTitle,
       eventGame: request.body.eventGame,
+      eventType: request.body.eventType || "Standard",
       eventDescription: request.body.eventDescription,
       eventOrganizer: request.body.eventOrganizer,
+      eventDuration: request.body.eventDuration || 1,
       organizerContactInfo: request.body.organizerContactInfo,
       eventDate: request.body.eventDate,
       eventDay: request.body.eventDay,
@@ -161,7 +163,6 @@ app.post("/templates", async function (request, response) {
       organizerContactInfo: request.body.organizerContactInfo,
       eventDay: request.body.eventDay,
       eventTime: request.body.eventTime,
-      
     });
     let savedTemplate = await newTemplate.save();
     response.status(201).json(savedTemplate);
@@ -227,21 +228,57 @@ app.put("/events/:eventId/give-bye", async (req, res) => {
   }
 });
 
+// app.put("/events/:eventId/add-player", async (req, res) => {
+//   try {
+//     const { playerName } = req.body;
+//     if (!playerName) {
+//       return res.status(400).json({ error: "Player name is required." });
+//     }
+
+//     // Always create a new player based on name
+//     const player = await Player.create({ playerName });
+
+//     const event = await Event.findByIdAndUpdate(
+//       req.params.eventId,
+//       { $push: { playerList: player._id } },
+//       { new: true }
+//     );
+
+//     res.json({ event, playerId: player._id });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
 app.put("/events/:eventId/add-player", async (req, res) => {
   try {
-    const { playerName } = req.body;
+    const {
+      playerName,
+      playerDiscordID,
+      playerWinScore,
+      playerLossScore,
+      playerDrawScore,
+      playerOppList,
+    } = req.body;
+
     if (!playerName) {
       return res.status(400).json({ error: "Player name is required." });
     }
 
-    // Always create a new player based on name
-    const player = await Player.create({ playerName });
+    const player = await Player.create({
+      playerName,
+      playerDiscordID,
+      playerWinScore,
+      playerLossScore,
+      playerDrawScore,
+      playerOppList,
+    });
 
     const event = await Event.findByIdAndUpdate(
       req.params.eventId,
       { $push: { playerList: player._id } },
       { new: true }
-    );
+    ).populate("playerList");
 
     res.json({ event, playerId: player._id });
   } catch (err) {

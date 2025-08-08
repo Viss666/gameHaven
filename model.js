@@ -38,6 +38,23 @@ const playerSchema = new mongoose.Schema(
       type: String,
       // required: [true, "please enter a Discord ID"],
     },
+    playerWinScore: {
+      type: Number,
+      default: 0,
+    },
+    playerLossScore: {
+      type: Number,
+      default: 0,
+    },
+    playerDrawScore: {
+      type: Number,
+      default: 0,
+    },
+    playerOppList: [
+      {
+        opponent: { type: mongoose.Schema.Types.ObjectId, ref: "Player" },
+      },
+    ],
   },
   { _id: true }
 );
@@ -77,6 +94,8 @@ const eventSchema = new mongoose.Schema(
     eventGame: { type: String, required: [true, "game is required"] },
     eventDescription: { type: String, required: [true, "add a description"] },
     eventOrganizer: { type: String, required: [true, "add an organizer"] },
+    eventType: { type: String, default: "Standard" },
+    eventDuration: { type: Number, default: 1 },
     organizerContactInfo: {
       type: String,
       required: [true, "add contact info"],
