@@ -50,11 +50,10 @@ const playerSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    playerOppList: [
-      {
-        opponent: { type: mongoose.Schema.Types.ObjectId, ref: "Player" },
-      },
-    ],
+    playerOppList: {
+      type: Array,
+      default: null,
+    },
   },
   { _id: true }
 );

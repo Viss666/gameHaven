@@ -228,63 +228,63 @@ app.put("/events/:eventId/give-bye", async (req, res) => {
   }
 });
 
-// app.put("/events/:eventId/add-player", async (req, res) => {
-//   try {
-//     const { playerName } = req.body;
-//     if (!playerName) {
-//       return res.status(400).json({ error: "Player name is required." });
-//     }
-
-//     // Always create a new player based on name
-//     const player = await Player.create({ playerName });
-
-//     const event = await Event.findByIdAndUpdate(
-//       req.params.eventId,
-//       { $push: { playerList: player._id } },
-//       { new: true }
-//     );
-
-//     res.json({ event, playerId: player._id });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
-
 app.put("/events/:eventId/add-player", async (req, res) => {
   try {
-    const {
-      playerName,
-      playerDiscordID,
-      playerWinScore,
-      playerLossScore,
-      playerDrawScore,
-      playerOppList,
-    } = req.body;
-
+    const { playerName } = req.body;
     if (!playerName) {
       return res.status(400).json({ error: "Player name is required." });
     }
 
-    const player = await Player.create({
-      playerName,
-      playerDiscordID,
-      playerWinScore,
-      playerLossScore,
-      playerDrawScore,
-      playerOppList,
-    });
+    // Always create a new player based on name
+    const player = await Player.create({ playerName });
 
     const event = await Event.findByIdAndUpdate(
       req.params.eventId,
       { $push: { playerList: player._id } },
       { new: true }
-    ).populate("playerList");
+    );
 
     res.json({ event, playerId: player._id });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+// app.put("/events/:eventId/add-player", async (req, res) => {
+//   try {
+//     const {
+//       playerName,
+//       playerDiscordID,
+//       playerWinScore,
+//       playerLossScore,
+//       playerDrawScore,
+//       playerOppList,
+//     } = req.body;
+
+//     if (!playerName) {
+//       return res.status(400).json({ error: "Player name is required." });
+//     }
+
+//     const player = await Player.create({
+//       playerName,
+//       playerDiscordID,
+//       playerWinScore,
+//       playerLossScore,
+//       playerDrawScore,
+//       playerOppList,
+//     });
+
+//     const event = await Event.findByIdAndUpdate(
+//       req.params.eventId,
+//       { $push: { playerList: player._id } },
+//       { new: true }
+//     ).populate("playerList");
+
+//     res.json({ event, playerId: player._id });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
 //remove player as admin
 app.put("/events/:eventId/admin-remove-player", async (req, res) => {
