@@ -1312,14 +1312,15 @@
                 }}
               </button>
 
-              <button @click="sendEventToBot()" class="btn">
-                Send Event To Bot
-              </button>
+
               <button @click="saveEvent(activeEvent._id)" class="svbtn">
                 Save Event
                 <!-- :disabled="saveButtonDisabled" -->
               </button>
             </div>
+              <button @click="sendEventToBot()" class="btn">
+                Send Event To Bot
+              </button>
           </div>
         </div>
         <div v-show="loading" class="loading-container">
