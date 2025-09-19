@@ -1228,7 +1228,8 @@ const App = {
           return this.getEvents();
         })
         .then(() => {
-          return this.viewEvent(eventId);
+          this.closeAdminAddPlayer();
+          return this.editEvent(eventId);
         })
         .catch((error) => {
           console.error("Error adding player:", error);
