@@ -250,6 +250,35 @@ app.put("/events/:eventId/add-player", async (req, res) => {
   }
 });
 
+app.put("/events/:eventId/admin-add-player", async (req, res) => {
+  try {
+    const { playerName } = req.body;
+    if (!playerName) {
+      return res.status(400).json({ error: "Player name is required." });
+    }
+
+    // Option 1: Prevent duplicates (find or create)
+    let player = await Player.findOne({ playerName });
+    if (!player) {
+      player = await Player.create({ playerName });
+    }
+
+    const event = await Event.findByIdAndUpdate(
+      req.params.eventId,
+      { $addToSet: { playerList: player._id } }, // $addToSet avoids duplicates
+      { new: true }
+    ).populate("playerList");
+
+    if (!event) {
+      return res.status(404).json({ error: "Event not found." });
+    }
+
+    res.json({ event, playerId: player._id });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // app.put("/events/:eventId/add-player", async (req, res) => {
 //   try {
 //     const {

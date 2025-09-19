@@ -1278,6 +1278,32 @@
               </div>
             </div>
             <div class="edit-buttons">
+              <button @click="openAdminAddPlayer" class="btn">Add Player</button>
+              <div v-if="showAdminAddPlayer" class="modal-overlay">
+                <div class="modal">
+                  <h2>Add Player</h2>
+                  <input
+                    v-model="adminPlayerName"
+                    type="text"
+                    placeholder="Enter player's first name & last initial..."
+                    class="input"
+                    maxlength="16"
+                  />
+
+                  <div class="button-container">
+                    <button
+                      @click="adminAddPlayer(activeEvent._id, adminPlayerName)"
+                      class="submit-btn"
+                    >
+                      Add Player
+                    </button>
+                    <button @click="closeAdminAddPlayer" class="close-btn">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <button @click="deleteEvent(activeEvent._id)" class="btn">
                 Delete Event
               </button>

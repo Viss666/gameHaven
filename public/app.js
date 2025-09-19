@@ -22,6 +22,8 @@ const App = {
       searchInput: "",
       firstName: "",
       discordId: "",
+      showAdminAddPlayer: false,
+      adminPlayerName: "",
       templates: null,
       events: [],
       newEvent: {
@@ -1188,6 +1190,60 @@ const App = {
         .finally(() => {
           this.stopLoading();
         });
+    },
+
+    adminAddPlayer(eventId, playerName) {
+      this.startLoading();
+
+      if (!eventId || typeof eventId !== "string") {
+        console.error("Invalid event ID:", eventId);
+        this.stopLoading();
+        return;
+      }
+
+      if (!playerName) {
+        alert("Please enter the player's name.");
+        this.stopLoading();
+        return;
+      }
+
+      fetch(`https://gamehavenstg.com/events/${eventId}/admin-add-player`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ playerName }),
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("Failed to add player.");
+          return response.json();
+        })
+        .then((data) => {
+          // Update local event state
+          if (this.activeEvent && Array.isArray(this.activeEvent.playerList)) {
+            this.activeEvent.playerList.push({
+              _id: data.playerId,
+              playerName: playerName,
+            });
+          }
+          return this.getEvents();
+        })
+        .then(() => {
+          return this.viewEvent(eventId);
+        })
+        .catch((error) => {
+          console.error("Error adding player:", error);
+          alert("Failed to add player. Please try again.");
+        })
+        .finally(() => {
+          this.stopLoading();
+        });
+    },
+    openAdminAddPlayer() {
+      this.showAdminAddPlayer = true;
+    },
+    closeAdminAddPlayer() {
+      this.showAdminAddPlayer = false;
+      this.adminPlayerName = "";
     },
 
     // submitCheckIn(eventId) {
