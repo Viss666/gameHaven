@@ -1432,7 +1432,7 @@ h4 {
   display: flex;
   justify-content: center;
   flex-direction: row;
-  padding: 3%;
+  padding: 1%;
 }
 
 .edit-buttons button {
